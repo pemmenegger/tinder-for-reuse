@@ -1,0 +1,69 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: #000000;
+  background-color: theme("colors.bg");
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .rondas-border {
+    @apply border border-lgray rounded;
+  }
+
+  h2 {
+    @apply font-head-400 text-2xl pb-8;
+  }
+}
+
+@layer base {
+  @font-face {
+    font-family: "henrietta-400";
+    src: url("../public/fonts/woff2/VCHenrietta-Light.woff2") format("woff2"),
+      url("/public/fonts/woff/VCHenrietta-Light.woff") format("woff");
+  }
+  @font-face {
+    font-family: "graphik-400";
+    src: url("../public/fonts/woff2/Graphik-Regular.woff2") format("woff2"),
+      url("/public/fonts/woff/Graphik-Regular.woff") format("woff");
+  }
+  @font-face {
+    font-family: "graphik-500";
+    src: url("../public/fonts/woff2/Graphik-Medium.woff2") format("woff2"),
+      url("/public/fonts/woff/Graphik-Medium.woff") format("woff");
+  }
+  @font-face {
+    font-family: "graphik-600";
+    src: url("../public/fonts/woff2/Graphik-Semibold.woff2") format("woff2"),
+      url("/public/fonts/woff/Graphik-Semibold.woff") format("woff");
+  }
+}
+
+/*@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}*/
