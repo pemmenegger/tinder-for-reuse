@@ -3,10 +3,7 @@ import Search from "@/components/search/Search";
 import { fetchBuildingElementFilterOptions } from "@/lib/api/items/building-elements";
 import { BuildingElementFilterOptions } from "@/types/api/items/building-element";
 import { buildingElementsFetcher } from "@/lib/api/items/building-elements";
-import {
-  BuildingElementCard,
-  BuildingElementCardSkeleton,
-} from "@/components/BuildingElementCard";
+import { BuildingElementResultsWrapper } from "@/components/search/resultsWrappers";
 
 export default function BuildingElementSearchPage() {
   const [filterProperties, setFilterProperties] =
@@ -73,8 +70,7 @@ export default function BuildingElementSearchPage() {
           options: filterProperties.material_types,
         },
       ]}
-      ResultComponent={BuildingElementCard}
-      LoadingSkeletonComponent={BuildingElementCardSkeleton}
+      ResultsWrapper={BuildingElementResultsWrapper}
     />
   );
 }

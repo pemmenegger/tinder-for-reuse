@@ -16,8 +16,8 @@ import {
   MagnifyingGlassIcon as MagnifyingGlassIconSolid,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
-const rondasLogo = require("../../public/rondas-logo-v3.svg") as string;
-const rondasLogoMobile = require("../../public/rondas-mobile.png") as string;
+const tfrLogo = require("../../public/tfr-logo.svg") as string;
+const tfrLogoMobile = require("../../public/rondas-mobile.png") as string;
 import { useRouter } from "next/router";
 
 function NavItem({
@@ -63,7 +63,7 @@ export default function Sidebar() {
         <div className="hidden md:block lg:hidden border rounded-lg">
           <div className="py-4 pb-3 my-3 mx-auto relative h-6 w-6">
             <Image
-              src={rondasLogoMobile}
+              src={tfrLogoMobile}
               alt="Rondas Logo Mobile"
               fill={true}
               style={{
@@ -74,9 +74,9 @@ export default function Sidebar() {
             />
           </div>
         </div>
-        <div className="hidden lg:block relative w-[125px] h-[27px] mx-4 mb-7">
+        <div className="hidden lg:block relative w-[150px] h-[50px] mx-4 mb-7">
           <Image
-            src={rondasLogo}
+            src={tfrLogo}
             alt="Rondas Logo"
             fill={true}
             style={{

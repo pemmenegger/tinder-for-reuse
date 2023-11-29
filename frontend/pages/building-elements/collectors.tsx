@@ -1,26 +1,51 @@
-import CollectorsMap from "@/components/CollectorsMap";
-import { Coords } from "google-map-react";
+import {
+  collectorsFetcher,
+  fetchCollectorFilterOptions,
+} from "@/lib/api/collectors";
+import { CollectorFilterOptions } from "@/types/api/collector";
+
+import { useEffect, useState } from "react";
+import Search from "@/components/search/Search";
+import { CollectorResultsWrapper } from "@/components/search/resultsWrappers";
 
 export default function CollectorsPage() {
-  const coords: Coords[] = [
-    {
-      lat: 48.38987,
-      lng: -4.48718,
-    },
-    {
-      lat: 45.764042,
-      lng: 4.835659,
-    },
-    {
-      lat: 43.296482,
-      lng: 5.36978,
-    },
-  ];
+  const [filterOptions, setFilterOptions] = useState<CollectorFilterOptions>({
+    collection_types: [],
+  });
+
+  useEffect(() => {
+    async function getfilterOptions() {
+      try {
+        const options = await fetchCollectorFilterOptions();
+        setFilterOptions(options);
+      } catch (error) {
+        console.error("Failed to fetch collector filter options:", error);
+      }
+    }
+
+    getfilterOptions();
+  }, []);
 
   return (
-    <>
-      <h2>Collectors</h2>
-      <CollectorsMap coords={coords} />
-    </>
+    <Search
+      fetcher={collectorsFetcher}
+      initialSearchRequest={{
+        query: {
+          text: "",
+        },
+        filter: {
+          collection_type_ids: [],
+        },
+      }}
+      filterConfigs={[
+        {
+          type: "multi",
+          label: "Collections",
+          path: ["filter", "collection_type_ids"],
+          options: filterOptions.collection_types,
+        },
+      ]}
+      ResultsWrapper={CollectorResultsWrapper}
+    />
   );
 }

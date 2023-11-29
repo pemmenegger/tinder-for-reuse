@@ -6,6 +6,7 @@ import SearchResults, {
   SearchResponse,
 } from "@/components/search/SearchResults";
 import { useState } from "react";
+import { ResultsWrapperType } from "./resultsWrappers";
 
 export default function Search<
   ReqT extends SearchRequest,
@@ -14,14 +15,12 @@ export default function Search<
   fetcher,
   initialSearchRequest,
   filterConfigs,
-  ResultComponent,
-  LoadingSkeletonComponent,
+  ResultsWrapper,
 }: {
   fetcher: (pageIndex: number, searchRequest: ReqT) => Promise<ResT>;
   initialSearchRequest: ReqT;
   filterConfigs: FilterConfig[];
-  ResultComponent: React.ComponentType<any>;
-  LoadingSkeletonComponent: React.ComponentType<any>;
+  ResultsWrapper: React.ComponentType<ResultsWrapperType>;
 }) {
   const [searchRequest, setSearchRequest] =
     useState<ReqT>(initialSearchRequest);
@@ -40,8 +39,7 @@ export default function Search<
           fetcher={fetcher}
           searchRequest={searchRequest}
           setTotalResults={setTotalResults}
-          ResultComponent={ResultComponent}
-          LoadingSkeletonComponent={LoadingSkeletonComponent}
+          ResultsWrapper={ResultsWrapper}
         />
         <button
           onClick={() => {

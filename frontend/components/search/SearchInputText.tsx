@@ -13,9 +13,7 @@ const SearchInputText = ({
       size="xl"
       icon={<MagnifyingGlassIcon className="w-6 h-6 stroke-dgray" />}
       placeholder={
-        queryText !== undefined
-          ? "Refine Your Photo Search..."
-          : "Blaue Asics Turnschuhe..."
+        queryText !== "" ? "Refine Your Photo Search With Text..." : "Search..."
       }
       value={queryText !== undefined ? queryText : ""}
       onChange={(e) => onTextChange(e.target.value)}

@@ -1,4 +1,5 @@
 from app.api.accounts import router as accounts_router
+from app.api.collectors import router as collectors_router
 from app.api.crawler.collectors import router as crawler_collectors_router
 from app.api.items.building_elements import router as building_elements_router
 from app.config import settings
@@ -24,17 +25,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# app.include_router(
-#     crawler_collectors_router,
-#     tags=["crawler-collectors"],
-#     prefix="/api/crawler/collectors",
-#     dependencies=[Depends(get_api_key)],
-# )
+app.include_router(
+    crawler_collectors_router,
+    tags=["crawler-collectors"],
+    prefix="/api/crawler/collectors",
+    dependencies=[Depends(get_api_key)],
+)
 
 app.include_router(
     building_elements_router,
     tags=[f"items-{ItemCategoryEnum.BUILDING_ELEMENT.slug}"],
     prefix=f"/api/items/{ItemCategoryEnum.BUILDING_ELEMENT.slug}",
+)
+
+app.include_router(
+    collectors_router,
+    tags=["collectors"],
+    prefix="/api/collectors",
 )
 
 

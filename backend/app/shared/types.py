@@ -28,15 +28,27 @@ class ItemCategoryEnum(RondasTypesEnum):
     BUILDING_ELEMENT = (1, "Building Element", "building-elements")
 
 
-# class ItemCrawlerEnum(RondasTypesEnum):
-#     TUTTI = (1, "Tutti")
-#     ANIBIS = (2, "Anibis")
-#     RICARDO = (3, "Ricardo")
-
-
 class BuildingElementUnitEnum(RondasTypesEnum):
     ML = (1, "ml")
     M2 = (2, "m²")
     M3 = (3, "m³")
     U = (4, "U")
     ENS = (5, "ens")
+
+
+class CollectorCollectionEnum(RondasTypesEnum):
+    INERT_WASTE = (1, "Inert Waste")
+    CONCRETE = (2, "Concrete")
+    WOOD = (3, "Wood")
+    METALS = (4, "Metals")
+    PLASTER = (5, "Plaster")
+    RIGID_PLASTICS_AND_PVC = (6, "Rigid Plastics & PVC")
+    GLAZED_JOINERY = (7, "Glazed Joinery")
+    GLASS_WOOL = (8, "Glass Wool")
+    ROCK_WOOL = (9, "Rock Wool")
+    EXPANDED_POLYSTYRENE = (10, "Expanded Polystyrene (EPS)")
+    POLYURETHANE = (11, "Polyurethane")
+    BIO_BASED_INSULATORS = (12, "Bio-based Insulators")
+    BITUMINOUS_MEMBRANES = (13, "Bituminous Membranes")
+    NON_PVC_FLOOR_COVERINGS = (14, "Non-PVC Floor Coverings")
+    PVC_FLOOR_COVERINGS = (15, "PVC Floor Coverings")

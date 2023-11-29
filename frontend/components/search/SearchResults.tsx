@@ -51,14 +51,12 @@ export default function SearchResults<
   fetcher,
   searchRequest,
   setTotalResults,
-  ResultComponent,
-  LoadingSkeletonComponent,
+  ResultsWrapper,
 }: {
   fetcher: (pageIndex: number, searchRequest: ReqT) => Promise<ResT>;
   searchRequest: ReqT;
   setTotalResults: Dispatch<SetStateAction<number>>;
-  ResultComponent: React.ComponentType<any>;
-  LoadingSkeletonComponent: React.ComponentType<any>;
+  ResultsWrapper: React.ComponentType<any>;
 }) {
   const [results, setResults] = useState<any[]>([]);
   const [hasMoreResults, setHasMoreResults] = useState(true);
@@ -100,16 +98,7 @@ export default function SearchResults<
   return (
     <div className="flex flex-col items-center">
       <div className="w-full mb-6">
-        {results.map((result, index) => (
-          <ResultComponent key={index} {...result} />
-        ))}
-        {isLoading && (
-          <>
-            <LoadingSkeletonComponent />
-            <LoadingSkeletonComponent />
-            <LoadingSkeletonComponent />
-          </>
-        )}
+        <ResultsWrapper results={results} isLoading={isLoading} />
       </div>
       {hasMoreResults ? (
         <button

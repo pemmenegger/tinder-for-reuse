@@ -26,7 +26,7 @@ export const uploadBuildingElements = async (
 
 export const fetchBuildingElementFilterOptions =
   async (): Promise<BuildingElementFilterOptions> => {
-    const { response, data } = await fetchApi(API_ROUTE, `/filter`, {
+    const { response, data } = await fetchApi(API_ROUTE, `/filter/`, {
       method: "GET",
     });
     if (!response.ok)
