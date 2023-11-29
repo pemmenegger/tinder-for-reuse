@@ -15,6 +15,8 @@ then
     exit 1
 fi
 
+cp ../.env .env
+
 # disable python bytecode generation
 export PYTHONDONTWRITEBYTECODE=1
 

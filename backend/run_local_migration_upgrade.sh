@@ -9,6 +9,8 @@ fi
 
 source .venv/bin/activate
 
+cp ../.env .env
+
 # disable python bytecode generation
 export PYTHONDONTWRITEBYTECODE=1
 
