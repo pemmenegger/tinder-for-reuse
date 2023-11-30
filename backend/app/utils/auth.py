@@ -9,7 +9,7 @@ from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from pydantic import SecretStr
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session
 from sqlmodel import select
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -53,9 +53,7 @@ def create_refresh_token(token_payload: TokenPayload) -> str:
     return token
 
 
-async def get_current_account(
-    token: str = Security(oauth2_scheme), session: AsyncSession = Depends(get_session)
-) -> Account:
+def get_current_account(token: str = Security(oauth2_scheme), session: Session = Depends(get_session)) -> Account:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -65,11 +63,9 @@ async def get_current_account(
     try:
         payload = jwt.decode(token, settings.BACKEND_JWT_SECRET_KEY, algorithms=[settings.BACKEND_JWT_ALGORITHM])
         token_data = TokenPayload(**payload)
-        async with session:
-            account = await session.execute(select(Account).where(Account.id == token_data.id))
-            account = account.scalar_one_or_none()
-            if account is None:
-                raise credentials_exception
-            return account
+        account = session.execute(select(Account).where(Account.id == token_data.id)).scalar_one_or_none()
+        if account is None:
+            raise credentials_exception
+        return account
     except jwt.PyJWTError:
         raise credentials_exception
