@@ -4,8 +4,9 @@ import {
   BuildingElementCardSkeleton,
 } from "../BuildingElementCard";
 import { CollectorCard, CollectorCardSkeleton } from "../CollectorCard";
-import CollectorsMap from "../CollectorsMap";
+
 import { CollectorRead } from "@/types/api/collector";
+import CollectorsMap from "../CollectorsMapNew";
 
 export type ResultsWrapperType = {
   results: any[];
