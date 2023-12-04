@@ -6,7 +6,7 @@ import {
 import { CollectorCard, CollectorCardSkeleton } from "../CollectorCard";
 
 import { CollectorRead } from "@/types/api/collector";
-import CollectorsMap from "../CollectorsMapNew";
+import CollectorsMap from "../CollectorsMap";
 
 export type ResultsWrapperType = {
   results: any[];
@@ -39,7 +39,7 @@ export function CollectorResultsWrapper({
 }: ResultsWrapperType) {
   const collectors = results as CollectorRead[];
   const [visibleCollectorIds, setVisibleCollectorIds] = useState<number[]>([]);
-  const [activeCollector, setActiveCollector] = useState<CollectorRead | null>(
+  const [activeCollectorId, setActiveCollectorId] = useState<number | null>(
     null
   );
   const IGNORE_DEACTIVATION_CLASS = "ignore-deactivation";
@@ -49,7 +49,7 @@ export function CollectorResultsWrapper({
       const target = event.target as Element;
       // only deactivate if the click is outside the active collector
       if (!target.closest(`.${IGNORE_DEACTIVATION_CLASS}`)) {
-        setActiveCollector(null);
+        setActiveCollectorId(null);
       }
     };
     document.addEventListener("click", handleClickOutside);
@@ -67,22 +67,26 @@ export function CollectorResultsWrapper({
     <>
       <CollectorsMap
         collectors={collectors}
-        activeCollector={activeCollector}
-        setActiveCollector={setActiveCollector}
+        activeCollectorId={activeCollectorId}
+        setActiveCollectorId={setActiveCollectorId}
         setVisibleCollectorIds={setVisibleCollectorIds}
         className={IGNORE_DEACTIVATION_CLASS}
       />
       {collectors
-        .filter((collector) => visibleCollectorIds.includes(collector.id))
+        .filter((collector) =>
+          activeCollectorId
+            ? activeCollectorId === collector.id
+            : visibleCollectorIds.includes(collector.id)
+        )
         .map((visibleCollector, index) => (
           <a
-            onClick={() => setActiveCollector(visibleCollector)}
+            onClick={() => setActiveCollectorId(visibleCollector.id)}
             key={index}
             className={`cursor-pointer ${IGNORE_DEACTIVATION_CLASS}`}
           >
             <CollectorCard
               {...visibleCollector}
-              isActive={activeCollector?.id === visibleCollector.id}
+              isActive={activeCollectorId === visibleCollector.id}
             />
           </a>
         ))}
