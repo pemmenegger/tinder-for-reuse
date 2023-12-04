@@ -6,7 +6,11 @@ import SearchResults, {
   SearchResponse,
 } from "@/components/search/SearchResults";
 import { useState } from "react";
-import { ResultsWrapperType } from "./resultsWrappers";
+
+export type SearchResultsWrapperType = {
+  results: any[];
+  isLoading: boolean;
+};
 
 export default function Search<
   ReqT extends SearchRequest,
@@ -20,7 +24,7 @@ export default function Search<
   fetcher: (pageIndex: number, searchRequest: ReqT) => Promise<ResT>;
   initialSearchRequest: ReqT;
   filterConfigs: FilterConfig[];
-  ResultsWrapper: React.ComponentType<ResultsWrapperType>;
+  ResultsWrapper: React.ComponentType<SearchResultsWrapperType>;
 }) {
   const [searchRequest, setSearchRequest] =
     useState<ReqT>(initialSearchRequest);
@@ -41,13 +45,13 @@ export default function Search<
           setTotalResults={setTotalResults}
           ResultsWrapper={ResultsWrapper}
         />
-        <button
+        {/* <button
           onClick={() => {
             console.log(searchRequest);
           }}
         >
           Log search request
-        </button>
+        </button> */}
       </div>
     </div>
   );

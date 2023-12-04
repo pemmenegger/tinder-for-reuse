@@ -2,11 +2,18 @@ import {
   collectorsFetcher,
   fetchCollectorFilterOptions,
 } from "@/lib/api/collectors";
-import { CollectorFilterOptions } from "@/types/api/collector";
+import { CollectorFilterOptions, CollectorRead } from "@/types/api/collector";
 
 import { useEffect, useState } from "react";
-import Search from "@/components/search/Search";
-import { CollectorResultsWrapper } from "@/components/search/resultsWrappers";
+import Search, { SearchResultsWrapperType } from "@/components/search/Search";
+
+import SearchWithMapResultsWrapper, {
+  MapMarker,
+} from "@/components/search/SearchWithMapResultsWrapper";
+import {
+  CollectorCard,
+  CollectorCardSkeleton,
+} from "@/components/CollectorCard";
 
 export default function CollectorsPage() {
   const [filterOptions, setFilterOptions] = useState<CollectorFilterOptions>({
@@ -14,7 +21,7 @@ export default function CollectorsPage() {
   });
 
   useEffect(() => {
-    async function getfilterOptions() {
+    async function getFilterOptions() {
       try {
         const options = await fetchCollectorFilterOptions();
         setFilterOptions(options);
@@ -23,7 +30,7 @@ export default function CollectorsPage() {
       }
     }
 
-    getfilterOptions();
+    getFilterOptions();
   }, []);
 
   return (
@@ -46,6 +53,31 @@ export default function CollectorsPage() {
         },
       ]}
       ResultsWrapper={CollectorResultsWrapper}
+    />
+  );
+}
+
+function CollectorResultsWrapper({
+  results,
+  isLoading,
+}: SearchResultsWrapperType) {
+  const collectors = results as CollectorRead[];
+
+  const mapMarkers: MapMarker[] = collectors.map((collector) => ({
+    iconUrl: "/icons/marker.svg",
+    iconScaledSize: {
+      width: 22,
+      height: 31,
+    },
+    ...collector,
+  }));
+
+  return (
+    <SearchWithMapResultsWrapper
+      isLoading={isLoading}
+      mapMarkers={mapMarkers}
+      ResultsComponent={CollectorCard}
+      LoadingSkeletonComponent={CollectorCardSkeleton}
     />
   );
 }

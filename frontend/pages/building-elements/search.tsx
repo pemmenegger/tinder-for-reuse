@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
-import Search from "@/components/search/Search";
+import Search, { SearchResultsWrapperType } from "@/components/search/Search";
 import { fetchBuildingElementFilterOptions } from "@/lib/api/items/building-elements";
-import { BuildingElementFilterOptions } from "@/types/api/items/building-element";
-import { buildingElementsFetcher } from "@/lib/api/items/building-elements";
 import {
-  BuildingElementResultsWrapper,
-  CollectorResultsWrapper,
-} from "@/components/search/resultsWrappers";
+  BuildingElementFilterOptions,
+  BuildingElementRead,
+} from "@/types/api/items/building-element";
+import { buildingElementsFetcher } from "@/lib/api/items/building-elements";
+import SearchWithMapResultsWrapper, {
+  MapMarker,
+} from "@/components/search/SearchWithMapResultsWrapper";
+import {
+  BuildingElementCard,
+  BuildingElementCardSkeleton,
+} from "@/components/BuildingElementCard";
 
 export default function BuildingElementSearchPage() {
   const [filterProperties, setFilterProperties] =
@@ -73,8 +79,32 @@ export default function BuildingElementSearchPage() {
           options: filterProperties.material_types,
         },
       ]}
-      ResultsWrapper={CollectorResultsWrapper}
-      // ResultsWrapper={BuildingElementResultsWrapper}
+      ResultsWrapper={BuildingElementResultsWrapper}
+    />
+  );
+}
+
+function BuildingElementResultsWrapper({
+  results,
+  isLoading,
+}: SearchResultsWrapperType) {
+  const buildingElements = results as BuildingElementRead[];
+
+  const mapMarkers: MapMarker[] = buildingElements.map((buildingElement) => ({
+    iconUrl: "/icons/marker.svg",
+    iconScaledSize: {
+      width: 22,
+      height: 31,
+    },
+    ...buildingElement,
+  }));
+
+  return (
+    <SearchWithMapResultsWrapper
+      isLoading={isLoading}
+      mapMarkers={mapMarkers}
+      ResultsComponent={BuildingElementCard}
+      LoadingSkeletonComponent={BuildingElementCardSkeleton}
     />
   );
 }
