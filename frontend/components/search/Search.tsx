@@ -21,7 +21,7 @@ export default function Search<
   filterConfigs,
   ResultsWrapper,
 }: {
-  fetcher: (pageIndex: number, searchRequest: ReqT) => Promise<ResT>;
+  fetcher: (searchRequest: ReqT) => Promise<ResT>;
   initialSearchRequest: ReqT;
   filterConfigs: FilterConfig[];
   ResultsWrapper: React.ComponentType<SearchResultsWrapperType>;

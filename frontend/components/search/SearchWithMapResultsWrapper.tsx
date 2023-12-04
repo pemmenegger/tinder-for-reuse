@@ -216,7 +216,7 @@ export default function SearchWithMapResultsWrapper({
           className={IGNORE_DEACTIVATION_CLASS}
         />
       </GoogleMapsWrapper>
-      {mapMarkers
+      {/* {mapMarkers
         .filter((mapMarker) =>
           activeMapMarkerId
             ? activeMapMarkerId === mapMarker.id
@@ -240,7 +240,7 @@ export default function SearchWithMapResultsWrapper({
           <LoadingSkeletonComponent />
           <LoadingSkeletonComponent />
         </>
-      )}
+      )} */}
     </>
   );
 }

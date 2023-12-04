@@ -91,7 +91,7 @@ function BuildingElementResultsWrapper({
   const buildingElements = results as BuildingElementRead[];
 
   const mapMarkers: MapMarker[] = buildingElements.map((buildingElement) => ({
-    iconUrl: "/icons/marker.svg",
+    iconUrl: "/icons/marker-collector.svg",
     iconScaledSize: {
       width: 22,
       height: 31,

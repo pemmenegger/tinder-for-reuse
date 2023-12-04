@@ -64,7 +64,7 @@ function CollectorResultsWrapper({
   const collectors = results as CollectorRead[];
 
   const mapMarkers: MapMarker[] = collectors.map((collector) => ({
-    iconUrl: "/icons/marker.svg",
+    iconUrl: "/icons/marker-collector.svg",
     iconScaledSize: {
       width: 22,
       height: 31,

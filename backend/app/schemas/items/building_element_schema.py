@@ -5,6 +5,7 @@
 from typing import List, Optional
 
 from app.schemas.item_schema import ItemRead
+from app.shared.schemas.collector_schema import CollectorRead
 from app.shared.schemas.item_schema import ItemCreate
 from app.shared.schemas.type_schema import TypeRead
 from pydantic import BaseModel
@@ -82,4 +83,11 @@ class BuildingElementSearchRequest(BaseModel):
 
 class BuildingElementSearchResponse(BaseModel):
     results: List[BuildingElementRead]
-    hasMore: bool
+
+
+class BuildingElementMatchesResponse(BaseModel):
+    class BuildingElementMatchesRead(BaseModel):
+        building_elements_read: List[BuildingElementRead]
+        collectors_read: List[CollectorRead]
+
+    results: List[BuildingElementMatchesRead]

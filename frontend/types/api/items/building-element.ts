@@ -3,6 +3,7 @@
 // See: ./backend/app/schemas/items/building_element_schema.py             //
 /////////////////////////////////////////////////////////////////////////////
 
+import { CollectorRead } from "../collector";
 import { ItemCreate, ItemRead } from "../item";
 import { TypeRead } from "../type";
 
@@ -61,5 +62,13 @@ export type BuildingElementSearchRequest = {
 
 export type BuildingElementSearchResponse = {
   results: BuildingElementRead[];
-  hasMore: boolean;
+};
+
+export type BuildingElementMatchesResponse = {
+  results: BuildingElementMatchesRead[];
+};
+
+export type BuildingElementMatchesRead = {
+  building_elements_read: BuildingElementRead[];
+  collectors_read: CollectorRead[];
 };

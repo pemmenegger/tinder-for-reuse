@@ -1,7 +1,7 @@
 from typing import List
 
-from app.config import settings
 from app.models.account_model import Account
+from app.models.collector_model import Collector
 from app.models.item_model import Item, ItemCategoryType
 from app.models.items.building_element_model import (
     BuildingElement,
@@ -13,10 +13,12 @@ from app.models.items.building_element_model import (
 from app.schemas.items.building_element_schema import (
     BuildingElementCreate,
     BuildingElementFilterOptions,
+    BuildingElementMatchesResponse,
     BuildingElementRead,
     BuildingElementSearchRequest,
     BuildingElementSearchResponse,
 )
+from app.shared.schemas.collector_schema import CollectorRead
 from app.shared.schemas.type_schema import TypeRead
 from app.shared.types import ItemCategoryEnum
 from app.utils.auth import get_current_account
@@ -29,6 +31,7 @@ from app.utils.database import (
     read_types,
 )
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import text
 from sqlalchemy.orm import Session, joinedload
 from sqlmodel import select
 
@@ -102,9 +105,8 @@ def read_filter_options(session: Session = Depends(get_session)):
     )
 
 
-@router.post("/search", response_model=BuildingElementSearchResponse)
-def search(payload: BuildingElementSearchRequest, session: Session = Depends(get_session), page: int = 0):
-    offset = page * settings.ITEMS_PER_PAGE
+@router.post("/search/", response_model=BuildingElementSearchResponse)
+def search(payload: BuildingElementSearchRequest, session: Session = Depends(get_session)):
     text = payload.query.text if len(payload.query.text) > 0 else None
     unit_type_ids = payload.filter.unit_type_ids
     category_type_ids = payload.filter.category_type_ids
@@ -113,6 +115,7 @@ def search(payload: BuildingElementSearchRequest, session: Session = Depends(get
 
     query = (
         select(BuildingElement)
+        .join(BuildingElement.item)
         .options(joinedload(BuildingElement.category_type))
         .options(joinedload(BuildingElement.unit_type))
         .options(joinedload(BuildingElement.constitution_types))
@@ -138,15 +141,60 @@ def search(payload: BuildingElementSearchRequest, session: Session = Depends(get
         query = query.where(BuildingElement.material_types.any(BuildingElementMaterialType.id.in_(material_type_ids)))
 
     query = query.order_by(Item.created_at.desc())
-    query = query.limit(settings.ITEMS_PER_PAGE).offset(offset)
     results = session.execute(query)
 
     building_elements_read = [
         BuildingElementRead.from_building_element(building_element) for building_element in results.scalars().unique()
     ]
-    return BuildingElementSearchResponse(
-        results=building_elements_read,
-        hasMore=len(building_elements_read) == settings.ITEMS_PER_PAGE,
+    return BuildingElementSearchResponse(results=building_elements_read)
+
+
+@router.post("/matches/")
+def read_my_matches(session: Session = Depends(get_session)):
+    building_elements_query = (
+        select(BuildingElement)
+        .join(BuildingElement.item)
+        .options(joinedload(BuildingElement.category_type))
+        .options(joinedload(BuildingElement.unit_type))
+        .options(joinedload(BuildingElement.constitution_types))
+        .options(joinedload(BuildingElement.material_types))
+        .options(joinedload(BuildingElement.item))
+        .where(Item.account_id == 1)
+        .order_by(Item.created_at.desc())
+    )
+    building_elements = session.execute(building_elements_query).scalars().unique()
+    building_elements_read = [BuildingElementRead.from_building_element(be) for be in building_elements]
+
+    upload_uuids_to_lat_lngs = {}
+    for building_element_read in building_elements_read:
+        if building_element_read.upload_uuid not in upload_uuids_to_lat_lngs:
+            upload_uuids_to_lat_lngs[building_element_read.upload_uuid] = {
+                "lat": building_element_read.lat,
+                "lng": building_element_read.lng,
+            }
+
+    nearest_collectors_read = {}
+    for uuid, lat_lng in upload_uuids_to_lat_lngs.items():
+        lat, lng = lat_lng["lat"], lat_lng["lng"]
+        collectors_nearby_query = (
+            select(Collector)
+            .where(Collector.lat.isnot(None))
+            .where(Collector.lng.isnot(None))
+            .order_by(text("haversine(:lat, :lon, Collector.lat, Collector.lng)").params(lat=lat, lon=lng))
+            .limit(5)
+        )
+        collectors_nearby = session.execute(collectors_nearby_query).scalars().unique()
+        nearest_collectors_read[uuid] = [CollectorRead.from_collector(collector) for collector in collectors_nearby]
+
+    collectors_read = [collector for collectors in nearest_collectors_read.values() for collector in collectors]
+
+    return BuildingElementMatchesResponse(
+        results=[
+            BuildingElementMatchesResponse.BuildingElementMatchesRead(
+                building_elements_read=building_elements_read,
+                collectors_read=collectors_read,
+            )
+        ]
     )
 
 
@@ -155,13 +203,15 @@ def read_my_building_elements(
     current_account: Account = Depends(get_current_account), session: Session = Depends(get_session)
 ):
     query = (
-        (select(BuildingElement).where(BuildingElement.account_id == current_account.id))
-        .options(joinedload(BuildingElement.account))
+        select(BuildingElement)
+        .join(BuildingElement.item)
         .options(joinedload(BuildingElement.category_type))
         .options(joinedload(BuildingElement.unit_type))
         .options(joinedload(BuildingElement.constitution_types))
         .options(joinedload(BuildingElement.material_types))
+        .options(joinedload(BuildingElement.item))
     )
+    query = query.where(Item.account_id == current_account.id)
     query = query.order_by(BuildingElement.created_at.desc())
     results = session.execute(query)
 

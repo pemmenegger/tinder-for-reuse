@@ -1,6 +1,7 @@
 import {
   BuildingElementCreate,
   BuildingElementFilterOptions,
+  BuildingElementMatchesResponse,
   BuildingElementSearchRequest,
   BuildingElementSearchResponse,
 } from "@/types/api/items/building-element";
@@ -47,20 +48,29 @@ export const fetchMyBuildingElements = async (session: Session) => {
 };
 
 export const buildingElementsFetcher = async (
-  pageIndex: number,
   searchRequest: BuildingElementSearchRequest
 ): Promise<BuildingElementSearchResponse> => {
-  const { response, data } = await fetchApi(
-    API_ROUTE,
-    `/search?page=${pageIndex}`,
-    {
-      method: "POST",
-      body: searchRequest,
-    }
-  );
+  const { response, data } = await fetchApi(API_ROUTE, `/search/`, {
+    method: "POST",
+    body: searchRequest,
+  });
   if (!response.ok)
     throw new ApiError("Fetching building elements failed", data);
 
   console.log("buildingElementsFetcher Response", data);
+  return data;
+};
+
+export const buildingElementMatchesFetcher = async (
+  searchRequest: BuildingElementSearchRequest
+): Promise<BuildingElementMatchesResponse> => {
+  const { response, data } = await fetchApi(API_ROUTE, `/matches/`, {
+    method: "POST",
+    body: searchRequest,
+  });
+  if (!response.ok)
+    throw new ApiError("Fetching building element matches failed", data);
+
+  console.log("buildingElementMatchesFetcher Response", data);
   return data;
 };

@@ -29,7 +29,6 @@ export const fetchCollectorFilterOptions =
   };
 
 export const collectorsFetcher = async (
-  pageIndex: number,
   searchRequest: CollectorSearchRequest
 ): Promise<CollectorSearchResponse> => {
   const { response, data } = await fetchApi(API_ROUTE, `/search`, {
