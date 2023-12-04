@@ -24,9 +24,8 @@ export function CollectorCard({
   };
 
   return (
-    // violet if active
     <div
-      className={`grid grid-cols-2 mt-8 bg-white shadow-sm border rounded-xl p-5 ${
+      className={`grid grid-cols-2 mt-8 bg-white border shadow-sm rounded-xl p-5 ${
         isActive ? "border-rondas-violet" : "border-dgray/40"
       }`}
     >

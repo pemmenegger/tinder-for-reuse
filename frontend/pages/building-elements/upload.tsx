@@ -6,6 +6,7 @@ import { BuildingElementCreate } from "@/types/api/items/building-element";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { v4 as uuidv4 } from "uuid";
 
 export default function BuildingElementUploadPage() {
   const { data: session } = useSession();
@@ -13,9 +14,11 @@ export default function BuildingElementUploadPage() {
     BuildingElementCreate[]
   >([]);
 
-  const handleFileUpload = (data: any[][]) => {
+  const handleFileUpload = (lat: number, lng: number, data: any[][]) => {
     // Clear existing data
     // setBuildingElementReusables([]);
+
+    const upload_uuid = uuidv4();
 
     let currCategory;
     for (let i = 0; i < data.length; i++) {
@@ -48,6 +51,9 @@ export default function BuildingElementUploadPage() {
         reuse_potential: row[14],
         drop_off_procedures: row[15],
         storage_method: row[16],
+        lat: lat,
+        lng: lng,
+        upload_uuid: upload_uuid,
 
         category_type: currCategory,
         unit_type: row[2],
@@ -56,7 +62,7 @@ export default function BuildingElementUploadPage() {
         item: {
           title: row[1],
           // must match with /shared/types.py ItemCategoryEnum
-          category_type_id: 2,
+          category_type_id: 1,
         },
       };
 
@@ -90,7 +96,7 @@ export default function BuildingElementUploadPage() {
 
   return (
     <>
-      <h2>Upload your deconstructed Materials</h2>
+      <h2>Upload Building Elements from Excel</h2>
       <ExcelReader
         onFileUploaded={handleFileUpload}
         supportedWorksheetNames={[

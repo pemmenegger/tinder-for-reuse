@@ -5,9 +5,9 @@ Revises: ${down_revision if down_revision else "No down revision" | comma,n}
 Create Date: ${create_date}
 
 """
-from alembic import op
 import sqlalchemy as sa # noqa: F401
 import sqlmodel # noqa: F401
+from alembic import op
 ${imports if imports else ""}
 
 # revision identifiers, used by Alembic.

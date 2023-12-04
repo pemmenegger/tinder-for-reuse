@@ -76,7 +76,7 @@ export default function LoginForm(props: Props) {
   return (
     <div className={props.className}>
       <h2>Login</h2>
-      <p>error .{props.error}.</p>
+      {/* <p>error .{props.error}.</p> */}
       {!!props.error && (
         <p className="bg-red-100 text-red-600 text-center p-2">
           Authentication Failed

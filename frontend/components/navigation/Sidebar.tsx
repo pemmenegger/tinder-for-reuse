@@ -1,18 +1,19 @@
 import Link from "next/link";
 import {
-  HomeIcon as HomeIconOutline,
-  CubeIcon as CubeIconOutline,
-  ShoppingBagIcon as ShoppingBagIconOutline,
   UserCircleIcon as UserCircleIconOutline,
   ArrowUpTrayIcon as ArrowUpTrayIconOutline,
+  BuildingStorefrontIcon as BuildingStorefrontIconOutline,
+  CircleStackIcon as CircleStackIconOutline,
+  ArrowsPointingInIcon as ArrowsPointingInIconOutline,
   MagnifyingGlassIcon as MagnifyingGlassIconOutline,
 } from "@heroicons/react/24/outline";
 import {
-  HomeIcon as HomeIconSolid,
-  CubeIcon as CubeIconSolid,
-  ShoppingBagIcon as ShoppingBagIconSolid,
   UserCircleIcon as UserCircleIconSolid,
   ArrowUpTrayIcon as ArrowUpTrayIconSolid,
+  BuildingStorefrontIcon as BuildingStorefrontIconSolid,
+  CircleStackIcon as CircleStackIconSolid,
+  ArrowsPointingInIcon as ArrowsPointingInIconSolid,
+  LinkIcon as LinkIconSolid,
   MagnifyingGlassIcon as MagnifyingGlassIconSolid,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
@@ -88,18 +89,25 @@ export default function Sidebar() {
       </Link>
       <ul className="flex justify-between px-4 md:px-0 md:block">
         <NavItem
-          OutlineIcon={MagnifyingGlassIconOutline}
-          SolidIcon={MagnifyingGlassIconSolid}
-          text="Search"
+          OutlineIcon={ArrowsPointingInIconOutline}
+          SolidIcon={ArrowsPointingInIconSolid}
+          text="Collectors"
+          link="/building-elements/collectors"
+          active={router.asPath === "/building-elements/collectors"}
+        />
+        <NavItem
+          OutlineIcon={CircleStackIconOutline}
+          SolidIcon={CircleStackIconSolid}
+          text="Items"
           link="/building-elements/search"
           active={router.asPath === "/building-elements/search"}
         />
         <NavItem
-          OutlineIcon={ArrowUpTrayIconOutline}
-          SolidIcon={ArrowUpTrayIconSolid}
-          text="Upload"
-          link="/building-elements/upload"
-          active={router.asPath === "/building-elements/upload"}
+          OutlineIcon={MagnifyingGlassIconOutline}
+          SolidIcon={MagnifyingGlassIconSolid}
+          text="Matches"
+          link="/building-elements/matches"
+          active={router.asPath === "/building-elements/matches"}
         />
         <div className="border-b "></div>
         <NavItem
@@ -118,11 +126,11 @@ export default function Sidebar() {
         />
         <div className="border-b "></div>
         <NavItem
-          OutlineIcon={CubeIconOutline}
-          SolidIcon={CubeIconSolid}
-          text="Collectors"
-          link="/building-elements/collectors"
-          active={router.asPath === "/building-elements/collectors"}
+          OutlineIcon={ArrowUpTrayIconOutline}
+          SolidIcon={ArrowUpTrayIconSolid}
+          text="Upload"
+          link="/building-elements/upload"
+          active={router.asPath === "/building-elements/upload"}
         />
       </ul>
     </nav>

@@ -26,6 +26,9 @@ class BuildingElementBase(SQLModel):
     reuse_potential: Optional[str] = Field(default=None)
     drop_off_procedures: Optional[str] = Field(default=None)
     storage_method: Optional[str] = Field(default=None)
+    lat: Optional[float] = Field(default=None)
+    lng: Optional[float] = Field(default=None)
+    upload_uuid: Optional[str]
 
     category_type: str
     unit_type: str
@@ -43,22 +46,11 @@ class BuildingElementRead(BuildingElementBase):
 
     @classmethod
     def from_building_element(cls, building_element):
-        return cls(
-            id=building_element.id,
-            quantity=building_element.quantity,
-            total_mass_kg=building_element.total_mass_kg,
-            total_volume_m3=building_element.total_volume_m3,
-            l=building_element.l,
-            L=building_element.L,
-            diameter=building_element.diameter,
-            H=building_element.H,
-            P=building_element.P,
-            E=building_element.E,
-            localization=building_element.localization,
-            condition=building_element.condition,
-            reuse_potential=building_element.reuse_potential,
-            drop_off_procedures=building_element.drop_off_procedures,
-            storage_method=building_element.storage_method,
+        return BuildingElementRead(
+            **building_element.dict(
+                exclude_unset=False,
+                exclude={"category_type", "unit_type", "constitution_types", "material_types", "item"},
+            ),
             category_type=building_element.category_type.name,
             unit_type=building_element.unit_type.name,
             constitution_types=[constitution_type.name for constitution_type in building_element.constitution_types],

@@ -21,6 +21,9 @@ type BuildingElementBase = {
   reuse_potential?: string;
   drop_off_procedures?: string;
   storage_method?: string;
+  lat: number;
+  lng: number;
+  upload_uuid: string;
 
   category_type: string;
   unit_type: string;

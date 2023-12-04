@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 import * as XLSX from "xlsx";
 
 type Props = {
-  onFileUploaded: (data: any[][]) => void;
+  onFileUploaded: (lat: number, lng: number, data: any[][]) => void;
   supportedWorksheetNames?: string[];
 };
 
@@ -39,6 +39,27 @@ const ExcelReader: React.FC<Props> = ({
         const data = await file.arrayBuffer();
         const workbook = XLSX.read(data, { type: "array" });
 
+        // go to synthese sheet and extract lat lng
+        let synthese =
+          workbook.Sheets["synthese"] ||
+          workbook.Sheets["Synthese"] ||
+          workbook.Sheets["SYNTHESE"];
+        if (!synthese) {
+          console.error("synthese sheet not found");
+          return;
+        }
+
+        const jsonData: any[][] = XLSX.utils.sheet_to_json(synthese, {
+          header: 1,
+        });
+        const lat = jsonData[1][0].split(",")[0];
+        const lng = jsonData[1][0].split(",")[1];
+        if (!lat || !lng) {
+          console.error("lat lng not found");
+          return;
+        }
+        console.log(lat, lng);
+
         workbook.SheetNames.forEach((sheetName) => {
           if (
             supportedWorksheetNames &&
@@ -50,7 +71,7 @@ const ExcelReader: React.FC<Props> = ({
           const jsonData: any[][] = XLSX.utils.sheet_to_json(worksheet, {
             header: 1,
           });
-          onFileUploaded(jsonData);
+          onFileUploaded(lat, lng, jsonData);
         });
       } catch (error) {
         console.error("Error reading file:", error);
