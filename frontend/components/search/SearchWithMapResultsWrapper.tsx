@@ -4,17 +4,8 @@ import {
   MarkerClusterer,
   SuperClusterAlgorithm,
 } from "@googlemaps/markerclusterer";
-
-export type MapMarker = {
-  id: number;
-  lat: number;
-  lng: number;
-  iconUrl: string;
-  iconScaledSize: {
-    width: number;
-    height: number;
-  };
-};
+import { MapMarker } from "@/types/item";
+import { BuildingElementCardSkeleton } from "../BuildingElementCard";
 
 const GoogleMapsWrapper = ({ children }: { children: React.ReactNode }) => {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
@@ -26,7 +17,7 @@ const GoogleMapsWrapper = ({ children }: { children: React.ReactNode }) => {
   return <Wrapper apiKey={apiKey}>{children}</Wrapper>;
 };
 
-const addMarkerClusterer = ({
+const addMarkers = ({
   mapMarkers,
   map,
   setActiveMapMarkerId,
@@ -35,7 +26,7 @@ const addMarkerClusterer = ({
   map: google.maps.Map | null | undefined;
   setActiveMapMarkerId: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
-  const markers = mapMarkers.map((mapMarker, index) => {
+  return mapMarkers.map((mapMarker) => {
     const marker = new google.maps.Marker({
       position: {
         lat: mapMarker.lat,
@@ -52,13 +43,23 @@ const addMarkerClusterer = ({
     });
 
     marker.addListener("click", () => {
-      setActiveMapMarkerId(mapMarkers[index].id);
-      // console.log("clicked on marker", markers[index]);
+      const markerId = mapMarker.id;
+      setActiveMapMarkerId(markerId);
     });
 
     return marker;
   });
+};
 
+const addMarkerClusterer = ({
+  markers,
+  clusterIconUrl,
+  map,
+}: {
+  markers: google.maps.Marker[];
+  clusterIconUrl: string;
+  map: google.maps.Map | null | undefined;
+}) => {
   return new MarkerClusterer({
     markers,
     map,
@@ -75,7 +76,7 @@ const addMarkerClusterer = ({
             color: "white",
           },
           icon: {
-            url: "/icons/cluster.svg",
+            url: clusterIconUrl,
             scaledSize: new google.maps.Size(50, 50),
           },
         });
@@ -88,16 +89,16 @@ const addMarkerClusterer = ({
 
 const GoogleMaps = ({
   mapMarkers,
+  clusterIconUrl,
   activeMapMarkerId,
   setVisibleMapMarkerIds,
   setActiveMapMarkerId,
-  className,
 }: {
   mapMarkers: MapMarker[];
+  clusterIconUrl?: string;
   activeMapMarkerId: number | null;
   setVisibleMapMarkerIds: React.Dispatch<React.SetStateAction<number[]>>;
   setActiveMapMarkerId: React.Dispatch<React.SetStateAction<number | null>>;
-  className?: string;
 }) => {
   const [bounds, setBounds] = useState<google.maps.LatLngBounds | undefined>();
   const [map, setMap] = useState<google.maps.Map>();
@@ -150,35 +151,42 @@ const GoogleMaps = ({
       );
     }
 
-    const markerClusterer = addMarkerClusterer({
+    const markers = addMarkers({
       mapMarkers,
       map,
       setActiveMapMarkerId,
     });
 
+    if (clusterIconUrl) {
+      const markerClusterer = addMarkerClusterer({
+        markers,
+        clusterIconUrl,
+        map,
+      });
+
+      return () => {
+        markerClusterer.clearMarkers();
+      };
+    }
+
     return () => {
-      markerClusterer.clearMarkers();
+      markers.forEach((marker) => marker.setMap(null));
     };
   }, [activeMapMarkerId, mapMarkers, map]);
 
   return (
-    <div
-      ref={ref}
-      className={`${className} w-full h-[500px] rounded-lg overflow-hidden`}
-    />
+    <div ref={ref} className="w-full h-[500px] rounded-lg overflow-hidden" />
   );
 };
 
 export default function SearchWithMapResultsWrapper({
   isLoading,
   mapMarkers,
-  ResultsComponent,
-  LoadingSkeletonComponent,
+  clusterIconUrl,
 }: {
   isLoading: boolean;
   mapMarkers: MapMarker[];
-  ResultsComponent: React.ComponentType<any>;
-  LoadingSkeletonComponent: React.ComponentType<any>;
+  clusterIconUrl?: string;
 }) {
   const [visibleMapMarkerIds, setVisibleMapMarkerIds] = useState<number[]>([]);
   const [activeMapMarkerId, setActiveMapMarkerId] = useState<number | null>(
@@ -189,6 +197,17 @@ export default function SearchWithMapResultsWrapper({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
+
+      // google markers fix
+      // TODO improve
+      if (
+        target.tagName === "IMG" &&
+        target.getAttribute("src") ===
+          "https://maps.gstatic.com/mapfiles/transparent.png"
+      ) {
+        return;
+      }
+
       // only deactivate if the click is outside the active collector
       if (!target.closest(`.${IGNORE_DEACTIVATION_CLASS}`)) {
         setActiveMapMarkerId(null);
@@ -205,42 +224,46 @@ export default function SearchWithMapResultsWrapper({
     setVisibleMapMarkerIds(mapMarkers.map((mapMarker) => mapMarker.id));
   }, [mapMarkers]);
 
+  const visibleMapMarkers = mapMarkers.filter((mapMarker) =>
+    activeMapMarkerId
+      ? activeMapMarkerId === mapMarker.id
+      : visibleMapMarkerIds.includes(mapMarker.id)
+  );
+
   return (
     <>
-      <GoogleMapsWrapper>
-        <GoogleMaps
-          mapMarkers={mapMarkers}
-          activeMapMarkerId={activeMapMarkerId}
-          setVisibleMapMarkerIds={setVisibleMapMarkerIds}
-          setActiveMapMarkerId={setActiveMapMarkerId}
-          className={IGNORE_DEACTIVATION_CLASS}
-        />
-      </GoogleMapsWrapper>
-      {/* {mapMarkers
-        .filter((mapMarker) =>
-          activeMapMarkerId
-            ? activeMapMarkerId === mapMarker.id
-            : visibleMapMarkerIds.includes(mapMarker.id)
-        )
-        .map((visibleCollector, index) => (
+      <div className={IGNORE_DEACTIVATION_CLASS}>
+        <GoogleMapsWrapper>
+          <GoogleMaps
+            mapMarkers={mapMarkers}
+            clusterIconUrl={clusterIconUrl}
+            activeMapMarkerId={activeMapMarkerId}
+            setVisibleMapMarkerIds={setVisibleMapMarkerIds}
+            setActiveMapMarkerId={setActiveMapMarkerId}
+          />
+        </GoogleMapsWrapper>
+      </div>
+      {visibleMapMarkers.map((mapMarker) =>
+        mapMarker.results.map((result, index) => (
           <a
-            onClick={() => setActiveMapMarkerId(visibleCollector.id)}
-            key={index}
+            onClick={() => setActiveMapMarkerId(mapMarker.id)}
+            key={`${mapMarker.id}.${index}`}
             className={`cursor-pointer ${IGNORE_DEACTIVATION_CLASS}`}
           >
-            <ResultsComponent
-              {...visibleCollector}
-              isActive={activeMapMarkerId === visibleCollector.id}
+            <mapMarker.ResultComponent
+              {...result}
+              isActive={activeMapMarkerId === mapMarker.id}
             />
           </a>
-        ))}
+        ))
+      )}
       {isLoading && (
         <>
-          <LoadingSkeletonComponent />
-          <LoadingSkeletonComponent />
-          <LoadingSkeletonComponent />
+          <BuildingElementCardSkeleton />
+          <BuildingElementCardSkeleton />
+          <BuildingElementCardSkeleton />
         </>
-      )} */}
+      )}
     </>
   );
 }

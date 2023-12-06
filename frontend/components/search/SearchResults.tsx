@@ -21,8 +21,8 @@ function useSearchResults<
   ResT extends SearchResponse
 >(searchRequest: ReqT, fetcher: (searchRequest: ReqT) => Promise<ResT>) {
   const swrKey = useMemo(
-    () => [searchRequest, JSON.stringify(searchRequest)],
-    [searchRequest]
+    () => [JSON.stringify(searchRequest), fetcher],
+    [JSON.stringify(searchRequest), fetcher]
   );
 
   const { data, error, isLoading } = useSWRImmutable(swrKey, async () => {
@@ -55,7 +55,7 @@ export default function SearchResults<
 
   useEffect(() => {
     setResults([]);
-  }, [JSON.stringify(searchRequest)]);
+  }, [JSON.stringify(searchRequest), fetcher]);
 
   useEffect(() => {
     if (data?.results) {

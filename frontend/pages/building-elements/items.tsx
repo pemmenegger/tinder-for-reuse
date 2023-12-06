@@ -6,15 +6,11 @@ import {
   BuildingElementRead,
 } from "@/types/api/items/building-element";
 import { buildingElementsFetcher } from "@/lib/api/items/building-elements";
-import SearchWithMapResultsWrapper, {
-  MapMarker,
-} from "@/components/search/SearchWithMapResultsWrapper";
-import {
-  BuildingElementCard,
-  BuildingElementCardSkeleton,
-} from "@/components/BuildingElementCard";
+import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";
+import { fromBuildingElementsToBuildingElementsMapMarkers } from "@/lib/utils";
+import { MapMarker } from "@/types/item";
 
-export default function BuildingElementSearchPage() {
+export default function BuildingElementItemsPage() {
   const [filterProperties, setFilterProperties] =
     useState<BuildingElementFilterOptions>({
       unit_types: [],
@@ -88,23 +84,26 @@ function BuildingElementResultsWrapper({
   results,
   isLoading,
 }: SearchResultsWrapperType) {
-  const buildingElements = results as BuildingElementRead[];
+  const [mapMarkers, setMapMarkers] = useState<MapMarker[]>([]);
 
-  const mapMarkers: MapMarker[] = buildingElements.map((buildingElement) => ({
-    iconUrl: "/icons/marker-collector.svg",
-    iconScaledSize: {
-      width: 22,
-      height: 31,
-    },
-    ...buildingElement,
-  }));
+  useEffect(() => {
+    const buildingElements = results as BuildingElementRead[];
+
+    if (!buildingElements || buildingElements.length === 0) {
+      return;
+    }
+
+    const buildingElementsMapMarkers =
+      fromBuildingElementsToBuildingElementsMapMarkers(buildingElements);
+
+    setMapMarkers(buildingElementsMapMarkers);
+  }, [results]);
 
   return (
     <SearchWithMapResultsWrapper
       isLoading={isLoading}
       mapMarkers={mapMarkers}
-      ResultsComponent={BuildingElementCard}
-      LoadingSkeletonComponent={BuildingElementCardSkeleton}
+      clusterIconUrl="/icons/building-elements/cluster.svg"
     />
   );
 }

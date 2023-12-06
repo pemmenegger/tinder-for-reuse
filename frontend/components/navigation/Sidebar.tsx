@@ -99,8 +99,8 @@ export default function Sidebar() {
           OutlineIcon={CircleStackIconOutline}
           SolidIcon={CircleStackIconSolid}
           text="Items"
-          link="/building-elements/search"
-          active={router.asPath === "/building-elements/search"}
+          link="/building-elements/items"
+          active={router.asPath === "/building-elements/items"}
         />
         <NavItem
           OutlineIcon={MagnifyingGlassIconOutline}

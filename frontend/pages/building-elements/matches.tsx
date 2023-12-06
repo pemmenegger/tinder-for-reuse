@@ -6,13 +6,12 @@ import {
   BuildingElementMatchesRead,
 } from "@/types/api/items/building-element";
 import { buildingElementMatchesFetcher } from "@/lib/api/items/building-elements";
-import SearchWithMapResultsWrapper, {
-  MapMarker,
-} from "@/components/search/SearchWithMapResultsWrapper";
+import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";
+import { MapMarker } from "@/types/item";
 import {
-  BuildingElementCard,
-  BuildingElementCardSkeleton,
-} from "@/components/BuildingElementCard";
+  fromBuildingElementsToBuildingElementsMapMarkers,
+  fromCollectorsToCollectorMapMarkers,
+} from "@/lib/utils";
 
 export default function BuildingElementMatchesPage() {
   const [filterProperties, setFilterProperties] =
@@ -88,44 +87,39 @@ function BuildingElementMatchesResultsWrapper({
   results,
   isLoading,
 }: SearchResultsWrapperType) {
-  console.log(results);
-  const buildingElementMatches = results as BuildingElementMatchesRead[];
-  const buildingElementMatch = buildingElementMatches[0];
+  const [mapMarkers, setMapMarkers] = useState<MapMarker[]>([]);
 
-  const mapMarkers: MapMarker[] = [];
+  useEffect(() => {
+    const buildingElementMatches = results as BuildingElementMatchesRead[];
 
-  if (buildingElementMatch) {
-    // TODO group by upload uuid, only one pin per upload same upload uuid
-    const buildingElementMapMarkers =
-      buildingElementMatch.building_elements_read.map((buildingElement) => ({
-        iconUrl: "/icons/marker-building-elements.svg",
-        iconScaledSize: {
-          width: 22,
-          height: 31,
-        },
-        ...buildingElement,
-      }));
-    mapMarkers.push(...buildingElementMapMarkers);
+    if (!buildingElementMatches || buildingElementMatches.length === 0) {
+      return;
+    }
 
-    const collectorMapMarkers = buildingElementMatch.collectors_read.map(
-      (collector) => ({
-        iconUrl: "/icons/marker-collector.svg",
-        iconScaledSize: {
-          width: 22,
-          height: 31,
-        },
-        ...collector,
-      })
-    );
-    mapMarkers.push(...collectorMapMarkers);
-  }
+    const buildingElements = buildingElementMatches[0].building_elements_read;
+    const collectors = buildingElementMatches[0].collectors_read;
+
+    if (
+      !buildingElements ||
+      !collectors ||
+      buildingElements.length === 0 ||
+      collectors.length === 0
+    ) {
+      return;
+    }
+
+    const buildingElementsMapMarkers =
+      fromBuildingElementsToBuildingElementsMapMarkers(buildingElements);
+    const collectorsMapMarkers =
+      fromCollectorsToCollectorMapMarkers(collectors);
+
+    setMapMarkers([...buildingElementsMapMarkers, ...collectorsMapMarkers]);
+  }, [results]);
 
   return (
     <SearchWithMapResultsWrapper
       isLoading={isLoading}
       mapMarkers={mapMarkers}
-      ResultsComponent={BuildingElementCard}
-      LoadingSkeletonComponent={BuildingElementCardSkeleton}
     />
   );
 }

@@ -32,7 +32,7 @@ export const fetchBuildingElementFilterOptions =
     });
     if (!response.ok)
       throw new ApiError("readBuildingElementFilterTypes fehlgeschlagen", data);
-    console.log("readBuildingElementFilterTypes Response", data);
+    // console.log("readBuildingElementFilterTypes Response", data);
     return data;
   };
 

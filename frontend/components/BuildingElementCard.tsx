@@ -17,7 +17,8 @@ export function BuildingElementCard({
   constitution_types,
   material_types,
   item,
-}: BuildingElementRead | BuildingElementCreate) {
+  isActive = false,
+}: (BuildingElementRead | BuildingElementCreate) & { isActive?: boolean }) {
   const renderProperty = (label: string, value: any) => {
     if (value !== null && value !== undefined) {
       return (
@@ -38,7 +39,11 @@ export function BuildingElementCard({
   };
 
   return (
-    <div className="grid grid-cols-2 mt-8 bg-white shadow-sm border border-dgray/40 rounded-xl p-5">
+    <div
+      className={`grid grid-cols-2 mt-8 bg-white border shadow-sm rounded-xl p-5 ${
+        isActive ? "border-[#3A7118]" : "border-dgray/40"
+      }`}
+    >
       {renderProperty("Title", item.title)}
       {renderProperty("Category", category_type)}
       {renderProperty("Quantity", formatQuantity(quantity, unit_type))}

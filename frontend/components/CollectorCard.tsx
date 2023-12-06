@@ -26,7 +26,7 @@ export function CollectorCard({
   return (
     <div
       className={`grid grid-cols-2 mt-8 bg-white border shadow-sm rounded-xl p-5 ${
-        isActive ? "border-rondas-violet" : "border-dgray/40"
+        isActive ? "border-[#C95139]" : "border-dgray/40"
       }`}
     >
       {renderProperty("Name", name)}

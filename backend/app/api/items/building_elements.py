@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import List
 
 from app.models.account_model import Account
@@ -173,20 +174,30 @@ def read_my_matches(session: Session = Depends(get_session)):
                 "lng": building_element_read.lng,
             }
 
-    nearest_collectors_read = {}
-    for uuid, lat_lng in upload_uuids_to_lat_lngs.items():
-        lat, lng = lat_lng["lat"], lat_lng["lng"]
+    # Pre-process the upload UUIDs to lat-long pairs
+    lat_lng_pairs = {uuid: (lat_lng["lat"], lat_lng["lng"]) for uuid, lat_lng in upload_uuids_to_lat_lngs.items()}
+
+    # Function to get nearby collectors
+    def get_nearby_collectors(latitude, longitude):
         collectors_nearby_query = (
             select(Collector)
             .where(Collector.lat.isnot(None))
             .where(Collector.lng.isnot(None))
-            .order_by(text("haversine(:lat, :lon, Collector.lat, Collector.lng)").params(lat=lat, lon=lng))
-            .limit(5)
+            .order_by(text("haversine(:lat, :lon, Collector.lat, Collector.lng)").params(lat=latitude, lon=longitude))
+            .limit(10)
         )
-        collectors_nearby = session.execute(collectors_nearby_query).scalars().unique()
-        nearest_collectors_read[uuid] = [CollectorRead.from_collector(collector) for collector in collectors_nearby]
+        return session.execute(collectors_nearby_query).scalars().unique()
 
-    collectors_read = [collector for collectors in nearest_collectors_read.values() for collector in collectors]
+    nearest_collectors_read = defaultdict(list)
+    for uuid, (lat, lng) in lat_lng_pairs.items():
+        collectors = get_nearby_collectors(lat, lng)
+        nearest_collectors_read[uuid].extend(CollectorRead.from_collector(collector) for collector in collectors)
+
+    # Flatten the list of collectors and remove duplicates
+    unique_collectors = {
+        collector.id: collector for collectors in nearest_collectors_read.values() for collector in collectors
+    }
+    collectors_read = list(unique_collectors.values())
 
     return BuildingElementMatchesResponse(
         results=[
@@ -210,9 +221,9 @@ def read_my_building_elements(
         .options(joinedload(BuildingElement.constitution_types))
         .options(joinedload(BuildingElement.material_types))
         .options(joinedload(BuildingElement.item))
+        .where(Item.account_id == current_account.id)
+        .order_by(Item.created_at.desc())
     )
-    query = query.where(Item.account_id == current_account.id)
-    query = query.order_by(BuildingElement.created_at.desc())
     results = session.execute(query)
 
     building_elements_read = [

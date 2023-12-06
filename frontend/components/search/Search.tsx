@@ -45,13 +45,6 @@ export default function Search<
           setTotalResults={setTotalResults}
           ResultsWrapper={ResultsWrapper}
         />
-        {/* <button
-          onClick={() => {
-            console.log(searchRequest);
-          }}
-        >
-          Log search request
-        </button> */}
       </div>
     </div>
   );

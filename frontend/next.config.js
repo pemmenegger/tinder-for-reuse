@@ -9,7 +9,7 @@ const nextConfig = {
     return [
       {
         source: "/",
-        destination: "/building-elements/search",
+        destination: "/building-elements/collectors",
       },
     ];
   },
