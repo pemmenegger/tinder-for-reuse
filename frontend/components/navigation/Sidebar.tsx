@@ -128,9 +128,16 @@ export default function Sidebar() {
         <NavItem
           OutlineIcon={ArrowUpTrayIconOutline}
           SolidIcon={ArrowUpTrayIconSolid}
-          text="Upload"
+          text="Upload Items"
           link="/building-elements/upload"
           active={router.asPath === "/building-elements/upload"}
+        />
+        <NavItem
+          OutlineIcon={ArrowUpTrayIconOutline}
+          SolidIcon={ArrowUpTrayIconSolid}
+          text="Upload Collector"
+          link="/building-elements/collectors/upload"
+          active={router.asPath === "/building-elements/collectors/upload"}
         />
       </ul>
     </nav>
