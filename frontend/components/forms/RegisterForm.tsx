@@ -42,7 +42,9 @@ const validationSchema = z
       .min(1, { message: "Display name is required" })
       .refine(
         (value) =>
-          /^[a-zA-Z-]*$/.test(value) && value.length <= 60 && value.length >= 2,
+          /^[a-zA-Z0-9- ]*$/.test(value) &&
+          value.length <= 60 &&
+          value.length >= 2,
         {
           message: "Invalid name",
         }

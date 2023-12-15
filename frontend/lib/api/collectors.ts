@@ -1,4 +1,5 @@
 import {
+  CollectorCreate,
   CollectorFilterOptions,
   CollectorRead,
   CollectorSearchRequest,
@@ -7,6 +8,18 @@ import {
 import { ApiError, fetchApi } from "./base";
 
 const API_ROUTE = "/api/collectors";
+
+export const createCollector = async (
+  collector: CollectorCreate
+): Promise<CollectorRead> => {
+  const { response, data } = await fetchApi(API_ROUTE, `/`, {
+    method: "POST",
+    body: [collector],
+  });
+  if (!response.ok) throw new ApiError("createCollector fehlgeschlagen", data);
+  console.log("createCollector Response", data);
+  return data;
+};
 
 export const fetchCollectors = async (): Promise<CollectorRead[]> => {
   const { response, data } = await fetchApi(API_ROUTE, `/`, {

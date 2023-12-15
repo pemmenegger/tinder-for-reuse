@@ -18,6 +18,8 @@ class CollectorBase(SQLModel):
     phone: Optional[str]
 
     collection_types: List[str]
+    authorized_vehicle_types: List[str]
+    material_recovery_types: List[str]
 
 
 class CollectorCreate(CollectorBase):
@@ -30,14 +32,15 @@ class CollectorRead(CollectorBase):
     @classmethod
     def from_collector(cls, collector):
         return cls(
-            id=collector.id,
-            name=collector.name,
-            address=collector.address,
-            zip_code=collector.zip_code,
-            city=collector.city,
-            lat=collector.lat,
-            lng=collector.lng,
-            email=collector.email,
-            phone=collector.phone,
+            **collector.dict(
+                exclude_unset=False,
+                exclude={"collection_types", "authorized_vehicle_types", "material_recovery_types"},
+            ),
             collection_types=[collection_type.name for collection_type in collector.collection_types],
+            authorized_vehicle_types=[
+                authorized_vehicle_type.name for authorized_vehicle_type in collector.authorized_vehicle_types
+            ],
+            material_recovery_types=[
+                material_recovery_type.name for material_recovery_type in collector.material_recovery_types
+            ],
         )

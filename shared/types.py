@@ -52,3 +52,15 @@ class CollectorCollectionEnum(RondasTypesEnum):
     BITUMINOUS_MEMBRANES = (13, "Bituminous Membranes")
     NON_PVC_FLOOR_COVERINGS = (14, "Non-PVC Floor Coverings")
     PVC_FLOOR_COVERINGS = (15, "PVC Floor Coverings")
+
+
+class CollectorAuthorizedVehicleEnum(RondasTypesEnum):
+    SMALL_VAN = (1, "Small Van (3 to 5 m³)")
+    MEDIUM_VAN = (2, "Medium Van (6 to 12 m³)")
+    FLATBED_TRUCK = (3, "Flatbed Truck (Over 12 m³)")
+
+
+class CollectorMaterialRecoveryEnum(RondasTypesEnum):
+    REUSE = (1, "Reuse")
+    RECYCLING = (2, "Recycling")
+    REPARATION = (3, "Reparation")

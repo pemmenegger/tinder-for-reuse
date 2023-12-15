@@ -16,14 +16,20 @@ type CollectorBase = {
   phone?: string;
 
   collection_types: string[];
+  authorized_vehicle_types: string[];
+  material_recovery_types: string[];
 };
 
 export type CollectorRead = CollectorBase & {
   id: number;
 };
 
+export type CollectorCreate = CollectorBase;
+
 export type CollectorFilterOptions = {
   collection_types: TypeRead[];
+  authorized_vehicle_types: TypeRead[];
+  material_recovery_types: TypeRead[];
 };
 
 export type CollectorSearchRequest = {
@@ -32,6 +38,8 @@ export type CollectorSearchRequest = {
   };
   filter: {
     collection_type_ids: number[];
+    authorized_vehicle_type_ids: number[];
+    material_recovery_type_ids: number[];
   };
 };
 

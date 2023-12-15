@@ -1,4 +1,4 @@
-import React, { HTMLInputTypeAttribute, useState } from "react";
+import React, { HTMLInputTypeAttribute } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -6,21 +6,12 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { Select } from "../ui/select";
 import { FilterOption } from "../search/SearchInputContainer";
-
-export type CollectorUploadInputs = {
-  name: string;
-  address: string;
-  zip_code: string;
-  city: string;
-  lat: number;
-  lng: number;
-  email?: string;
-  phone: string;
-  collection_types: string[];
-  authorized_vehicle_types: string[];
-  material_recovery_types: string[];
-  // TODO: opening hours and holidays
-};
+import {
+  createCollector,
+  fetchCollectorFilterOptions,
+} from "@/lib/api/collectors";
+import { useFilterOptions } from "../hooks/useFilterOptions";
+import { CollectorCreate } from "@/types/api/collector";
 
 const validationSchema = z.object({
   name: z
@@ -28,7 +19,9 @@ const validationSchema = z.object({
     .min(1, { message: "Name is required" })
     .refine(
       (value) =>
-        /^[a-zA-Z-]*$/.test(value) && value.length <= 60 && value.length >= 2,
+        /^[a-zA-Z0-9- ]*$/.test(value) &&
+        value.length <= 60 &&
+        value.length >= 2,
       {
         message: "Invalid name",
       }
@@ -67,8 +60,24 @@ const validationSchema = z.object({
         message: "Invalid city",
       }
     ),
-  lat: z.number(),
-  lng: z.number(),
+  lat: z
+    .string()
+    .refine((value) => /^[0-9,.]*$/.test(value), {
+      message: "Latitude must contain only numbers, commas, or points",
+    })
+    .transform((value) => parseFloat(value))
+    .refine((val) => !isNaN(val) && val >= -90 && val <= 90, {
+      message: "Latitude must be a valid number between -90 and 90",
+    }),
+  lng: z
+    .string()
+    .refine((value) => /^[0-9,.]*$/.test(value), {
+      message: "Longitude must contain only numbers, commas, or points",
+    })
+    .transform((value) => parseFloat(value))
+    .refine((val) => !isNaN(val) && val >= -180 && val <= 180, {
+      message: "Longitude must be a valid number between -180 and 180",
+    }),
   email: z
     .string()
     .min(1, { message: "Email is required" })
@@ -85,7 +94,7 @@ const validationSchema = z.object({
     .min(1, { message: "Phone is required" })
     .refine(
       (value) =>
-        /^[0-9-]*$/.test(value) && value.length <= 60 && value.length >= 2,
+        /^[+0-9-]*$/.test(value) && value.length <= 60 && value.length >= 2,
       {
         message: "Invalid phone",
       }
@@ -96,29 +105,33 @@ const validationSchema = z.object({
 });
 
 export default function CollectorUploadForm() {
-  const { control, register, handleSubmit, setValue, formState } =
-    useForm<CollectorUploadInputs>({
+  const { filterOptions, error: filterOptionsError } = useFilterOptions(
+    fetchCollectorFilterOptions
+  );
+  const { control, register, handleSubmit, setValue, formState, trigger } =
+    useForm<CollectorCreate>({
       resolver: zodResolver(validationSchema),
       mode: "onBlur",
       reValidateMode: "onBlur",
     });
   const { errors, isValid } = formState;
 
-  const onSubmit = async (values: CollectorUploadInputs) => {
+  const onSubmit = async (values: CollectorCreate) => {
     try {
       console.log(`sent to backend: ${JSON.stringify(values)}`);
-      // TODO send to backend
+      await createCollector({ ...values });
     } catch (err) {
       console.log(err);
     }
   };
 
   const renderInput = (
-    label: keyof CollectorUploadInputs,
+    label: keyof CollectorCreate,
     placeholder: string,
     type?: HTMLInputTypeAttribute
   ) => {
     const error = errors[label]?.message;
+
     return (
       <div className={`w-full`}>
         <Input {...register(label)} placeholder={placeholder} type={type} />
@@ -128,12 +141,12 @@ export default function CollectorUploadForm() {
   };
 
   const renderSelect = (
-    label: keyof CollectorUploadInputs,
+    label: keyof CollectorCreate,
     placeholder: string,
     options: FilterOption[]
   ) => {
     const error = errors[label]?.message;
-    const [selectedOptions, setSelectedOptions] = useState<FilterOption[]>([]);
+
     return (
       <div className={`w-full`}>
         <Controller
@@ -142,14 +155,19 @@ export default function CollectorUploadForm() {
             <>
               <Select
                 options={options}
-                selectedOptions={selectedOptions}
+                selectedOptions={options.filter((option) => {
+                  return (
+                    field.value &&
+                    (field.value as string[]).includes(option.name)
+                  );
+                })}
                 placeholder={placeholder}
                 onChange={(selectedOptions) => {
-                  setSelectedOptions(selectedOptions);
                   setValue(
-                    "collection_types",
+                    label,
                     selectedOptions.map((option) => option.name)
                   );
+                  trigger(label);
                 }}
                 isMultiSelect={true}
               />
@@ -164,6 +182,10 @@ export default function CollectorUploadForm() {
     );
   };
 
+  if (filterOptionsError) {
+    return <p>Failed to load page.</p>;
+  }
+
   return (
     <div>
       <h2>Upload Collector</h2>
@@ -177,39 +199,30 @@ export default function CollectorUploadForm() {
             {renderInput("address", "Address")}
             {renderInput("zip_code", "Zip Code")}
             {renderInput("city", "City")}
-            {renderInput("lat", "Latitude", "number")}
-            {renderInput("lng", "Longitude", "number")}
+            {renderInput("lat", "Latitude")}
+            {renderInput("lng", "Longitude")}
             <br />
             {renderInput("email", "Email")}
             {renderInput("phone", "Phone")}
             <br />
-            {renderSelect("collection_types", "Select Collections...", [
-              { id: "1", name: "Paper" },
-              { id: "2", name: "Plastic" },
-              { id: "3", name: "Glass" },
-            ])}
+            {renderSelect(
+              "collection_types",
+              "Select Collections...",
+              filterOptions?.collection_types || []
+            )}
             {renderSelect(
               "authorized_vehicle_types",
               "Select Authorized Vehicles...",
-              [
-                { id: "1", name: "Small Van (3 to 5 m³)" },
-                { id: "2", name: "Medium Van (6 to 12 m³)" },
-                { id: "3", name: "Flatbed Truck (Over 12 m³)" },
-              ]
+              filterOptions?.authorized_vehicle_types || []
             )}
             {renderSelect(
               "material_recovery_types",
               "Select Material Recoveries...",
-              [
-                { id: "1", name: "Reuse" },
-                { id: "2", name: "Recycling" },
-                { id: "3", name: "Reparation" },
-              ]
+              filterOptions?.material_recovery_types || []
             )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <button type="submit">Submit</button>
             <Button
               variant={isValid ? "primary" : "disabled"}
               size="sm"

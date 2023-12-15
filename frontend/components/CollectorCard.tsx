@@ -9,6 +9,8 @@ export function CollectorCard({
   email,
   phone,
   collection_types,
+  authorized_vehicle_types,
+  material_recovery_types,
   isActive,
 }: CollectorRead & { isActive: boolean }) {
   const renderProperty = (label: string, value: any) => {
@@ -34,6 +36,8 @@ export function CollectorCard({
       {renderProperty("Email", email)}
       {renderProperty("Phone", phone)}
       {renderProperty("Collection Types", collection_types)}
+      {renderProperty("Authorized Vehicle Types", authorized_vehicle_types)}
+      {renderProperty("Material Recovery Types", material_recovery_types)}
     </div>
   );
 }

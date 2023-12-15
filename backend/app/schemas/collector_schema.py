@@ -11,6 +11,8 @@ from pydantic import BaseModel
 
 class CollectorFilterOptions(BaseModel):
     collection_types: List[TypeRead]
+    authorized_vehicle_types: List[TypeRead]
+    material_recovery_types: List[TypeRead]
 
 
 class CollectorSearchRequest(BaseModel):
@@ -19,6 +21,8 @@ class CollectorSearchRequest(BaseModel):
 
     class Filter(BaseModel):
         collection_type_ids: List[int]
+        authorized_vehicle_type_ids: List[int]
+        material_recovery_type_ids: List[int]
 
     query: Query
     filter: Filter
