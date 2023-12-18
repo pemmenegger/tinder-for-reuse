@@ -1,6 +1,5 @@
 import "@/styles/globals.css";
 import Layout from "../components/Layout";
-import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 
@@ -13,9 +12,7 @@ export default function App({
       <Head>
         <title>Rondas — Discover The Future of Secondhand</title>
       </Head>
-      <SessionProvider session={session}>
-        <Component {...pageProps} />
-      </SessionProvider>
+      <Component {...pageProps} />
     </Layout>
   );
 }

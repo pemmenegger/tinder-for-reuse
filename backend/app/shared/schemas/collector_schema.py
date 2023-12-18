@@ -17,9 +17,10 @@ class CollectorBase(SQLModel):
     email: Optional[str]
     phone: Optional[str]
 
-    collection_types: List[str]
+    material_types: List[str]
+    waste_code_types: List[str]
     authorized_vehicle_types: List[str]
-    material_recovery_types: List[str]
+    circular_strategy_types: List[str]
 
 
 class CollectorCreate(CollectorBase):
@@ -34,13 +35,13 @@ class CollectorRead(CollectorBase):
         return cls(
             **collector.dict(
                 exclude_unset=False,
-                exclude={"collection_types", "authorized_vehicle_types", "material_recovery_types"},
+                exclude={"material_types", "authorized_vehicle_types", "circular_strategy_types"},
             ),
-            collection_types=[collection_type.name for collection_type in collector.collection_types],
+            material_types=[material_type.name for material_type in collector.material_types],
             authorized_vehicle_types=[
                 authorized_vehicle_type.name for authorized_vehicle_type in collector.authorized_vehicle_types
             ],
-            material_recovery_types=[
-                material_recovery_type.name for material_recovery_type in collector.material_recovery_types
+            circular_strategy_types=[
+                circular_strategy_type.name for circular_strategy_type in collector.circular_strategy_types
             ],
         )

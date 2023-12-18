@@ -8,9 +8,10 @@ export function CollectorCard({
   city,
   email,
   phone,
-  collection_types,
+  material_types,
+  waste_code_types,
   authorized_vehicle_types,
-  material_recovery_types,
+  circular_strategy_types,
   isActive,
 }: CollectorRead & { isActive: boolean }) {
   const renderProperty = (label: string, value: any) => {
@@ -35,9 +36,10 @@ export function CollectorCard({
       {renderProperty("Address", `${address}, ${zip_code}, ${city}`)}
       {renderProperty("Email", email)}
       {renderProperty("Phone", phone)}
-      {renderProperty("Collection Types", collection_types)}
-      {renderProperty("Authorized Vehicle Types", authorized_vehicle_types)}
-      {renderProperty("Material Recovery Types", material_recovery_types)}
+      {renderProperty("Materials", material_types)}
+      {renderProperty("Waste Codes", waste_code_types)}
+      {renderProperty("Authorized Vehicles", authorized_vehicle_types)}
+      {renderProperty("Circular Strategies", circular_strategy_types)}
     </div>
   );
 }

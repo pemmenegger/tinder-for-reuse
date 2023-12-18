@@ -1,9 +1,7 @@
-import { Session } from "next-auth";
-
 export const fetchApi = async (
   route: string,
   endpoint: string,
-  options: { method: string; body?: any; headers?: any; session?: Session }
+  options: { method: string; body?: any; headers?: any }
 ): Promise<any> => {
   const fullUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}${route}${endpoint}`;
 
@@ -16,9 +14,6 @@ export const fetchApi = async (
 
   if (body) {
     headers["Content-Type"] = "application/json";
-  }
-  if (options.session) {
-    headers["Authorization"] = `Bearer ${options.session.accessToken}`;
   }
 
   const init: RequestInit = {

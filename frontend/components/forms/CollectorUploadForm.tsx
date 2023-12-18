@@ -12,6 +12,7 @@ import {
 } from "@/lib/api/collectors";
 import { useFilterOptions } from "../hooks/useFilterOptions";
 import { CollectorCreate } from "@/types/api/collector";
+import { renderInput, renderSelect } from "./renderFields";
 
 const validationSchema = z.object({
   name: z
@@ -83,9 +84,10 @@ const validationSchema = z.object({
         message: "Invalid phone",
       }
     ),
-  collection_types: z.array(z.string()).nonempty(),
+  material_types: z.array(z.string()).nonempty(),
+  waste_code_types: z.array(z.string()).nonempty(),
   authorized_vehicle_types: z.array(z.string()).nonempty(),
-  material_recovery_types: z.array(z.string()).nonempty(),
+  circular_strategy_types: z.array(z.string()).nonempty(),
 });
 
 export default function CollectorUploadForm() {
@@ -103,67 +105,38 @@ export default function CollectorUploadForm() {
   const onSubmit = async (values: CollectorCreate) => {
     try {
       console.log(`sent to backend: ${JSON.stringify(values)}`);
-      await createCollector({ ...values });
+      // await createCollector({ ...values });
     } catch (err) {
       console.log(err);
     }
   };
 
-  const renderInput = (
+  const renderInputInternal = (
     label: keyof CollectorCreate,
-    placeholder: string,
-    type?: HTMLInputTypeAttribute
+    placeholder: string
   ) => {
-    const error = errors[label]?.message;
-
-    return (
-      <div className={`w-full`}>
-        <Input {...register(label)} placeholder={placeholder} type={type} />
-        {error && <p className="px-2.5 pt-1.5 text-sm text-red">{error}</p>}
-      </div>
-    );
+    return renderInput<CollectorCreate>({
+      register,
+      errors,
+      label,
+      placeholder,
+    });
   };
 
-  const renderSelect = (
+  const renderSelectInternal = (
     label: keyof CollectorCreate,
     placeholder: string,
     options: FilterOption[]
   ) => {
-    const error = errors[label]?.message;
-
-    return (
-      <div className={`w-full`}>
-        <Controller
-          control={control}
-          render={({ field }) => (
-            <>
-              <Select
-                options={options}
-                selectedOptions={options.filter((option) => {
-                  return (
-                    field.value &&
-                    (field.value as string[]).includes(option.name)
-                  );
-                })}
-                placeholder={placeholder}
-                onChange={(selectedOptions) => {
-                  setValue(
-                    label,
-                    selectedOptions.map((option) => option.name)
-                  );
-                  trigger(label);
-                }}
-                isMultiSelect={true}
-              />
-              {error && (
-                <p className="px-2.5 pt-1.5 text-sm text-red">{error}</p>
-              )}
-            </>
-          )}
-          name={label}
-        />
-      </div>
-    );
+    return renderSelect<CollectorCreate>({
+      control,
+      setValue,
+      trigger,
+      errors,
+      label,
+      placeholder,
+      options,
+    });
   };
 
   if (filterOptionsError) {
@@ -179,30 +152,35 @@ export default function CollectorUploadForm() {
       >
         <div className="flex flex-col max-w-[1080px] gap-9">
           <div className="flex flex-col gap-2">
-            {renderInput("name", "Name")}
-            {renderInput("address", "Address")}
-            {renderInput("zip_code", "Zip Code")}
-            {renderInput("city", "City")}
-            {renderInput("lat", "Latitude")}
-            {renderInput("lng", "Longitude")}
+            {renderInputInternal("name", "Name")}
+            {renderInputInternal("address", "Address")}
+            {renderInputInternal("zip_code", "Zip Code")}
+            {renderInputInternal("city", "City")}
+            {renderInputInternal("lat", "Latitude")}
+            {renderInputInternal("lng", "Longitude")}
             <br />
-            {renderInput("email", "Email")}
-            {renderInput("phone", "Phone")}
+            {renderInputInternal("email", "Email")}
+            {renderInputInternal("phone", "Phone")}
             <br />
-            {renderSelect(
-              "collection_types",
-              "Select Collections...",
-              filterOptions?.collection_types || []
+            {renderSelectInternal(
+              "material_types",
+              "Select Materials...",
+              filterOptions?.material_types || []
             )}
-            {renderSelect(
+            {renderSelectInternal(
+              "waste_code_types",
+              "Select Waste Codes...",
+              filterOptions?.waste_code_types || []
+            )}
+            {renderSelectInternal(
               "authorized_vehicle_types",
               "Select Authorized Vehicles...",
               filterOptions?.authorized_vehicle_types || []
             )}
-            {renderSelect(
-              "material_recovery_types",
-              "Select Material Recoveries...",
-              filterOptions?.material_recovery_types || []
+            {renderSelectInternal(
+              "circular_strategy_types",
+              "Select Circular Strategies...",
+              filterOptions?.circular_strategy_types || []
             )}
           </div>
 

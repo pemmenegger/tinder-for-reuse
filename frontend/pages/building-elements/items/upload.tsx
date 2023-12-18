@@ -3,13 +3,12 @@ import ExcelReader from "@/components/ui/ExcelReader";
 import { Button } from "@/components/ui/button";
 import { uploadBuildingElements } from "@/lib/api/items/building-elements";
 import { BuildingElementCreate } from "@/types/api/items/building-element";
-import { useSession } from "next-auth/react";
+
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 
 export default function BuildingElementUploadPage() {
-  const { data: session } = useSession();
   const [buildingElementsToUpload, setBuildingElementsToUpload] = useState<
     BuildingElementCreate[]
   >([]);
@@ -76,15 +75,8 @@ export default function BuildingElementUploadPage() {
   };
 
   const upload = async () => {
-    if (!session) {
-      toast.error("You must be logged in to upload building elements");
-      return;
-    }
     try {
-      const res = await uploadBuildingElements(
-        buildingElementsToUpload,
-        session
-      );
+      const res = await uploadBuildingElements(buildingElementsToUpload);
       console.log(res);
       toast.success("Successfully uploaded building elements");
       setBuildingElementsToUpload([]);

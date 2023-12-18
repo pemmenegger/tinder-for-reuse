@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, List, Optional
 
 from app.models._base_model import RondasBase, RondasItemBase, RondasTypeBase
-from app.models.account_model import Account
 from app.shared.schemas.item_schema import ItemBase, ItemImageBase
 from app.shared.schemas.type_schema import TypeBase
 from sqlmodel import Field, Relationship
@@ -32,8 +31,6 @@ class Item(ItemBase, RondasBase, table=True):
 
     category_type_id: int = Field(foreign_key="item_category_type.id")
     category_type: ItemCategoryType = Relationship(back_populates="items")
-    account_id: Optional[int] = Field(foreign_key="account.id")
-    account: Account = Relationship(back_populates="items")
     images: Optional[List[ItemImage]] = Relationship(back_populates="item")
 
     building_element: "BuildingElement" = Relationship(back_populates="item")

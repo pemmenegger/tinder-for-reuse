@@ -27,17 +27,18 @@ export default function CollectorsPage() {
           text: "",
         },
         filter: {
-          collection_type_ids: [],
+          material_type_ids: [],
+          waste_code_type_ids: [],
           authorized_vehicle_type_ids: [],
-          material_recovery_type_ids: [],
+          circular_strategy_type_ids: [],
         },
       }}
       filterConfigs={[
         {
           type: "multi",
-          label: "Collections",
-          path: ["filter", "collection_type_ids"],
-          options: filterOptions?.collection_types,
+          label: "Materials",
+          path: ["filter", "material_type_ids"],
+          options: filterOptions?.material_types,
         },
         {
           type: "multi",
@@ -47,9 +48,9 @@ export default function CollectorsPage() {
         },
         {
           type: "multi",
-          label: "Material Recovery",
-          path: ["filter", "material_recovery_type_ids"],
-          options: filterOptions?.material_recovery_types,
+          label: "Circular Strategy",
+          path: ["filter", "circular_strategy_type_ids"],
+          options: filterOptions?.circular_strategy_types,
         },
       ]}
       ResultsWrapper={CollectorResultsWrapper}

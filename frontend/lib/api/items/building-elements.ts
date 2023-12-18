@@ -6,18 +6,15 @@ import {
   BuildingElementSearchResponse,
 } from "@/types/api/items/building-element";
 import { ApiError, fetchApi } from "../base";
-import { Session } from "next-auth";
 
 const API_ROUTE = "/api/items/building-elements";
 
 export const uploadBuildingElements = async (
-  buildingElements: BuildingElementCreate[],
-  session: Session
+  buildingElements: BuildingElementCreate[]
 ) => {
   const { response, data } = await fetchApi(API_ROUTE, `/`, {
     method: "POST",
     body: buildingElements,
-    session: session,
   });
   if (!response.ok)
     throw new ApiError("createBuildingElements fehlgeschlagen", data);
@@ -36,10 +33,9 @@ export const fetchBuildingElementFilterOptions =
     return data;
   };
 
-export const fetchMyBuildingElements = async (session: Session) => {
+export const fetchMyBuildingElements = async () => {
   const { response, data } = await fetchApi(API_ROUTE, `/my`, {
     method: "GET",
-    session: session,
   });
   if (!response.ok)
     throw new ApiError("getMyBuildingElements fehlgeschlagen", data);

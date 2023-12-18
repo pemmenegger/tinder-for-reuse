@@ -25,5 +25,4 @@ class ItemBase(SQLModel):
 
 class ItemCreate(ItemBase):
     category_type_id: int
-    # Account will be set by the API
     images: Optional[List[ItemImageCreate]]

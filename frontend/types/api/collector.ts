@@ -15,9 +15,10 @@ type CollectorBase = {
   email?: string;
   phone?: string;
 
-  collection_types: string[];
+  material_types: string[];
+  waste_code_types: string[];
   authorized_vehicle_types: string[];
-  material_recovery_types: string[];
+  circular_strategy_types: string[];
 };
 
 export type CollectorRead = CollectorBase & {
@@ -27,9 +28,10 @@ export type CollectorRead = CollectorBase & {
 export type CollectorCreate = CollectorBase;
 
 export type CollectorFilterOptions = {
-  collection_types: TypeRead[];
+  material_types: TypeRead[];
+  waste_code_types: TypeRead[];
   authorized_vehicle_types: TypeRead[];
-  material_recovery_types: TypeRead[];
+  circular_strategy_types: TypeRead[];
 };
 
 export type CollectorSearchRequest = {
@@ -37,9 +39,10 @@ export type CollectorSearchRequest = {
     text: string;
   };
   filter: {
-    collection_type_ids: number[];
+    material_type_ids: number[];
+    waste_code_type_ids: number[];
     authorized_vehicle_type_ids: number[];
-    material_recovery_type_ids: number[];
+    circular_strategy_type_ids: number[];
   };
 };
 

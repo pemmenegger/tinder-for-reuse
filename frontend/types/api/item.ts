@@ -2,7 +2,6 @@
 // Do not modify this file directly. It is created from the API definition //
 /////////////////////////////////////////////////////////////////////////////
 
-import { AccountRead } from "./account";
 import { TypeRead } from "./type";
 
 /////////////////////////////////////////////////////////////////////////////
@@ -36,6 +35,5 @@ export type ItemImageRead = ItemImageBase & {
 export type ItemRead = ItemBase & {
   id: number;
   category_type: TypeRead;
-  account?: AccountRead;
   images?: ItemImageRead[];
 };
