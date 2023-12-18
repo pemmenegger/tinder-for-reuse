@@ -17,27 +17,15 @@ const validationSchema = z.object({
   name: z
     .string()
     .min(1, { message: "Name is required" })
-    .refine(
-      (value) =>
-        /^[a-zA-Z0-9- ]*$/.test(value) &&
-        value.length <= 60 &&
-        value.length >= 2,
-      {
-        message: "Invalid name",
-      }
-    ),
+    .refine((value) => value.length <= 60 && value.length >= 2, {
+      message: "Invalid name",
+    }),
   address: z
     .string()
     .min(1, { message: "Address is required" })
-    .refine(
-      (value) =>
-        /^[a-zA-Z0-9- ]*$/.test(value) &&
-        value.length <= 60 &&
-        value.length >= 2,
-      {
-        message: "Invalid address",
-      }
-    ),
+    .refine((value) => value.length <= 60 && value.length >= 2, {
+      message: "Invalid address",
+    }),
   zip_code: z
     .string()
     .min(1, { message: "Zip code is required" })
@@ -53,16 +41,12 @@ const validationSchema = z.object({
   city: z
     .string()
     .min(1, { message: "City is required" })
-    .refine(
-      (value) =>
-        /^[a-zA-Z- ]*$/.test(value) && value.length <= 60 && value.length >= 2,
-      {
-        message: "Invalid city",
-      }
-    ),
+    .refine((value) => value.length <= 60 && value.length >= 2, {
+      message: "Invalid city",
+    }),
   lat: z
     .string()
-    .refine((value) => /^[0-9,.]*$/.test(value), {
+    .refine((value) => /^[-0-9,.]*$/.test(value), {
       message: "Latitude must contain only numbers, commas, or points",
     })
     .transform((value) => parseFloat(value))
@@ -71,7 +55,7 @@ const validationSchema = z.object({
     }),
   lng: z
     .string()
-    .refine((value) => /^[0-9,.]*$/.test(value), {
+    .refine((value) => /^[-0-9,.]*$/.test(value), {
       message: "Longitude must contain only numbers, commas, or points",
     })
     .transform((value) => parseFloat(value))

@@ -6,6 +6,8 @@ import {
   CircleStackIcon as CircleStackIconOutline,
   ArrowsPointingInIcon as ArrowsPointingInIconOutline,
   MagnifyingGlassIcon as MagnifyingGlassIconOutline,
+  BriefcaseIcon as BriefcaseIconOutline,
+  ArrowPathRoundedSquareIcon as ArrowPathRoundedSquareIconOutline,
 } from "@heroicons/react/24/outline";
 import {
   UserCircleIcon as UserCircleIconSolid,
@@ -15,6 +17,8 @@ import {
   ArrowsPointingInIcon as ArrowsPointingInIconSolid,
   LinkIcon as LinkIconSolid,
   MagnifyingGlassIcon as MagnifyingGlassIconSolid,
+  BriefcaseIcon as BriefcaseIconSolid,
+  ArrowPathRoundedSquareIcon as ArrowPathRoundedSquareIconSolid,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
 const tfrLogo = require("../../public/tfr-logo.svg") as string;
@@ -89,13 +93,6 @@ export default function Sidebar() {
       </Link>
       <ul className="flex justify-between px-4 md:px-0 md:block">
         <NavItem
-          OutlineIcon={ArrowsPointingInIconOutline}
-          SolidIcon={ArrowsPointingInIconSolid}
-          text="Collectors"
-          link="/building-elements/collectors"
-          active={router.asPath === "/building-elements/collectors"}
-        />
-        <NavItem
           OutlineIcon={CircleStackIconOutline}
           SolidIcon={CircleStackIconSolid}
           text="Items"
@@ -103,42 +100,51 @@ export default function Sidebar() {
           active={router.asPath === "/building-elements/items"}
         />
         <NavItem
+          OutlineIcon={ArrowUpTrayIconOutline}
+          SolidIcon={ArrowUpTrayIconSolid}
+          text="Upload"
+          link="/building-elements/items/upload"
+          active={router.asPath === "/building-elements/items/upload"}
+        />
+        <div className="border-b"></div>
+        <NavItem
+          OutlineIcon={ArrowPathRoundedSquareIconOutline}
+          SolidIcon={ArrowPathRoundedSquareIconSolid}
+          text="Collectors"
+          link="/building-elements/collectors"
+          active={router.asPath === "/building-elements/collectors"}
+        />
+        <NavItem
+          OutlineIcon={ArrowUpTrayIconOutline}
+          SolidIcon={ArrowUpTrayIconSolid}
+          text="Upload"
+          link="/building-elements/collectors/upload"
+          active={router.asPath === "/building-elements/collectors/upload"}
+        />
+        <div className="border-b"></div>
+        <NavItem
+          OutlineIcon={BriefcaseIconOutline}
+          SolidIcon={BriefcaseIconSolid}
+          text="Contractors"
+          link="/building-elements/contractors"
+          active={router.asPath === "/building-elements/contractors"}
+        />
+        <NavItem
+          OutlineIcon={ArrowUpTrayIconOutline}
+          SolidIcon={ArrowUpTrayIconSolid}
+          text="Upload"
+          link="/building-elements/contractors/upload"
+          active={router.asPath === "/building-elements/contractors/upload"}
+        />
+
+        {/* <div className="border-b "></div>
+        <NavItem
           OutlineIcon={MagnifyingGlassIconOutline}
           SolidIcon={MagnifyingGlassIconSolid}
           text="Matches"
           link="/building-elements/matches"
           active={router.asPath === "/building-elements/matches"}
-        />
-        <div className="border-b "></div>
-        <NavItem
-          OutlineIcon={UserCircleIconOutline}
-          SolidIcon={UserCircleIconSolid}
-          text="My Account"
-          link="/account"
-          active={router.asPath === "/account"}
-        />
-        <NavItem
-          OutlineIcon={UserCircleIconOutline}
-          SolidIcon={UserCircleIconSolid}
-          text="My Uploads"
-          link="/my-uploads"
-          active={router.asPath === "/my-uploads"}
-        />
-        <div className="border-b "></div>
-        <NavItem
-          OutlineIcon={ArrowUpTrayIconOutline}
-          SolidIcon={ArrowUpTrayIconSolid}
-          text="Upload Items"
-          link="/building-elements/upload"
-          active={router.asPath === "/building-elements/upload"}
-        />
-        <NavItem
-          OutlineIcon={ArrowUpTrayIconOutline}
-          SolidIcon={ArrowUpTrayIconSolid}
-          text="Upload Collector"
-          link="/building-elements/collectors/upload"
-          active={router.asPath === "/building-elements/collectors/upload"}
-        />
+        /> */}
       </ul>
     </nav>
   );
