@@ -1,4 +1,4 @@
-import { BuildingElementCard } from "@/components/BuildingElementCard";
+import { BuildingElementCard } from "@/components/cards/BuildingElementCard";
 import ExcelReader from "@/components/ui/ExcelReader";
 import { Button } from "@/components/ui/button";
 import { uploadBuildingElements } from "@/lib/api/items/building-elements";

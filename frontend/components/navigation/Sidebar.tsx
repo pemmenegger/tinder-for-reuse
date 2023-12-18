@@ -39,9 +39,9 @@ function NavItem({
   active: boolean;
 }) {
   let itemStyle =
-    "flex text-lg my-2 md:my-3 items-center rounded-lg py-2 md:py-4 md:pb-3 px-4 hover:bg-rondas-beige-dark/10";
+    "flex text-lg my-2 md:my-3 items-center rounded-lg py-2 md:py-4 md:pb-3 px-4 hover:bg-dbeige/10";
   if (active) {
-    itemStyle += " bg-rondas-beige-dark/5 text-black font-body-500";
+    itemStyle += " bg-dbeige/5 text-black font-body-500";
   }
 
   let iconStyle = "h-6 w-6 mb-0.5 lg:mr-4";

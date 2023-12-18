@@ -1,8 +1,8 @@
-import CollectorUploadForm from "@/components/forms/CollectorUploadForm";
+import ContractorUploadForm from "@/components/forms/ContractorUploadForm";
 import React from "react";
 
-const CollectorUploadPage = () => {
-  return <CollectorUploadForm />;
+const ContractorUploadPage = () => {
+  return <ContractorUploadForm />;
 };
 
-export default CollectorUploadPage;
+export default ContractorUploadPage;

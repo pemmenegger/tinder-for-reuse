@@ -1,4 +1,5 @@
 from app.config import settings
+from fastapi import HTTPException, status
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import create_engine, select
 
@@ -50,3 +51,15 @@ def read_types(session, model_class):
     types = session.execute(select(model_class))
     types = types.scalars().all()
     return types
+
+
+def read_types_by_name_or_throw(session, model_class, names):
+    instances = []
+    for name in names:
+        instance = read_type_by_name(session, model_class, name)
+        if not instance:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail=f"{model_class} with name {name} not found"
+            )
+        instances.append(instance)
+    return instances

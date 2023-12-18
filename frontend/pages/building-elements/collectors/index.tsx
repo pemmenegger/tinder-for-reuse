@@ -2,7 +2,7 @@ import {
   collectorsFetcher,
   fetchCollectorFilterOptions,
 } from "@/lib/api/collectors";
-import { CollectorFilterOptions, CollectorRead } from "@/types/api/collector";
+import { CollectorRead } from "@/types/api/collector";
 import { useEffect, useState } from "react";
 import Search, { SearchResultsWrapperType } from "@/components/search/Search";
 import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";

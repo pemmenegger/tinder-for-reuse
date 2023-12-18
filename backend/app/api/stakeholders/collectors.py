@@ -13,7 +13,7 @@ from app.schemas.stakeholders.collector_schema import (
     CollectorSearchResponse,
 )
 from app.shared.schemas.collector_schema import CollectorCreate, CollectorRead
-from app.utils.database import get_session, read_type_by_name, read_types
+from app.utils.database import get_session, read_types, read_types_by_name_or_throw
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session, joinedload
 from sqlmodel import select
@@ -31,46 +31,14 @@ def create_collectors(
 
     collectors_to_create = []
     for collector_create in payload:
-        material_types = []
-        waste_code_types = []
-        authorized_vehicle_types = []
-        circular_strategy_types = []
-
-        for material_type in collector_create.material_types:
-            material_type = read_type_by_name(session, MaterialType, material_type)
-            if not material_type:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Collection type {material_type} does not exist",
-                )
-            material_types.append(material_type)
-
-        for waste_code_type in collector_create.waste_code_types:
-            waste_code_type = read_type_by_name(session, WasteCodeType, waste_code_type)
-            if not waste_code_type:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Waste code type {waste_code_type} does not exist",
-                )
-            waste_code_types.append(waste_code_type)
-
-        for authorized_vehicle_type in collector_create.authorized_vehicle_types:
-            authorized_vehicle_type = read_type_by_name(session, AuthorizedVehicleType, authorized_vehicle_type)
-            if not authorized_vehicle_type:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Authorized vehicle type {authorized_vehicle_type} does not exist",
-                )
-            authorized_vehicle_types.append(authorized_vehicle_type)
-
-        for circular_strategy_type in collector_create.circular_strategy_types:
-            circular_strategy_type = read_type_by_name(session, CircularStrategyType, circular_strategy_type)
-            if not circular_strategy_type:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Circular strategy type {circular_strategy_type} does not exist",
-                )
-            circular_strategy_types.append(circular_strategy_type)
+        material_types = read_types_by_name_or_throw(session, MaterialType, collector_create.material_types)
+        waste_code_types = read_types_by_name_or_throw(session, WasteCodeType, collector_create.waste_code_types)
+        authorized_vehicle_types = read_types_by_name_or_throw(
+            session, AuthorizedVehicleType, collector_create.authorized_vehicle_types
+        )
+        circular_strategy_types = read_types_by_name_or_throw(
+            session, CircularStrategyType, collector_create.circular_strategy_types
+        )
 
         collector = Collector(
             **collector_create.dict(

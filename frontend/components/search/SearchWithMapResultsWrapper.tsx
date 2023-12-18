@@ -5,7 +5,7 @@ import {
   SuperClusterAlgorithm,
 } from "@googlemaps/markerclusterer";
 import { MapMarker } from "@/types/item";
-import { BuildingElementCardSkeleton } from "../BuildingElementCard";
+import { BuildingElementCardSkeleton } from "../cards/BuildingElementCard";
 
 const GoogleMapsWrapper = ({ children }: { children: React.ReactNode }) => {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;

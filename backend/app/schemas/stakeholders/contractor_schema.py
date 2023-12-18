@@ -4,6 +4,8 @@
 
 from typing import List, Optional
 
+from app.shared.schemas.type_schema import TypeRead
+from pydantic import BaseModel
 from sqlmodel import SQLModel
 
 
@@ -38,3 +40,25 @@ class ContractorRead(ContractorBase):
             material_types=[material_type.name for material_type in contractor.material_types],
             waste_code_types=[waste_code_type.name for waste_code_type in contractor.waste_code_types],
         )
+
+
+class ContractorFilterOptions(BaseModel):
+    material_types: List[TypeRead]
+    waste_code_types: List[TypeRead]
+
+
+class ContractorSearchRequest(BaseModel):
+    class Query(BaseModel):
+        text: str
+
+    class Filter(BaseModel):
+        material_type_ids: List[int]
+        waste_code_type_ids: List[int]
+
+    query: Query
+    filter: Filter
+
+
+class ContractorSearchResponse(BaseModel):
+    results: List[ContractorRead]
+    hasMore: bool

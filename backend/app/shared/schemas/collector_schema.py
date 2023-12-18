@@ -35,9 +35,10 @@ class CollectorRead(CollectorBase):
         return cls(
             **collector.dict(
                 exclude_unset=False,
-                exclude={"material_types", "authorized_vehicle_types", "circular_strategy_types"},
+                exclude={"material_types", "waste_code_types", "authorized_vehicle_types", "circular_strategy_types"},
             ),
             material_types=[material_type.name for material_type in collector.material_types],
+            waste_code_types=[waste_code_type.name for waste_code_type in collector.waste_code_types],
             authorized_vehicle_types=[
                 authorized_vehicle_type.name for authorized_vehicle_type in collector.authorized_vehicle_types
             ],

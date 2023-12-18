@@ -1,9 +1,0 @@
-node_modules
-.next
-
-.git
-.gitignore
-
-.env
-.env.aws
-.env.local

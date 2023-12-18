@@ -12,9 +12,7 @@ const SearchInputText = ({
     <Input
       size="xl"
       icon={<MagnifyingGlassIcon className="w-6 h-6 stroke-dgray" />}
-      placeholder={
-        queryText !== "" ? "Refine Your Photo Search With Text..." : "Search..."
-      }
+      placeholder={queryText !== "" ? "Search With Text..." : "Search..."}
       value={queryText !== undefined ? queryText : ""}
       onChange={(e) => onTextChange(e.target.value)}
     />

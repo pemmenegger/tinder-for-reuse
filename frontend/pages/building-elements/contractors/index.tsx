@@ -1,18 +1,18 @@
 import {
-  collectorsFetcher,
-  fetchCollectorFilterOptions,
-} from "@/lib/api/collectors";
-import { CollectorFilterOptions, CollectorRead } from "@/types/api/collector";
+  contractorsFetcher,
+  fetchContractorFilterOptions,
+} from "@/lib/api/contractors";
+import { ContractorRead } from "@/types/api/contractor";
 import { useEffect, useState } from "react";
 import Search, { SearchResultsWrapperType } from "@/components/search/Search";
 import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";
 import { MapMarker } from "@/types/item";
-import { fromCollectorsToCollectorMapMarkers } from "@/lib/utils";
+import { fromContractorsToContractorMapMarkers } from "@/lib/utils";
 import { useFilterOptions } from "@/components/hooks/useFilterOptions";
 
-export default function CollectorsPage() {
+export default function ContractorsPage() {
   const { filterOptions, error } = useFilterOptions(
-    fetchCollectorFilterOptions
+    fetchContractorFilterOptions
   );
 
   if (error) {
@@ -21,7 +21,7 @@ export default function CollectorsPage() {
 
   return (
     <Search
-      fetcher={collectorsFetcher}
+      fetcher={contractorsFetcher}
       initialSearchRequest={{
         query: {
           text: "",
@@ -29,8 +29,6 @@ export default function CollectorsPage() {
         filter: {
           material_type_ids: [],
           waste_code_type_ids: [],
-          authorized_vehicle_type_ids: [],
-          circular_strategy_type_ids: [],
         },
       }}
       filterConfigs={[
@@ -42,46 +40,40 @@ export default function CollectorsPage() {
         },
         {
           type: "multi",
-          label: "Authorized Vehicles",
-          path: ["filter", "authorized_vehicle_type_ids"],
-          options: filterOptions?.authorized_vehicle_types,
-        },
-        {
-          type: "multi",
-          label: "Circular Strategy",
-          path: ["filter", "circular_strategy_type_ids"],
-          options: filterOptions?.circular_strategy_types,
+          label: "Waste Codes",
+          path: ["filter", "waste_code_types"],
+          options: filterOptions?.waste_code_types,
         },
       ]}
-      ResultsWrapper={CollectorResultsWrapper}
+      ResultsWrapper={ContractorResultsWrapper}
     />
   );
 }
 
-function CollectorResultsWrapper({
+function ContractorResultsWrapper({
   results,
   isLoading,
 }: SearchResultsWrapperType) {
   const [mapMarkers, setMapMarkers] = useState<MapMarker[]>([]);
 
   useEffect(() => {
-    const collectors = results as CollectorRead[];
+    const contractors = results as ContractorRead[];
 
-    if (!collectors || collectors.length === 0) {
+    if (!contractors || contractors.length === 0) {
       return;
     }
 
-    const collectorsMapMarkers =
-      fromCollectorsToCollectorMapMarkers(collectors);
+    const contractorsMapMarkers =
+      fromContractorsToContractorMapMarkers(contractors);
 
-    setMapMarkers(collectorsMapMarkers);
+    setMapMarkers(contractorsMapMarkers);
   }, [results]);
 
   return (
     <SearchWithMapResultsWrapper
       isLoading={isLoading}
       mapMarkers={mapMarkers}
-      clusterIconUrl="/icons/collectors/cluster.svg"
+      clusterIconUrl="/icons/contractors/cluster.svg"
     />
   );
 }

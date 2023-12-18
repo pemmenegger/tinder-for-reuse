@@ -1,6 +1,8 @@
-import { BuildingElementCard } from "@/components/BuildingElementCard";
-import { CollectorCard } from "@/components/CollectorCard";
+import { ContractorCard } from "@/components/cards/ContractorCard";
+import { BuildingElementCard } from "@/components/cards/BuildingElementCard";
+import { CollectorCard } from "@/components/cards/CollectorCard";
 import { CollectorRead } from "@/types/api/collector";
+import { ContractorRead } from "@/types/api/contractor";
 import { BuildingElementRead } from "@/types/api/items/building-element";
 import { MapMarker } from "@/types/item";
 import { ClassValue, clsx } from "clsx";
@@ -24,6 +26,23 @@ export const fromCollectorsToCollectorMapMarkers = (
     },
     results: [collector],
     ResultComponent: CollectorCard,
+  }));
+};
+
+export const fromContractorsToContractorMapMarkers = (
+  contractors: ContractorRead[]
+): MapMarker[] => {
+  return contractors.map((contractor) => ({
+    id: contractor.id,
+    lat: contractor.lat,
+    lng: contractor.lng,
+    iconUrl: "/icons/contractors/marker.svg",
+    iconScaledSize: {
+      width: 22,
+      height: 31,
+    },
+    results: [contractor],
+    ResultComponent: ContractorCard,
   }));
 };
 

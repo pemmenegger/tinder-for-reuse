@@ -42,7 +42,7 @@ const SearchInputImage = ({
     <>
       {queryImage ? (
         <div
-          className="flex relative cursor-pointer bg-rondas-orange/20 border border-rondas-orange/30 items-center rounded-lg px-1.5"
+          className="flex relative cursor-pointer bg-orange/20 border border-orange/30 items-center rounded-lg px-1.5"
           onClick={onImageRemove}
         >
           <div className="mr-3 flex items-center">
@@ -60,7 +60,7 @@ const SearchInputImage = ({
         </div>
       ) : (
         <button
-          className="w-14 rounded-lg border border-black border-dashed bg-rondas-beige-dark/5 shadow-sm flex items-center justify-center content-center"
+          className="w-14 rounded-lg border border-black border-dashed bg-dbeige/5 shadow-sm flex items-center justify-center content-center"
           onClick={() => imageUploadRef.current?.click()}
         >
           <input
@@ -70,7 +70,7 @@ const SearchInputImage = ({
             ref={imageUploadRef}
             onChange={handleImageUpload}
           />
-          <CameraIcon className="w-1/2 stroke-rondas-beige-dark/60" />
+          <CameraIcon className="w-1/2 stroke-dbeige/60" />
         </button>
       )}
     </>
