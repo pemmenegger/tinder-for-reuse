@@ -5,17 +5,18 @@ import {
 import React from "react";
 
 export function BuildingElementCard({
-  quantity,
-  total_mass_kg,
-  total_volume_m3,
-  localization,
+  total_mass,
+  total_volume,
+  material,
+  condition_sanitary,
   reuse_potential,
-  drop_off_procedures,
-  storage_method,
+  waste_code,
+  recycling_potential,
+  energy_recovery,
+  disposal,
+  address,
   category_type,
-  unit_type,
-  constitution_types,
-  material_types,
+  worksheet,
   item,
   isActive = false,
 }: (BuildingElementRead | BuildingElementCreate) & { isActive?: boolean }) {
@@ -31,12 +32,12 @@ export function BuildingElementCard({
     return null;
   };
 
-  const formatQuantity = (quantity: number, unit: string) => {
-    if (unit == "U") {
-      return `${quantity} unit(s)`;
-    }
-    return `${quantity} ${unit}`;
-  };
+  // const formatQuantity = (quantity: number, unit: string) => {
+  //   if (unit == "U") {
+  //     return `${quantity} unit(s)`;
+  //   }
+  //   return `${quantity} ${unit}`;
+  // };
 
   return (
     <div
@@ -46,15 +47,18 @@ export function BuildingElementCard({
     >
       {renderProperty("Title", item.title)}
       {renderProperty("Category", category_type)}
-      {renderProperty("Quantity", formatQuantity(quantity, unit_type))}
-      {renderProperty("Total Mass", `${total_mass_kg} kg`)}
-      {renderProperty("Total Volume", `${total_volume_m3} m³`)}
-      {renderProperty("Localization", localization)}
-      {renderProperty("Constitutions", constitution_types)}
-      {renderProperty("Materials", material_types)}
+      {/* {renderProperty("Quantity", formatQuantity(quantity, unit_type))} */}
+      {renderProperty("Total Mass", `${total_mass} t`)}
+      {renderProperty("Total Volume", `${total_volume} m³`)}
+      {renderProperty("Material", material)}
+      {renderProperty("Condition", condition_sanitary)}
       {renderProperty("Reuse Potential", reuse_potential)}
-      {renderProperty("Drop Off Procedures", drop_off_procedures)}
-      {renderProperty("Storage Method", storage_method)}
+      {renderProperty("Waste Code", waste_code)}
+      {renderProperty("Recycling Potential", recycling_potential)}
+      {renderProperty("Energy Recovery", energy_recovery)}
+      {renderProperty("Disposal", disposal)}
+      {renderProperty("Address", address)}
+      {renderProperty("Worksheet", worksheet)}
     </div>
   );
 }

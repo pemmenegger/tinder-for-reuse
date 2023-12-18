@@ -8,28 +8,24 @@ import { ItemCreate, ItemRead } from "../item";
 import { TypeRead } from "../type";
 
 type BuildingElementBase = {
-  quantity: number;
-  total_mass_kg?: number;
-  total_volume_m3?: number;
-  l?: number;
-  L?: number;
-  diameter?: number;
-  H?: number;
-  P?: number;
-  E?: number;
-  localization?: string;
-  condition?: string;
+  total_mass?: number;
+  total_volume?: number;
+  material?: string;
+  condition_sanitary?: string;
   reuse_potential?: string;
-  drop_off_procedures?: string;
-  storage_method?: string;
+  waste_code?: string;
+  recycling_potential?: string;
+  energy_recovery?: string;
+  disposal?: string;
+  address: string;
   lat: number;
   lng: number;
   upload_uuid: string;
 
   category_type: string;
-  unit_type: string;
-  constitution_types: string[];
-  material_types: string[];
+  worksheet: string;
+
+  // TODO material not standardized? list of strings?
 };
 
 export type BuildingElementCreate = BuildingElementBase & {

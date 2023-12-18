@@ -2,7 +2,12 @@ import React, { useCallback, useRef, useState } from "react";
 import * as XLSX from "xlsx";
 
 type Props = {
-  onFileUploaded: (lat: number, lng: number, data: any[][]) => void;
+  onFileUploaded: (
+    data: any[][],
+    sheetName: string,
+    address: any,
+    location: any
+  ) => void;
   supportedWorksheetNames?: string[];
 };
 
@@ -39,39 +44,34 @@ const ExcelReader: React.FC<Props> = ({
         const data = await file.arrayBuffer();
         const workbook = XLSX.read(data, { type: "array" });
 
-        // go to synthese sheet and extract lat lng
-        let synthese =
-          workbook.Sheets["synthese"] ||
-          workbook.Sheets["Synthese"] ||
-          workbook.Sheets["SYNTHESE"];
-        if (!synthese) {
-          console.error("synthese sheet not found");
-          return;
-        }
-
-        const jsonData: any[][] = XLSX.utils.sheet_to_json(synthese, {
-          header: 1,
-        });
-        const lat = jsonData[1][0].split(",")[0];
-        const lng = jsonData[1][0].split(",")[1];
-        if (!lat || !lng) {
-          console.error("lat lng not found");
-          return;
-        }
-        console.log(lat, lng);
-
+        const jsonSynthese: any[][] = XLSX.utils.sheet_to_json(
+          workbook.Sheets["synthese"],
+          {
+            header: 1,
+          }
+        );
+        const address: string = jsonSynthese[0][1];
+        const location: string = jsonSynthese[1][1];
+        const location_lat: number = parseFloat(location.split(";")[0]);
+        const location_long: number = parseFloat(location.split(";")[1]);
         workbook.SheetNames.forEach((sheetName) => {
+          console.log("Handling sheet:", sheetName);
           if (
             supportedWorksheetNames &&
             !supportedWorksheetNames.includes(sheetName)
           ) {
+            console.log("Skipping unsupported sheet:", sheetName);
             return;
           }
           const worksheet = workbook.Sheets[sheetName];
+          console.log("Worksheet:", worksheet);
           const jsonData: any[][] = XLSX.utils.sheet_to_json(worksheet, {
             header: 1,
           });
-          onFileUploaded(lat, lng, jsonData);
+          onFileUploaded(jsonData, sheetName, address, [
+            location_lat,
+            location_long,
+          ]);
         });
       } catch (error) {
         console.error("Error reading file:", error);

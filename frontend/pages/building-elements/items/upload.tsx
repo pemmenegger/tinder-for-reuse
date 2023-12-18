@@ -13,92 +13,92 @@ export default function BuildingElementUploadPage() {
     BuildingElementCreate[]
   >([]);
 
-  const handleFileUpload = (lat: number, lng: number, data: any[][]) => {
-    // Clear existing data
-    // setBuildingElementReusables([]);
-
+  const handleFileUpload = (
+    data: any[][],
+    sheetName: string,
+    address: string,
+    location: [number, number]
+  ) => {
     const upload_uuid = uuidv4();
 
+    const headers = data[1];
+    const columnIndices = {
+      total_mass: headers.indexOf("poids total en tonne"),
+      total_volume: headers.indexOf("volume total en m3"),
+      material: headers.indexOf("matériaux"),
+      condition_sanitary: headers.indexOf("état sanitaire des matériaux"),
+      reuse_potential: headers.indexOf("potentiel de réemploi/ réutilisation"),
+      waste_code: headers.indexOf("code déchet"),
+      recycling_potential: headers.indexOf("potentiel de recyclage"),
+      energy_recovery: headers.indexOf("valorisation énergie"),
+      disposal: headers.indexOf("élimination"),
+    };
+
     let currCategory;
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 2; i < data.length; i++) {
       const row = data[i];
-      if (row.length == 2 && row[0] == null && row[1] != null) {
+      if (row.length < 2) continue;
+      if (row.length == 2) {
         currCategory = row[1];
         continue;
       }
-      if (row.length == 0 || currCategory == null) {
-        // skip empty rows and the first rows without a category (headers)
-        continue;
-      }
+      if (!currCategory) continue;
 
-      console.log(row);
-
-      // Extracting dimensions if they exist in the form of 'H = value ; l = value' etc.
-      const dimensions = row[9]?.match(
-        /H\s*=\s*([\d.]+)\s*;\s*l\s*=\s*([\d.]+)\s*;\s*diamètre\s*=\s*([\d.]+)|H\s*=\s*([\d.]+)/i
-      );
-      const buildingElementsToUpload: BuildingElementCreate = {
-        quantity: row[6],
-        total_mass_kg: row[7],
-        total_volume_m3: row[8],
-        // If dimensions exist, assign them to their corresponding properties
-        H: dimensions ? parseFloat(dimensions[1] || dimensions[4]) : undefined,
-        l: dimensions ? parseFloat(dimensions[2]) : undefined,
-        diameter: dimensions ? parseFloat(dimensions[3]) : undefined,
-        localization: row[10],
-        condition: row[13],
-        reuse_potential: row[14],
-        drop_off_procedures: row[15],
-        storage_method: row[16],
-        lat: lat,
-        lng: lng,
-        upload_uuid: upload_uuid,
-
+      const newElement: BuildingElementCreate = {
+        total_mass: row[columnIndices.total_mass],
+        total_volume: row[columnIndices.total_volume],
+        material: row[columnIndices.material],
+        condition_sanitary: row[columnIndices.condition_sanitary],
+        reuse_potential: row[columnIndices.reuse_potential],
+        waste_code: row[columnIndices.waste_code],
+        recycling_potential: row[columnIndices.recycling_potential],
+        energy_recovery: row[columnIndices.energy_recovery],
+        disposal: row[columnIndices.disposal],
         category_type: currCategory,
-        unit_type: row[2],
-        constitution_types: row[11] ? row[11].split(" ; ") : [],
-        material_types: row[12] ? row[12].split(" ; ") : [],
+        worksheet: sheetName,
         item: {
           title: row[1],
-          // must match with /shared/types.py ItemCategoryEnum
-          category_type_id: 1,
+          category_type_id: 1, // This might need to be dynamically determined
         },
+        address: address,
+        lat: location[0],
+        lng: location[1],
+        upload_uuid: upload_uuid,
       };
 
-      // Logging and updating state
-      console.log(buildingElementsToUpload);
-      setBuildingElementsToUpload((prev) => [
-        ...prev,
-        buildingElementsToUpload,
-      ]);
+      setBuildingElementsToUpload((prev) => [...prev, newElement]);
     }
   };
 
   const upload = async () => {
+    if (buildingElementsToUpload.length === 0) {
+      toast.error("No building elements to upload");
+      return;
+    }
+
     try {
-      const res = await uploadBuildingElements(buildingElementsToUpload);
-      console.log(res);
+      await uploadBuildingElements(buildingElementsToUpload);
       toast.success("Successfully uploaded building elements");
       setBuildingElementsToUpload([]);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       toast.error("Failed to upload building elements");
     }
   };
 
   return (
     <>
-      <h2>Upload Building Elements from Excel</h2>
+      <h2>Upload your deconstructed Materials</h2>
       <ExcelReader
         onFileUploaded={handleFileUpload}
         supportedWorksheetNames={[
-          // "STRUCTURE",
-          // "SECOND OEUVRE",
-          // "RESEAUX",
-          // "AMENAGEMENT EXT",
+          "STRUCTURE",
+          "SECOND OEUVRE",
+          "RESEAUX",
+          "AMENAGEMENT EXT",
           "DECHETS RESIDUELS",
-          // "DEEE",
-          // "DEA",
+          "DEEE",
+          "DEA",
         ]}
       />
       {buildingElementsToUpload.map((buildingElementToUpload, index) => (
@@ -115,6 +115,9 @@ export default function BuildingElementUploadPage() {
       >
         Upload
       </Button>
+      <p onClick={() => console.log(buildingElementsToUpload)}>
+        print elements
+      </p>
     </>
   );
 }
