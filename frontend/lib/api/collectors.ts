@@ -9,6 +9,15 @@ import { ApiError, fetchApi } from "./base";
 
 const API_ROUTE = "/api/collectors";
 
+export const fetchCollectors = async (): Promise<CollectorRead[]> => {
+  const { response, data } = await fetchApi(API_ROUTE, `/`, {
+    method: "GET",
+  });
+  if (!response.ok) throw new ApiError("fetchCollectors fehlgeschlagen", data);
+  // console.log("fetchCollectors Response", data);
+  return data;
+};
+
 export const createCollector = async (
   collector: CollectorCreate
 ): Promise<CollectorRead> => {
@@ -21,12 +30,16 @@ export const createCollector = async (
   return data;
 };
 
-export const fetchCollectors = async (): Promise<CollectorRead[]> => {
-  const { response, data } = await fetchApi(API_ROUTE, `/`, {
-    method: "GET",
+export const updateCollector = async (
+  collectorId: number,
+  collector: CollectorCreate
+): Promise<CollectorRead> => {
+  const { response, data } = await fetchApi(API_ROUTE, `/${collectorId}`, {
+    method: "PUT",
+    body: [collector],
   });
-  if (!response.ok) throw new ApiError("fetchCollectors fehlgeschlagen", data);
-  // console.log("fetchCollectors Response", data);
+  if (!response.ok) throw new ApiError("updateCollector fehlgeschlagen", data);
+  console.log("updateCollector Response", data);
   return data;
 };
 

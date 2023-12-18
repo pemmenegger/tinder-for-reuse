@@ -1,4 +1,4 @@
-import ContractorUploadForm from "@/components/forms/ContractorUploadForm";
+import ContractorUploadForm from "@/components/forms/ContractorForm";
 import React from "react";
 
 const ContractorUploadPage = () => {

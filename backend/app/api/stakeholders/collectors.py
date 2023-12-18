@@ -21,6 +21,16 @@ from sqlmodel import select
 router = APIRouter()
 
 
+@router.get("/")
+def fetch_collectors(
+    session: Session = Depends(get_session),
+):
+    query = select(Collector).options(joinedload(Collector.material_types))
+    results = session.execute(query)
+    collectors_read = [CollectorRead.from_collector(collector) for collector in results.scalars().unique()]
+    return collectors_read
+
+
 @router.post("/")
 def create_collectors(
     payload: List[CollectorCreate],
@@ -58,14 +68,41 @@ def create_collectors(
     return [collector.dict() for collector in collectors_to_create]
 
 
-@router.get("/")
-def fetch_collectors(
+@router.put("/{id}")
+def update_collector(
+    id: int,
+    payload: CollectorCreate,
     session: Session = Depends(get_session),
 ):
-    query = select(Collector).options(joinedload(Collector.material_types))
-    results = session.execute(query)
-    collectors_read = [CollectorRead.from_collector(collector) for collector in results.scalars().unique()]
-    return collectors_read
+    collector = session.get(Collector, id)
+    if not collector:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Collector not found")
+    material_types = read_types_by_name_or_throw(session, MaterialType, payload.material_types)
+    waste_code_types = read_types_by_name_or_throw(session, WasteCodeType, payload.waste_code_types)
+    authorized_vehicle_types = read_types_by_name_or_throw(
+        session, AuthorizedVehicleType, payload.authorized_vehicle_types
+    )
+    circular_strategy_types = read_types_by_name_or_throw(
+        session, CircularStrategyType, payload.circular_strategy_types
+    )
+
+    collector.name = payload.name
+    collector.address = payload.address
+    collector.zip_code = payload.zip_code
+    collector.city = payload.city
+    collector.lat = payload.lat
+    collector.lng = payload.lng
+    collector.email = payload.email
+    collector.phone = payload.phone
+    collector.material_types = material_types
+    collector.waste_code_types = waste_code_types
+    collector.authorized_vehicle_types = authorized_vehicle_types
+    collector.circular_strategy_types = circular_strategy_types
+
+    session.add(collector)
+    session.commit()
+
+    return collector.dict()
 
 
 @router.get("/filter/", response_model=CollectorFilterOptions)

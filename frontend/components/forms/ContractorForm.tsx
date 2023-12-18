@@ -7,14 +7,14 @@ import { z } from "zod";
 import { Select } from "../ui/select";
 import { FilterOption } from "../search/SearchInputContainer";
 import {
-  createCollector,
-  fetchCollectorFilterOptions,
-} from "@/lib/api/collectors";
-import { useFilterOptions } from "../hooks/useFilterOptions";
-import { CollectorCreate } from "@/types/api/collector";
+  createContractor,
+  fetchContractorFilterOptions,
+} from "@/lib/api/contractors";
+import { ContractorCreate } from "@/types/api/contractor";
 import { renderInput, renderSelect } from "./renderFields";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import useSWR from "swr";
 
 const validationSchema = z.object({
   name: z
@@ -88,39 +88,38 @@ const validationSchema = z.object({
     ),
   material_types: z.array(z.string()).nonempty(),
   waste_code_types: z.array(z.string()).nonempty(),
-  authorized_vehicle_types: z.array(z.string()).nonempty(),
-  circular_strategy_types: z.array(z.string()).nonempty(),
 });
 
-export default function CollectorUploadForm() {
+export default function ContractorUploadForm() {
   const router = useRouter();
-  const { filterOptions, error: filterOptionsError } = useFilterOptions(
-    fetchCollectorFilterOptions
+  const { data: filterOptions, error: filterOptionsError } = useSWR(
+    "/api/contractors/filter/",
+    fetchContractorFilterOptions
   );
   const { control, register, handleSubmit, setValue, formState, trigger } =
-    useForm<CollectorCreate>({
+    useForm<ContractorCreate>({
       resolver: zodResolver(validationSchema),
       mode: "onBlur",
       reValidateMode: "onBlur",
     });
   const { errors, isValid } = formState;
 
-  const onSubmit = async (values: CollectorCreate) => {
+  const onSubmit = async (values: ContractorCreate) => {
     try {
       console.log(`sent to backend: ${JSON.stringify(values)}`);
-      await createCollector({ ...values });
-      toast.success("Successfully uploaded collector");
-      router.push("/building-elements/collectors");
+      await createContractor({ ...values });
+      toast.success("Successfully uploaded contractor");
+      router.push("/building-elements/contractors");
     } catch (err) {
       console.log(err);
     }
   };
 
   const renderInputInternal = (
-    label: keyof CollectorCreate,
+    label: keyof ContractorCreate,
     placeholder: string
   ) => {
-    return renderInput<CollectorCreate>({
+    return renderInput<ContractorCreate>({
       register,
       errors,
       label,
@@ -129,11 +128,11 @@ export default function CollectorUploadForm() {
   };
 
   const renderSelectInternal = (
-    label: keyof CollectorCreate,
+    label: keyof ContractorCreate,
     placeholder: string,
     options: FilterOption[]
   ) => {
-    return renderSelect<CollectorCreate>({
+    return renderSelect<ContractorCreate>({
       control,
       setValue,
       trigger,
@@ -150,7 +149,7 @@ export default function CollectorUploadForm() {
 
   return (
     <div>
-      <h2>Upload Collector</h2>
+      <h2>Upload Contractor</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex w-1/2 max-w-[1080px] flex-col gap-2"
@@ -176,16 +175,6 @@ export default function CollectorUploadForm() {
               "waste_code_types",
               "Select Waste Codes...",
               filterOptions?.waste_code_types || []
-            )}
-            {renderSelectInternal(
-              "authorized_vehicle_types",
-              "Select Authorized Vehicles...",
-              filterOptions?.authorized_vehicle_types || []
-            )}
-            {renderSelectInternal(
-              "circular_strategy_types",
-              "Select Circular Strategies...",
-              filterOptions?.circular_strategy_types || []
             )}
           </div>
           <div className="flex flex-col gap-2">

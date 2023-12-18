@@ -1,11 +1,18 @@
 import { CollectorRead } from "@/types/api/collector";
-import React from "react";
+import React, { useState } from "react";
+import { Button } from "../ui/button";
+import { CollectorEditForm } from "../forms/CollectorForm";
+import toast from "react-hot-toast";
+import { PencilIcon as PencilIconOutline } from "@heroicons/react/24/outline";
 
 export function CollectorCard({
+  id,
   name,
   address,
   zip_code,
   city,
+  lat,
+  lng,
   email,
   phone,
   material_types,
@@ -14,6 +21,8 @@ export function CollectorCard({
   circular_strategy_types,
   isActive,
 }: CollectorRead & { isActive: boolean }) {
+  const [isEditing, setIsEditing] = useState(false);
+
   const renderProperty = (label: string, value: any) => {
     if (value !== null && value !== undefined) {
       return (
@@ -28,18 +37,52 @@ export function CollectorCard({
 
   return (
     <div
-      className={`grid grid-cols-2 mt-8 bg-white border shadow-sm rounded-xl p-5 ${
+      className={`relative mt-10 bg-white border shadow-sm rounded-xl p-5 ${
         isActive ? "border-[#C95139]" : "border-dgray/40"
       }`}
     >
-      {renderProperty("Name", name)}
-      {renderProperty("Address", `${address}, ${zip_code}, ${city}`)}
-      {renderProperty("Email", email)}
-      {renderProperty("Phone", phone)}
-      {renderProperty("Materials", material_types)}
-      {renderProperty("Waste Codes", waste_code_types)}
-      {renderProperty("Authorized Vehicles", authorized_vehicle_types)}
-      {renderProperty("Circular Strategies", circular_strategy_types)}
+      {isEditing ? (
+        <CollectorEditForm
+          onCancel={() => setIsEditing(false)}
+          onSuccess={() => {
+            toast.success("Collector updated successfully");
+            setIsEditing(false);
+          }}
+          defaultValues={{
+            name,
+            address,
+            zip_code,
+            city,
+            lat,
+            lng,
+            email,
+            phone,
+            material_types,
+            waste_code_types,
+            authorized_vehicle_types,
+            circular_strategy_types,
+          }}
+          collectorId={id}
+        />
+      ) : (
+        <>
+          <div className={`grid grid-cols-2`}>
+            {renderProperty("Name", name)}
+            {renderProperty("Address", `${address}, ${zip_code}, ${city}`)}
+            {renderProperty("Email", email)}
+            {renderProperty("Phone", phone)}
+            {renderProperty("Materials", material_types)}
+            {renderProperty("Waste Codes", waste_code_types)}
+            {renderProperty("Authorized Vehicles", authorized_vehicle_types)}
+            {renderProperty("Circular Strategies", circular_strategy_types)}
+          </div>
+          <div className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3">
+            <Button variant="secondary" onClick={() => setIsEditing(true)}>
+              <PencilIconOutline className="h-4 w-4" />
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

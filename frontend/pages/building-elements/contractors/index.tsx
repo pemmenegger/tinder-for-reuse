@@ -8,10 +8,11 @@ import Search, { SearchResultsWrapperType } from "@/components/search/Search";
 import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";
 import { MapMarker } from "@/types/item";
 import { fromContractorsToContractorMapMarkers } from "@/lib/utils";
-import { useFilterOptions } from "@/components/hooks/useFilterOptions";
+import useSWR from "swr";
 
 export default function ContractorsPage() {
-  const { filterOptions, error } = useFilterOptions(
+  const { data: filterOptions, error } = useSWR(
+    "/api/contractors/filter/",
     fetchContractorFilterOptions
   );
 
