@@ -102,9 +102,11 @@ export default function BuildingElementUploadPage() {
         ]}
       />
       {buildingElementsToUpload.map((buildingElementToUpload, index) => (
-        <div key={index} className="mt-8">
-          <BuildingElementCard {...buildingElementToUpload} />
-        </div>
+        <BuildingElementCard
+          data={buildingElementToUpload}
+          key={index}
+          className="mt-8"
+        />
       ))}
       <Button
         className="mt-8"

@@ -1,12 +1,13 @@
-import { ContractorCard } from "@/components/cards/ContractorCard";
-import { BuildingElementCard } from "@/components/cards/BuildingElementCard";
-import { CollectorCard } from "@/components/cards/CollectorCard";
 import { CollectorRead } from "@/types/api/collector";
 import { ContractorRead } from "@/types/api/contractor";
-import { BuildingElementRead } from "@/types/api/items/building-element";
 import { MapMarker } from "@/types/item";
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+
+import { BuildingElementRead } from "@/types/api/items/building-element";
+import { CollectorCard } from "@/components/cards/CollectorCard";
+import { ContractorCard } from "@/components/cards/ContractorCard";
+import { BuildingElementCard } from "@/components/cards/BuildingElementCard";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -25,7 +26,7 @@ export const fromCollectorsToCollectorMapMarkers = (
       height: 31,
     },
     results: [collector],
-    ResultComponent: CollectorCard,
+    ResultCard: CollectorCard,
   }));
 };
 
@@ -42,7 +43,7 @@ export const fromContractorsToContractorMapMarkers = (
       height: 31,
     },
     results: [contractor],
-    ResultComponent: ContractorCard,
+    ResultCard: ContractorCard,
   }));
 };
 
@@ -73,7 +74,7 @@ export const fromBuildingElementsToBuildingElementsMapMarkers = (
         height: 31,
       },
       results: buildingElements,
-      ResultComponent: BuildingElementCard,
+      ResultCard: BuildingElementCard,
     })
   );
 };

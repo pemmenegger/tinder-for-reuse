@@ -12,6 +12,7 @@ import {
 import { CollectorCreate } from "@/types/api/collector";
 import { renderInput, renderSelect } from "./renderFields";
 import useSWR from "swr";
+import { EditFormProps } from "./forms";
 
 const validationSchema = z.object({
   name: z
@@ -157,8 +158,6 @@ export default function CollectorBaseForm({
     return <p>Failed to load page.</p>;
   }
 
-  // w-1/2 max-w-[1080px]
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
       <div className="flex flex-col gap-9">
@@ -235,17 +234,12 @@ export function CollectorEditForm({
   onCancel,
   onSuccess,
   defaultValues,
-  collectorId,
-}: {
-  onCancel?: () => void;
-  onSuccess?: () => void | Promise<void>;
-  defaultValues?: CollectorCreate;
-  collectorId: number;
-}) {
+  dataId,
+}: EditFormProps) {
   const onSubmit = async (values: CollectorCreate) => {
     try {
       console.log(`editCollector to backend: ${JSON.stringify(values)}`);
-      await updateCollector(collectorId, values);
+      await updateCollector(dataId, values);
       await onSuccess?.();
     } catch (err) {
       console.error(err);
@@ -253,7 +247,7 @@ export function CollectorEditForm({
   };
 
   console.log(`defaultValues: ${JSON.stringify(defaultValues)}`);
-  console.log(`collectorId: ${collectorId}`);
+  console.log(`collectorId: ${dataId}`);
 
   return (
     <CollectorBaseForm

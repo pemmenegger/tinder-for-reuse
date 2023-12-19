@@ -6,6 +6,11 @@ export type Item = ItemRead & {
   price_tag: string;
 };
 
+export interface ResultCardProps extends React.ComponentProps<"div"> {
+  isActive?: boolean;
+  data: any;
+}
+
 export type MapMarker = {
   id: number;
   lat: number;
@@ -16,5 +21,5 @@ export type MapMarker = {
     height: number;
   };
   results: any[];
-  ResultComponent: React.ComponentType<any>;
+  ResultCard: React.ComponentType<ResultCardProps>;
 };

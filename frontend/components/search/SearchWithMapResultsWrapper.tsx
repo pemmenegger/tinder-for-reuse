@@ -5,7 +5,9 @@ import {
   SuperClusterAlgorithm,
 } from "@googlemaps/markerclusterer";
 import { MapMarker } from "@/types/item";
-import { BuildingElementCardSkeleton } from "../cards/BuildingElementCard";
+import { CardSkeleton } from "../cards/Card";
+
+export const IGNORE_CARD_DEACTIVATION_CLASS = "ignore-deactivation";
 
 const GoogleMapsWrapper = ({ children }: { children: React.ReactNode }) => {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string;
@@ -192,7 +194,6 @@ export default function SearchWithMapResultsWrapper({
   const [activeMapMarkerId, setActiveMapMarkerId] = useState<number | null>(
     null
   );
-  const IGNORE_DEACTIVATION_CLASS = "ignore-deactivation";
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -209,7 +210,7 @@ export default function SearchWithMapResultsWrapper({
       }
 
       // only deactivate if the click is outside the active collector
-      if (!target.closest(`.${IGNORE_DEACTIVATION_CLASS}`)) {
+      if (!target.closest(`.${IGNORE_CARD_DEACTIVATION_CLASS}`)) {
         setActiveMapMarkerId(null);
       }
     };
@@ -232,7 +233,7 @@ export default function SearchWithMapResultsWrapper({
 
   return (
     <>
-      <div className={IGNORE_DEACTIVATION_CLASS}>
+      <div className={IGNORE_CARD_DEACTIVATION_CLASS}>
         <GoogleMapsWrapper>
           <GoogleMaps
             mapMarkers={mapMarkers}
@@ -243,25 +244,24 @@ export default function SearchWithMapResultsWrapper({
           />
         </GoogleMapsWrapper>
       </div>
-      {visibleMapMarkers.map((mapMarker) =>
-        mapMarker.results.map((result, index) => (
-          <a
-            onClick={() => setActiveMapMarkerId(mapMarker.id)}
-            key={`${mapMarker.id}.${index}`}
-            className={`cursor-pointer ${IGNORE_DEACTIVATION_CLASS}`}
-          >
-            <mapMarker.ResultComponent
-              {...result}
+      <div className="flex flex-col gap-8 mt-8">
+        {visibleMapMarkers.map((mapMarker) =>
+          mapMarker.results.map((result, index) => (
+            <mapMarker.ResultCard
+              key={`${mapMarker.id}.${index}`}
+              onClick={() => setActiveMapMarkerId(mapMarker.id)}
+              className={`cursor-pointer ${IGNORE_CARD_DEACTIVATION_CLASS}`}
               isActive={activeMapMarkerId === mapMarker.id}
+              data={result}
             />
-          </a>
-        ))
-      )}
+          ))
+        )}
+      </div>
       {isLoading && (
         <>
-          <BuildingElementCardSkeleton />
-          <BuildingElementCardSkeleton />
-          <BuildingElementCardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
+          <CardSkeleton />
         </>
       )}
     </>

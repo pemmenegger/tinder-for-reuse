@@ -13,8 +13,8 @@ engine = create_engine(DB_CONNECTION_STRING, echo=echo, future=True)
 
 def get_session():
     Session = sessionmaker(bind=engine, expire_on_commit=False)
-    session = Session()
-    return session
+    with Session() as session:
+        yield session
 
 
 def read_or_create_type_by_name(session, model_class, name):
