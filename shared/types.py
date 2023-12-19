@@ -10,7 +10,7 @@ from enum import Enum
 ######################################################################
 
 
-class RondasTypesEnum(Enum):
+class TypesEnum(Enum):
     """
     Base class for custom enums.
     Provides a common constructor for enums with additional fields.
@@ -24,11 +24,11 @@ class RondasTypesEnum(Enum):
             self.slug = args[2]
 
 
-class ItemCategoryEnum(RondasTypesEnum):
+class ItemCategoryEnum(TypesEnum):
     BUILDING_ELEMENT = (1, "Building Element", "building-elements")
 
 
-class BuildingElementUnitEnum(RondasTypesEnum):
+class BuildingElementUnitEnum(TypesEnum):
     ML = (1, "ml")
     M2 = (2, "m²")
     M3 = (3, "m³")
@@ -36,14 +36,14 @@ class BuildingElementUnitEnum(RondasTypesEnum):
     ENS = (5, "ens")
 
 
-class MaterialEnum(RondasTypesEnum):
+class MaterialEnum(TypesEnum):
     INERT_WASTE = (1, "Inert Waste")
     CONCRETE = (2, "Concrete")
     WOOD = (3, "Wood")
     METALS = (4, "Metals")
     PLASTER = (5, "Plaster")
     RIGID_PLASTICS_AND_PVC = (6, "Rigid Plastics & PVC")
-    GLAZED_JOINERY = (7, "Glazed Joinery")
+    GLAZED_WINDOWS = (7, "Glazed Windows")
     GLASS_WOOL = (8, "Glass Wool")
     ROCK_WOOL = (9, "Rock Wool")
     EXPANDED_POLYSTYRENE = (10, "Expanded Polystyrene (EPS)")
@@ -52,15 +52,16 @@ class MaterialEnum(RondasTypesEnum):
     BITUMINOUS_MEMBRANES = (13, "Bituminous Membranes")
     NON_PVC_FLOOR_COVERINGS = (14, "Non-PVC Floor Coverings")
     PVC_FLOOR_COVERINGS = (15, "PVC Floor Coverings")
+    HAZARDOUS_WASTE = (16, "Hazardous Waste")
 
 
-class AuthorizedVehicleEnum(RondasTypesEnum):
+class AuthorizedVehicleEnum(TypesEnum):
     SMALL_VAN = (1, "Small Van (3 to 5 m³)")
     MEDIUM_VAN = (2, "Medium Van (6 to 12 m³)")
     FLATBED_TRUCK = (3, "Flatbed Truck (Over 12 m³)")
 
 
-class CircularStrategyEnum(RondasTypesEnum):
+class CircularStrategyEnum(TypesEnum):
     REUSE = (1, "Reuse")
     RECYCLING = (2, "Recycling")
     REPARATION = (3, "Reparation")
@@ -68,7 +69,7 @@ class CircularStrategyEnum(RondasTypesEnum):
     DISPOSAL = (5, "Disposal")
 
 
-class WasteCodeEnum(RondasTypesEnum):
+class WasteCodeEnum(TypesEnum):
     _170101 = (1, "17 01 01")
     _170102 = (2, "17 01 02")
     _170103 = (3, "17 01 03")
@@ -107,3 +108,11 @@ class WasteCodeEnum(RondasTypesEnum):
     _170902 = (36, "17 09 02")
     _170903 = (37, "17 09 03")
     _170904 = (38, "17 09 04")
+
+
+class CircularServicesEnum(TypesEnum):
+    DEMOLITION = (1, "Demolition")
+    CLEANING = (2, "Cleaning")
+    CAREFUL_REMOVAL = (3, "Careful Removal")
+    REPARATION = (4, "Reparation")
+    RECLAMATION = (5, "Reclamation")

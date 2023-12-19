@@ -44,7 +44,7 @@ export default function CollectorsPage() {
         {
           type: "multi",
           label: "Waste Codes",
-          path: ["filter", "waste_code_types"],
+          path: ["filter", "waste_code_type_ids"],
           options: filterOptions?.waste_code_types,
         },
         {

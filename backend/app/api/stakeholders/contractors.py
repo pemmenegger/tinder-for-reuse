@@ -1,7 +1,7 @@
 from typing import List
 
 from app.models.stakeholders.contractor_model import Contractor
-from app.models.type_model import MaterialType, WasteCodeType
+from app.models.type_model import CircularServiceType, MaterialType, WasteCodeType
 from app.schemas.stakeholders.contractor_schema import (
     ContractorCreate,
     ContractorFilterOptions,
@@ -29,14 +29,18 @@ def create_contractors(
     for contractor_create in payload:
         material_types = read_types_by_name_or_throw(session, MaterialType, contractor_create.material_types)
         waste_code_types = read_types_by_name_or_throw(session, WasteCodeType, contractor_create.waste_code_types)
+        circular_service_types = read_types_by_name_or_throw(
+            session, CircularServiceType, contractor_create.circular_service_types
+        )
 
         contractor = Contractor(
             **contractor_create.dict(
                 exclude_unset=True,
-                exclude={"material_types", "waste_code_types"},
+                exclude={"material_types", "waste_code_types", "circular_service_types"},
             ),
             material_types=material_types,
             waste_code_types=waste_code_types,
+            circular_service_types=circular_service_types,
         )
         contractors_to_create.append(contractor)
 
@@ -54,6 +58,7 @@ def fetch_contractors(
         select(Contractor)
         .options(joinedload(Contractor.material_types))
         .options(joinedload(Contractor.waste_code_types))
+        .options(joinedload(Contractor.circular_service_types))
     )
     results = session.execute(query)
     contractors_read = [ContractorRead.from_contractor(contractor) for contractor in results.scalars().unique()]
@@ -64,9 +69,11 @@ def fetch_contractors(
 def read_filter_options(session: Session = Depends(get_session)):
     material_types = read_types(session, MaterialType)
     waste_code_types = read_types(session, WasteCodeType)
+    circular_service_types = read_types(session, CircularServiceType)
     return ContractorFilterOptions(
         material_types=material_types,
         waste_code_types=waste_code_types,
+        circular_service_types=circular_service_types,
     )
 
 
@@ -75,11 +82,13 @@ def search(payload: ContractorSearchRequest, session: Session = Depends(get_sess
     text = payload.query.text if len(payload.query.text) > 0 else None
     material_type_ids = payload.filter.material_type_ids
     waste_code_type_ids = payload.filter.waste_code_type_ids
+    circular_service_type_ids = payload.filter.circular_service_type_ids
 
     query = (
         select(Contractor)
         .options(joinedload(Contractor.material_types))
         .options(joinedload(Contractor.waste_code_types))
+        .options(joinedload(Contractor.circular_service_types))
     )
 
     if text:
@@ -89,6 +98,10 @@ def search(payload: ContractorSearchRequest, session: Session = Depends(get_sess
         query = query.where(Contractor.material_types.any(MaterialType.id.in_(material_type_ids)))
     if waste_code_type_ids:
         query = query.where(Contractor.waste_code_types.any(WasteCodeType.id.in_(waste_code_type_ids)))
+    if circular_service_type_ids:
+        query = query.where(
+            Contractor.circular_service_types.any(CircularServiceType.id.in_(circular_service_type_ids))
+        )
 
     query = query.order_by(Contractor.name.asc())
     results = session.execute(query)

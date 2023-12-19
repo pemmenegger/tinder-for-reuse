@@ -10,6 +10,7 @@ from app.models.stakeholders.collector_model import (
 )
 from app.models.stakeholders.contractor_model import (
     Contractor,
+    ContractorToCircularServiceType,
     ContractorToMaterialType,
     ContractorToWasteCodeType,
 )
@@ -46,4 +47,12 @@ class WasteCodeType(TypeBase, RondasTypeBase, table=True):
     collectors: List[Collector] = Relationship(back_populates="waste_code_types", link_model=CollectorToWasteCodeType)
     contractors: List[Contractor] = Relationship(
         back_populates="waste_code_types", link_model=ContractorToWasteCodeType
+    )
+
+
+class CircularServiceType(TypeBase, RondasTypeBase, table=True):
+    __tablename__ = "circular_service_type"
+
+    contractors: List[Contractor] = Relationship(
+        back_populates="circular_service_types", link_model=ContractorToCircularServiceType
     )

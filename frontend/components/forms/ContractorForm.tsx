@@ -67,27 +67,40 @@ const validationSchema = z.object({
     }),
   email: z
     .string()
-    .min(1, { message: "Email is required" })
     .refine(
-      (value) =>
-        /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(value) &&
-        value.length <= 50,
+      (value) => {
+        if (value) {
+          return (
+            /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(value) &&
+            value.length <= 50
+          );
+        }
+        return true;
+      },
       {
         message: "Invalid email address",
       }
-    ),
+    )
+    .optional(),
   phone: z
     .string()
-    .min(1, { message: "Phone is required" })
     .refine(
-      (value) =>
-        /^[+0-9-]*$/.test(value) && value.length <= 60 && value.length >= 2,
+      (value) => {
+        if (value) {
+          return (
+            /^[+0-9-]*$/.test(value) && value.length <= 60 && value.length >= 2
+          );
+        }
+        return true;
+      },
       {
         message: "Invalid phone",
       }
-    ),
+    )
+    .optional(),
   material_types: z.array(z.string()).nonempty(),
   waste_code_types: z.array(z.string()).nonempty(),
+  circular_service_types: z.array(z.string()).nonempty(),
 });
 
 export default function ContractorUploadForm() {
@@ -175,6 +188,11 @@ export default function ContractorUploadForm() {
               "waste_code_types",
               "Select Waste Codes...",
               filterOptions?.waste_code_types || []
+            )}
+            {renderSelectInternal(
+              "circular_service_types",
+              "Select Circular Services...",
+              filterOptions?.circular_service_types || []
             )}
           </div>
           <div className="flex flex-col gap-2">

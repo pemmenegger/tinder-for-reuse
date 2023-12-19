@@ -30,6 +30,7 @@ export default function ContractorsPage() {
         filter: {
           material_type_ids: [],
           waste_code_type_ids: [],
+          circular_service_type_ids: [],
         },
       }}
       filterConfigs={[
@@ -42,8 +43,14 @@ export default function ContractorsPage() {
         {
           type: "multi",
           label: "Waste Codes",
-          path: ["filter", "waste_code_types"],
+          path: ["filter", "waste_code_type_ids"],
           options: filterOptions?.waste_code_types,
+        },
+        {
+          type: "multi",
+          label: "Circular Services",
+          path: ["filter", "circular_service_type_ids"],
+          options: filterOptions?.circular_service_types,
         },
       ]}
       ResultsWrapper={ContractorResultsWrapper}

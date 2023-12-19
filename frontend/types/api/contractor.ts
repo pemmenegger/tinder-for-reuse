@@ -17,6 +17,7 @@ type ContractorBase = {
 
   material_types: string[];
   waste_code_types: string[];
+  circular_service_types: string[];
 };
 
 export type ContractorRead = ContractorBase & {
@@ -28,6 +29,7 @@ export type ContractorCreate = ContractorBase;
 export type ContractorFilterOptions = {
   material_types: TypeRead[];
   waste_code_types: TypeRead[];
+  circular_service_types: TypeRead[];
 };
 
 export type ContractorSearchRequest = {
@@ -37,6 +39,7 @@ export type ContractorSearchRequest = {
   filter: {
     material_type_ids: number[];
     waste_code_type_ids: number[];
+    circular_service_type_ids: number[];
   };
 };
 
