@@ -1,11 +1,3 @@
-import { ItemRead } from "./api/item";
-
-export type Item = ItemRead & {
-  date: string;
-  location: string;
-  price_tag: string;
-};
-
 export interface ResultCardProps extends React.ComponentProps<"div"> {
   isActive?: boolean;
   data: any;

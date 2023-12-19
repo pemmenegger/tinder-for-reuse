@@ -4,44 +4,43 @@
 /////////////////////////////////////////////////////////////////////////////
 
 import { CollectorRead } from "../collector";
-import { ItemCreate, ItemRead } from "../item";
-import { TypeRead } from "../type";
+import { UnifiedTypeRead } from "../type";
 
 type BuildingElementBase = {
-  total_mass?: number;
-  total_volume?: number;
-  material?: string;
-  condition_sanitary?: string;
-  reuse_potential?: string;
-  waste_code?: string;
-  recycling_potential?: string;
-  energy_recovery?: string;
-  disposal?: string;
+  upload_uuid: string;
   address: string;
   lat: number;
   lng: number;
-  upload_uuid: string;
 
+  worksheet_type: string;
   category_type: string;
-  worksheet: string;
 
-  // TODO material not standardized? list of strings?
+  reference: string;
+  title: string;
+  unit_type: string;
+  total?: number;
+  total_mass_t?: number;
+  total_volume_m3?: number;
+  material_type?: string;
+  health_status_type?: string;
+  reuse_potential_type?: string;
+  waste_code_type?: string;
+  recycling_potential_type?: string;
+  has_energy_recovery?: boolean;
+  hs_elimination?: boolean;
 };
 
-export type BuildingElementCreate = BuildingElementBase & {
-  item: ItemCreate;
-};
+export type BuildingElementCreate = BuildingElementBase;
 
 export type BuildingElementRead = BuildingElementBase & {
   id: number;
-  item: ItemRead;
 };
 
 export type BuildingElementFilterOptions = {
-  unit_types: TypeRead[];
-  category_types: TypeRead[];
-  constitution_types: TypeRead[];
-  material_types: TypeRead[];
+  unit_types: UnifiedTypeRead[];
+  category_types: UnifiedTypeRead[];
+  constitution_types: UnifiedTypeRead[];
+  material_types: UnifiedTypeRead[];
 };
 
 export type BuildingElementSearchRequest = {

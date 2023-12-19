@@ -5,7 +5,7 @@ import {
   ContractorSearchRequest,
   ContractorSearchResponse,
 } from "@/types/api/contractor";
-import { ApiError, fetchApi } from "./base";
+import { ApiError, fetchApi } from "../utils";
 
 const API_ROUTE = "/api/contractors";
 

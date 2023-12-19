@@ -5,9 +5,9 @@ import {
   BuildingElementSearchRequest,
   BuildingElementSearchResponse,
 } from "@/types/api/items/building-element";
-import { ApiError, fetchApi } from "../base";
+import { ApiError, fetchApi } from "../utils";
 
-const API_ROUTE = "/api/items/building-elements";
+const API_ROUTE = "/api/building-elements";
 
 export const uploadBuildingElements = async (
   buildingElements: BuildingElementCreate[]

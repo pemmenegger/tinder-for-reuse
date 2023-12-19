@@ -4,67 +4,61 @@
 
 from typing import List, Optional
 
-from app.schemas.item_schema import ItemRead
 from app.shared.schemas.collector_schema import CollectorRead
-from app.shared.schemas.item_schema import ItemCreate
-from app.shared.schemas.type_schema import TypeRead
+from app.shared.schemas.type_schema import UnifiedTypeRead
 from pydantic import BaseModel
-from sqlmodel import Field, SQLModel
+from sqlmodel import SQLModel
 
 
 class BuildingElementBase(SQLModel):
-    quantity: float
-    total_mass_kg: Optional[float] = Field(default=None)
-    total_volume_m3: Optional[float] = Field(default=None)
-    l: Optional[float] = Field(default=None)
-    L: Optional[float] = Field(default=None)
-    diameter: Optional[float] = Field(default=None)
-    H: Optional[float] = Field(default=None)
-    P: Optional[float] = Field(default=None)
-    E: Optional[float] = Field(default=None)
-    localization: Optional[str] = Field(default=None)
-    condition: Optional[str] = Field(default=None)
-    reuse_potential: Optional[str] = Field(default=None)
-    drop_off_procedures: Optional[str] = Field(default=None)
-    storage_method: Optional[str] = Field(default=None)
-    lat: Optional[float] = Field(default=None)
-    lng: Optional[float] = Field(default=None)
-    upload_uuid: Optional[str]
+    upload_uuid: str
+    address: str
+    latitude: float
+    longitude: float
 
+    worksheet_type: str
     category_type: str
+
+    reference: Optional[str]
+    title: str
     unit_type: str
-    constitution_types: List[str]
-    material_types: List[str]
+    total: Optional[float]
+    total_mass_t: Optional[float]
+    total_volume_m3: Optional[float]
+    material_types: Optional[List[str]]
+    health_status_types: Optional[List[str]]
+    reuse_potential_types: Optional[List[str]]
+    waste_code_types: Optional[List[str]]
+    recycling_code_types: Optional[List[str]]
+    has_energy_recovery: Optional[bool]
+    has_elimination: Optional[bool]
 
 
 class BuildingElementCreate(BuildingElementBase):
-    item: ItemCreate
+    pass
 
 
 class BuildingElementRead(BuildingElementBase):
     id: int
-    item: ItemRead
 
     @classmethod
     def from_building_element(cls, building_element):
         return BuildingElementRead(
             **building_element.dict(
                 exclude_unset=False,
-                exclude={"category_type", "unit_type", "constitution_types", "material_types", "item"},
+                exclude={"category_type", "unit_type", "constitution_types", "material_types"},
             ),
             category_type=building_element.category_type.name,
             unit_type=building_element.unit_type.name,
             constitution_types=[constitution_type.name for constitution_type in building_element.constitution_types],
             material_types=[material_type.name for material_type in building_element.material_types],
-            item=ItemRead.from_item(building_element.item),
         )
 
 
 class BuildingElementFilterOptions(BaseModel):
-    unit_types: List[TypeRead]
-    category_types: List[TypeRead]
-    constitution_types: List[TypeRead]
-    material_types: List[TypeRead]
+    unit_types: List[UnifiedTypeRead]
+    category_types: List[UnifiedTypeRead]
+    material_types: List[UnifiedTypeRead]
 
 
 class BuildingElementSearchRequest(BaseModel):
@@ -74,7 +68,6 @@ class BuildingElementSearchRequest(BaseModel):
     class Filter(BaseModel):
         unit_type_ids: List[int]
         category_type_ids: List[int]
-        constitution_type_ids: List[int]
         material_type_ids: List[int]
 
     query: Query

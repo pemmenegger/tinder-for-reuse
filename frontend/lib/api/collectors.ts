@@ -5,7 +5,7 @@ import {
   CollectorSearchRequest,
   CollectorSearchResponse,
 } from "@/types/api/collector";
-import { ApiError, fetchApi } from "./base";
+import { ApiError, fetchApi } from "../utils";
 
 const API_ROUTE = "/api/collectors";
 

@@ -55,7 +55,7 @@ export const SearchInputSelect: React.FC<SearchInputSelectProps> = ({
         className="w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
       >
         {selectedOptions.length > 0
-          ? selectedOptions.map((option) => option.name).join(", ")
+          ? selectedOptions.map((option) => option.value).join(", ")
           : placeholder}
       </button>
 
@@ -74,7 +74,7 @@ export const SearchInputSelect: React.FC<SearchInputSelectProps> = ({
                   isSelected(option) ? "font-medium" : "font-normal"
                 }`}
               >
-                {option.name}
+                {option.value}
               </span>
               {isSelected(option) && (
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600">

@@ -3,7 +3,8 @@
 // See: ./shared/schemas/type_schema.ts                                    //
 /////////////////////////////////////////////////////////////////////////////
 
-export type TypeRead = {
+export type UnifiedTypeRead = {
+  discriminator: string;
   id: number;
-  name: string;
+  value: string;
 };

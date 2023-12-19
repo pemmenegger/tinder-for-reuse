@@ -3,7 +3,7 @@
 // See: ./backend/app/schemas/contractor_schema.py                         //
 /////////////////////////////////////////////////////////////////////////////
 
-import { TypeRead } from "./type";
+import { UnifiedTypeRead } from "./type";
 
 type ContractorBase = {
   name: string;
@@ -27,9 +27,9 @@ export type ContractorRead = ContractorBase & {
 export type ContractorCreate = ContractorBase;
 
 export type ContractorFilterOptions = {
-  material_types: TypeRead[];
-  waste_code_types: TypeRead[];
-  circular_service_types: TypeRead[];
+  material_types: UnifiedTypeRead[];
+  waste_code_types: UnifiedTypeRead[];
+  circular_service_types: UnifiedTypeRead[];
 };
 
 export type ContractorSearchRequest = {

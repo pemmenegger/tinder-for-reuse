@@ -1,4 +1,5 @@
 from app.config import settings
+from app.models.unified_type_model import UnifiedType
 from fastapi import HTTPException, status
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import create_engine, select
@@ -19,7 +20,7 @@ def get_session():
 
 def read_or_create_type_by_name(session, model_class, name):
     if not hasattr(model_class, "name"):
-        raise ValueError(f"{model_class} is not an instance of TypeBase")
+        raise ValueError(f"{model_class} is not an instance of UnifiedTypeBase")
 
     name = name.strip().upper()
     statement = select(model_class).where(model_class.name == name)
@@ -37,29 +38,28 @@ def read_or_create_types_by_names(session, model_class, names):
     return instances
 
 
-def read_type_by_name(session, model_class, name):
-    result = session.execute(select(model_class).where(model_class.name == name))
-    return result.scalars().first()
-
-
-def read_type_by_id(session, model_class, id):
-    result = session.execute(select(model_class).where(model_class.id == id))
-    return result.scalars().first()
-
-
-def read_types(session, model_class):
-    types = session.execute(select(model_class))
+def read_types(session, type_class):
+    types = session.execute(select(UnifiedType).where(UnifiedType.discriminator == type_class.DISCRIMINATOR))
     types = types.scalars().all()
     return types
 
 
-def read_types_by_name_or_throw(session, model_class, names):
+def read_type_by_value(session, type_class, value):
+    result = session.execute(
+        select(UnifiedType)
+        .where(UnifiedType.discriminator == type_class.DISCRIMINATOR)
+        .where(UnifiedType.value == value)
+    )
+    return result.scalars().first()
+
+
+def read_types_by_values_or_throw(session, type_class, values):
     instances = []
-    for name in names:
-        instance = read_type_by_name(session, model_class, name)
+    for value in values:
+        instance = read_type_by_value(session, type_class, value)
         if not instance:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail=f"{model_class} with name {name} not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail=f"{type_class} with value {value} not found"
             )
         instances.append(instance)
     return instances

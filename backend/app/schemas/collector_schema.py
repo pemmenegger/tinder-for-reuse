@@ -5,15 +5,15 @@
 from typing import List
 
 from app.shared.schemas.collector_schema import CollectorRead
-from app.shared.schemas.type_schema import TypeRead
+from app.shared.schemas.type_schema import UnifiedTypeRead
 from pydantic import BaseModel
 
 
 class CollectorFilterOptions(BaseModel):
-    material_types: List[TypeRead]
-    waste_code_types: List[TypeRead]
-    authorized_vehicle_types: List[TypeRead]
-    circular_strategy_types: List[TypeRead]
+    material_types: List[UnifiedTypeRead]
+    waste_code_types: List[UnifiedTypeRead]
+    authorized_vehicle_types: List[UnifiedTypeRead]
+    circular_strategy_types: List[UnifiedTypeRead]
 
 
 class CollectorSearchRequest(BaseModel):

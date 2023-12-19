@@ -3,7 +3,7 @@
 // See: ./shared/schemas/collector_schema.py                               //
 /////////////////////////////////////////////////////////////////////////////
 
-import { TypeRead } from "./type";
+import { UnifiedTypeRead } from "./type";
 
 type CollectorBase = {
   name: string;
@@ -28,10 +28,10 @@ export type CollectorRead = CollectorBase & {
 export type CollectorCreate = CollectorBase;
 
 export type CollectorFilterOptions = {
-  material_types: TypeRead[];
-  waste_code_types: TypeRead[];
-  authorized_vehicle_types: TypeRead[];
-  circular_strategy_types: TypeRead[];
+  material_types: UnifiedTypeRead[];
+  waste_code_types: UnifiedTypeRead[];
+  authorized_vehicle_types: UnifiedTypeRead[];
+  circular_strategy_types: UnifiedTypeRead[];
 };
 
 export type CollectorSearchRequest = {

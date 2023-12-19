@@ -7,15 +7,16 @@
 from sqlmodel import Field, SQLModel
 
 
-class TypeBase(SQLModel):
-    name: str = Field(unique=True, index=True)
+class UnifiedTypeBase(SQLModel):
+    discriminator: str = Field(primary_key=True)
+    value: str = Field(index=True)
 
 
-class TypeCreate(TypeBase):
+class UnifiedTypeCreate(UnifiedTypeBase):
     pass
 
 
-class TypeRead(TypeBase):
+class UnifiedTypeRead(UnifiedTypeBase):
     # change also in frontend/types/api/type.ts
     id: int
 

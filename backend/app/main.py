@@ -1,10 +1,10 @@
-from app.api.items.building_elements import router as building_elements_router
-from app.api.stakeholders.collectors import router as collectors_router
-from app.api.stakeholders.contractors import router as contractors_router
+# from app.api.building_elements import router as building_elements_router
+from app.api.collectors import router as collectors_router
+
+# from app.api.contractors import router as contractors_router
 from app.config import settings
 
 # from app.shared.helpers import init_logging
-from app.shared.types import ItemCategoryEnum
 from fastapi import FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -23,11 +23,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(
-    building_elements_router,
-    tags=[f"items-{ItemCategoryEnum.BUILDING_ELEMENT.slug}"],
-    prefix=f"/api/items/{ItemCategoryEnum.BUILDING_ELEMENT.slug}",
-)
+# app.include_router(
+#     building_elements_router,
+#     tags=["building-elements"],
+#     prefix="/api/building-elements",
+# )
 
 app.include_router(
     collectors_router,
@@ -35,11 +35,11 @@ app.include_router(
     prefix="/api/collectors",
 )
 
-app.include_router(
-    contractors_router,
-    tags=["contractors"],
-    prefix="/api/contractors",
-)
+# app.include_router(
+#     contractors_router,
+#     tags=["contractors"],
+#     prefix="/api/contractors",
+# )
 
 
 @app.get("/")

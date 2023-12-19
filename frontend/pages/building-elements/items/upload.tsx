@@ -1,7 +1,7 @@
 import { BuildingElementCard } from "@/components/cards/BuildingElementCard";
 import ExcelReader from "@/components/ui/ExcelReader";
 import { Button } from "@/components/ui/button";
-import { uploadBuildingElements } from "@/lib/api/items/building-elements";
+import { uploadBuildingElements } from "@/lib/api/building-elements";
 import { BuildingElementCreate } from "@/types/api/items/building-element";
 
 import { useState } from "react";
@@ -44,29 +44,29 @@ export default function BuildingElementUploadPage() {
       }
       if (!currCategory) continue;
 
-      const newElement: BuildingElementCreate = {
-        total_mass: row[columnIndices.total_mass],
-        total_volume: row[columnIndices.total_volume],
-        material: row[columnIndices.material],
-        condition_sanitary: row[columnIndices.condition_sanitary],
-        reuse_potential: row[columnIndices.reuse_potential],
-        waste_code: row[columnIndices.waste_code],
-        recycling_potential: row[columnIndices.recycling_potential],
-        energy_recovery: row[columnIndices.energy_recovery],
-        disposal: row[columnIndices.disposal],
-        category_type: currCategory,
-        worksheet: sheetName,
-        item: {
-          title: row[1],
-          category_type_id: 1, // This might need to be dynamically determined
-        },
-        address: address,
-        lat: location[0],
-        lng: location[1],
-        upload_uuid: upload_uuid,
-      };
+      // const newElement: BuildingElementCreate = {
+      //   total_mass: row[columnIndices.total_mass],
+      //   total_volume: row[columnIndices.total_volume],
+      //   material: row[columnIndices.material],
+      //   condition_sanitary: row[columnIndices.condition_sanitary],
+      //   reuse_potential: row[columnIndices.reuse_potential],
+      //   waste_code: row[columnIndices.waste_code],
+      //   recycling_potential: row[columnIndices.recycling_potential],
+      //   energy_recovery: row[columnIndices.energy_recovery],
+      //   disposal: row[columnIndices.disposal],
+      //   category_type: currCategory,
+      //   worksheet: sheetName,
+      //   item: {
+      //     title: row[1],
+      //     category_type_id: 1, // This might need to be dynamically determined
+      //   },
+      //   address: address,
+      //   lat: location[0],
+      //   lng: location[1],
+      //   upload_uuid: upload_uuid,
+      // };
 
-      setBuildingElementsToUpload((prev) => [...prev, newElement]);
+      // setBuildingElementsToUpload((prev) => [...prev, newElement]);
     }
   };
 

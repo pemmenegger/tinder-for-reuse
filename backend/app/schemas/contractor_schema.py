@@ -4,7 +4,7 @@
 
 from typing import List, Optional
 
-from app.shared.schemas.type_schema import TypeRead
+from app.shared.schemas.type_schema import UnifiedTypeRead
 from pydantic import BaseModel
 from sqlmodel import SQLModel
 
@@ -47,9 +47,9 @@ class ContractorRead(ContractorBase):
 
 
 class ContractorFilterOptions(BaseModel):
-    material_types: List[TypeRead]
-    waste_code_types: List[TypeRead]
-    circular_service_types: List[TypeRead]
+    material_types: List[UnifiedTypeRead]
+    waste_code_types: List[UnifiedTypeRead]
+    circular_service_types: List[UnifiedTypeRead]
 
 
 class ContractorSearchRequest(BaseModel):

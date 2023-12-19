@@ -11,7 +11,8 @@ import { SearchRequest } from "./SearchResults";
 import { SearchInputSelect } from "./SearchInputSelect";
 
 export type FilterOption = {
-  name: string;
+  discriminator: string;
+  value: string;
   id: number | string;
 };
 

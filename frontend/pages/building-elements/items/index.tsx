@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Search, { SearchResultsWrapperType } from "@/components/search/Search";
-import { fetchBuildingElementFilterOptions } from "@/lib/api/items/building-elements";
+import { fetchBuildingElementFilterOptions } from "@/lib/api/building-elements";
 import {
   BuildingElementFilterOptions,
   BuildingElementRead,
 } from "@/types/api/items/building-element";
-import { buildingElementsFetcher } from "@/lib/api/items/building-elements";
+import { buildingElementsFetcher } from "@/lib/api/building-elements";
 import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";
 import { fromBuildingElementsToBuildingElementsMapMarkers } from "@/lib/utils";
 import { MapMarker } from "@/types/item";

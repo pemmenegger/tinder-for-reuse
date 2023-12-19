@@ -1,7 +1,11 @@
 from typing import List
 
 from app.models.stakeholders.contractor_model import Contractor
-from app.models.type_model import CircularServiceType, MaterialType, WasteCodeType
+from app.models.unified_type_model import (
+    CircularServiceType,
+    MaterialType,
+    WasteCodeType,
+)
 from app.schemas.stakeholders.contractor_schema import (
     ContractorCreate,
     ContractorFilterOptions,
@@ -27,9 +31,9 @@ def create_contractors(
 
     contractors_to_create = []
     for contractor_create in payload:
-        material_types = read_types_by_name_or_throw(session, MaterialType, contractor_create.material_types)
-        waste_code_types = read_types_by_name_or_throw(session, WasteCodeType, contractor_create.waste_code_types)
-        circular_service_types = read_types_by_name_or_throw(
+        material_types = read_types_by_values_or_throw(session, MaterialType, contractor_create.material_types)
+        waste_code_types = read_types_by_values_or_throw(session, WasteCodeType, contractor_create.waste_code_types)
+        circular_service_types = read_types_by_values_or_throw(
             session, CircularServiceType, contractor_create.circular_service_types
         )
 

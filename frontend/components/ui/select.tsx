@@ -111,7 +111,7 @@ export const Select: React.FC<SelectProps> = ({
       >
         {isEmpty
           ? placeholder
-          : selectedOptions.map((option) => option.name).join(", ")}
+          : selectedOptions.map((option) => option.value).join(", ")}
       </button>
 
       {isOpen && (
@@ -122,7 +122,7 @@ export const Select: React.FC<SelectProps> = ({
               onClick={() => toggleOption(option)}
               className={cn(optionVariants({ isSelected: isSelected(option) }))}
             >
-              <span className={`block truncate`}>{option.name}</span>
+              <span className={`block truncate`}>{option.value}</span>
               {isSelected(option) && (
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600">
                   <svg

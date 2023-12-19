@@ -70,12 +70,12 @@ export const renderSelect = <T extends FieldValues>({
             <Select
               options={options}
               selectedOptions={options.filter((option) =>
-                value?.includes(option.name)
+                value?.includes(option.value)
               )}
               placeholder={placeholder}
               onChange={(selectedOptions) => {
                 const newValue = selectedOptions.map(
-                  (option) => option.name
+                  (option) => option.value
                 ) as PathValue<T, Path<T>>;
                 setValue(label, newValue, { shouldValidate: true });
                 trigger(label);

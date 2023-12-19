@@ -1,19 +1,20 @@
 from typing import List
 
-from app.models.stakeholders.collector_model import Collector
-from app.models.type_model import (
-    AuthorizedVehicleType,
-    CircularStrategyType,
-    MaterialType,
-    WasteCodeType,
-)
-from app.schemas.stakeholders.collector_schema import (
+from app.models import Collector
+from app.models.unified_type_model import UnifiedType
+from app.schemas.collector_schema import (
     CollectorFilterOptions,
     CollectorSearchRequest,
     CollectorSearchResponse,
 )
 from app.shared.schemas.collector_schema import CollectorCreate, CollectorRead
-from app.utils.database import get_session, read_types, read_types_by_name_or_throw
+from app.shared.types import (
+    AuthorizedVehicleType,
+    CircularStrategyType,
+    MaterialType,
+    WasteCodeType,
+)
+from app.utils.database import get_session, read_types, read_types_by_values_or_throw
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session, joinedload
 from sqlmodel import select
@@ -25,7 +26,13 @@ router = APIRouter()
 def fetch_collectors(
     session: Session = Depends(get_session),
 ):
-    query = select(Collector).options(joinedload(Collector.material_types))
+    query = (
+        select(Collector)
+        .options(joinedload(Collector.material_types))
+        .options(joinedload(Collector.waste_code_types))
+        .options(joinedload(Collector.authorized_vehicle_types))
+        .options(joinedload(Collector.circular_strategy_types))
+    )
     results = session.execute(query)
     collectors_read = [CollectorRead.from_collector(collector) for collector in results.scalars().unique()]
     return collectors_read
@@ -41,12 +48,12 @@ def create_collectors(
 
     collectors_to_create = []
     for collector_create in payload:
-        material_types = read_types_by_name_or_throw(session, MaterialType, collector_create.material_types)
-        waste_code_types = read_types_by_name_or_throw(session, WasteCodeType, collector_create.waste_code_types)
-        authorized_vehicle_types = read_types_by_name_or_throw(
+        material_types = read_types_by_values_or_throw(session, MaterialType, collector_create.material_types)
+        waste_code_types = read_types_by_values_or_throw(session, WasteCodeType, collector_create.waste_code_types)
+        authorized_vehicle_types = read_types_by_values_or_throw(
             session, AuthorizedVehicleType, collector_create.authorized_vehicle_types
         )
-        circular_strategy_types = read_types_by_name_or_throw(
+        circular_strategy_types = read_types_by_values_or_throw(
             session, CircularStrategyType, collector_create.circular_strategy_types
         )
 
@@ -77,12 +84,12 @@ def update_collector(
     collector = session.get(Collector, id)
     if not collector:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Collector not found")
-    material_types = read_types_by_name_or_throw(session, MaterialType, payload.material_types)
-    waste_code_types = read_types_by_name_or_throw(session, WasteCodeType, payload.waste_code_types)
-    authorized_vehicle_types = read_types_by_name_or_throw(
+    material_types = read_types_by_values_or_throw(session, MaterialType, payload.material_types)
+    waste_code_types = read_types_by_values_or_throw(session, WasteCodeType, payload.waste_code_types)
+    authorized_vehicle_types = read_types_by_values_or_throw(
         session, AuthorizedVehicleType, payload.authorized_vehicle_types
     )
-    circular_strategy_types = read_types_by_name_or_throw(
+    circular_strategy_types = read_types_by_values_or_throw(
         session, CircularStrategyType, payload.circular_strategy_types
     )
 
@@ -121,29 +128,25 @@ def read_filter_options(session: Session = Depends(get_session)):
 
 @router.post("/search", response_model=CollectorSearchResponse)
 def search(payload: CollectorSearchRequest, session: Session = Depends(get_session)):
-    text = payload.query.text if len(payload.query.text) > 0 else None
+    text = payload.query.text if payload.query.text else None
     material_type_ids = payload.filter.material_type_ids
     waste_code_type_ids = payload.filter.waste_code_type_ids
     authorized_vehicle_type_ids = payload.filter.authorized_vehicle_type_ids
     circular_strategy_type_ids = payload.filter.circular_strategy_type_ids
 
-    query = select(Collector).options(joinedload(Collector.material_types))
+    query = session.query(Collector)
 
     if text:
         query = query.where(Collector.name.ilike(f"%{text}%"))
 
     if material_type_ids:
-        query = query.where(Collector.material_types.any(MaterialType.id.in_(material_type_ids)))
+        query = query.where(Collector.material_types.any(UnifiedType.id.in_(material_type_ids)))
     if waste_code_type_ids:
-        query = query.where(Collector.waste_code_types.any(WasteCodeType.id.in_(waste_code_type_ids)))
+        query = query.where(Collector.waste_code_types.any(UnifiedType.id.in_(waste_code_type_ids)))
     if authorized_vehicle_type_ids:
-        query = query.where(
-            Collector.authorized_vehicle_types.any(AuthorizedVehicleType.id.in_(authorized_vehicle_type_ids))
-        )
+        query = query.where(Collector.authorized_vehicle_types.any(UnifiedType.id.in_(authorized_vehicle_type_ids)))
     if circular_strategy_type_ids:
-        query = query.where(
-            Collector.circular_strategy_types.any(CircularStrategyType.id.in_(circular_strategy_type_ids))
-        )
+        query = query.where(Collector.circular_strategy_types.any(UnifiedType.id.in_(circular_strategy_type_ids)))
 
     query = query.order_by(Collector.name.asc())
     results = session.execute(query)
