@@ -8,7 +8,6 @@ export function CollectorCard({
   data,
   ...props
 }: ResultCardProps) {
-  console.log(props);
   return (
     <CardEditable
       isActive={isActive}

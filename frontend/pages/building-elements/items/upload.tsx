@@ -23,7 +23,7 @@ export default function BuildingElementUploadPage() {
 
     const headers = data[1];
     const columnIndices = {
-      total_mass: headers.indexOf("poids total en tonne"),
+      total_mass: headers.indexOf("Masse totale estimée in kg"),
       total_volume: headers.indexOf("volume total en m3"),
       material: headers.indexOf("matériaux"),
       condition_sanitary: headers.indexOf("état sanitaire des matériaux"),

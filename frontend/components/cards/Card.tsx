@@ -36,7 +36,7 @@ export default function CardGrid({ attributes, ...props }: CardGridProps) {
   return (
     <div {...props} className="grid grid-cols-2">
       {attributes.map((attribute) => {
-        if (attribute.value === null || attribute.value === undefined) {
+        if (!attribute.value) {
           return null;
         }
         return (
@@ -67,14 +67,6 @@ export function CardEditable({
   ...props
 }: CardEditableProps) {
   const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    if (isEditing) {
-      console.log(`isEditing with id ${data.id}`);
-    } else {
-      console.log(`is not editing with id ${data.id}`);
-    }
-  }, [isEditing]);
 
   return (
     <Card {...props}>

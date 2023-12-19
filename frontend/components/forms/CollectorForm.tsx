@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -45,24 +45,12 @@ const validationSchema = z.object({
     .refine((value) => value.length <= 60 && value.length >= 2, {
       message: "Invalid city",
     }),
-  lat: z
-    .string()
-    .refine((value) => /^[-0-9,.]*$/.test(value), {
-      message: "Latitude must contain only numbers, commas, or points",
-    })
-    .transform((value) => parseFloat(value))
-    .refine((val) => !isNaN(val) && val >= -90 && val <= 90, {
-      message: "Latitude must be a valid number between -90 and 90",
-    }),
-  lng: z
-    .string()
-    .refine((value) => /^[-0-9,.]*$/.test(value), {
-      message: "Longitude must contain only numbers, commas, or points",
-    })
-    .transform((value) => parseFloat(value))
-    .refine((val) => !isNaN(val) && val >= -180 && val <= 180, {
-      message: "Longitude must be a valid number between -180 and 180",
-    }),
+  lat: z.coerce.number().refine((val) => val >= -90 && val <= 90, {
+    message: "Latitude must be a valid number between -90 and 90",
+  }),
+  lng: z.coerce.number().refine((val) => val >= -180 && val <= 180, {
+    message: "Longitude must be a valid number between -180 and 180",
+  }),
   email: z
     .string()
     .refine(
@@ -245,9 +233,6 @@ export function CollectorEditForm({
       console.error(err);
     }
   };
-
-  console.log(`defaultValues: ${JSON.stringify(defaultValues)}`);
-  console.log(`collectorId: ${dataId}`);
 
   return (
     <CollectorBaseForm

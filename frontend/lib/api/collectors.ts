@@ -36,7 +36,7 @@ export const updateCollector = async (
 ): Promise<CollectorRead> => {
   const { response, data } = await fetchApi(API_ROUTE, `/${collectorId}`, {
     method: "PUT",
-    body: [collector],
+    body: collector,
   });
   if (!response.ok) throw new ApiError("updateCollector fehlgeschlagen", data);
   console.log("updateCollector Response", data);

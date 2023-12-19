@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { ReactHTMLElement, useEffect, useRef, useState } from "react";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import {
   MarkerClusterer,
@@ -195,6 +195,16 @@ export default function SearchWithMapResultsWrapper({
     null
   );
 
+  const hasClassInParents = (element: Element | null, className: string) => {
+    while (element) {
+      if (element.classList && element.classList.contains(className)) {
+        return true;
+      }
+      element = element.parentElement;
+    }
+    return false;
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
@@ -249,7 +259,17 @@ export default function SearchWithMapResultsWrapper({
           mapMarker.results.map((result, index) => (
             <mapMarker.ResultCard
               key={`${mapMarker.id}.${index}`}
-              onClick={() => setActiveMapMarkerId(mapMarker.id)}
+              onClick={(event) => {
+                if (
+                  !hasClassInParents(
+                    event.target as Element,
+                    IGNORE_CARD_DEACTIVATION_CLASS
+                  )
+                ) {
+                  console.log("clicked");
+                  setActiveMapMarkerId(mapMarker.id);
+                }
+              }}
               className={`cursor-pointer ${IGNORE_CARD_DEACTIVATION_CLASS}`}
               isActive={activeMapMarkerId === mapMarker.id}
               data={result}
