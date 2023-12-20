@@ -30,6 +30,30 @@ export const fetchContractors = async (): Promise<ContractorRead[]> => {
   return data;
 };
 
+export const updateContractor = async (
+  contractorId: number,
+  contractor: ContractorCreate
+): Promise<ContractorCreate> => {
+  const { response, data } = await fetchApi(API_ROUTE, `/${contractorId}`, {
+    method: "PUT",
+    body: contractor,
+  });
+  if (!response.ok) throw new ApiError("updateContractor fehlgeschlagen", data);
+  console.log("updateContractor Response", data);
+  return data;
+};
+
+export const deleteContractor = async (
+  contractorId: number
+): Promise<ContractorRead> => {
+  const { response, data } = await fetchApi(API_ROUTE, `/${contractorId}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new ApiError("deleteContractor fehlgeschlagen", data);
+  console.log("deleteContractor Response", data);
+  return data;
+};
+
 export const fetchContractorFilterOptions =
   async (): Promise<ContractorFilterOptions> => {
     const { response, data } = await fetchApi(API_ROUTE, `/filter/`, {

@@ -1,7 +1,6 @@
 # from app.api.building_elements import router as building_elements_router
 from app.api.collectors import router as collectors_router
-
-# from app.api.contractors import router as contractors_router
+from app.api.contractors import router as contractors_router
 from app.config import settings
 
 # from app.shared.helpers import init_logging
@@ -35,11 +34,11 @@ app.include_router(
     prefix="/api/collectors",
 )
 
-# app.include_router(
-#     contractors_router,
-#     tags=["contractors"],
-#     prefix="/api/contractors",
-# )
+app.include_router(
+    contractors_router,
+    tags=["contractors"],
+    prefix="/api/contractors",
+)
 
 
 @app.get("/")

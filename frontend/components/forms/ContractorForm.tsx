@@ -1,20 +1,20 @@
-import React, { HTMLInputTypeAttribute } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { z } from "zod";
-import { Select } from "../ui/select";
 import { FilterOption } from "../search/SearchInputContainer";
 import {
   createContractor,
+  deleteContractor,
   fetchContractorFilterOptions,
+  updateContractor,
 } from "@/lib/api/contractors";
 import { ContractorCreate } from "@/types/api/contractor";
 import { renderInput, renderSelect } from "./renderFields";
-import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 import useSWR from "swr";
+import { EditFormProps } from "./forms";
+import toast from "react-hot-toast";
 
 const validationSchema = z.object({
   name: z
@@ -47,24 +47,12 @@ const validationSchema = z.object({
     .refine((value) => value.length <= 60 && value.length >= 2, {
       message: "Invalid city",
     }),
-  lat: z
-    .string()
-    .refine((value) => /^[-0-9,.]*$/.test(value), {
-      message: "Latitude must contain only numbers, commas, or points",
-    })
-    .transform((value) => parseFloat(value))
-    .refine((val) => !isNaN(val) && val >= -90 && val <= 90, {
-      message: "Latitude must be a valid number between -90 and 90",
-    }),
-  lng: z
-    .string()
-    .refine((value) => /^[-0-9,.]*$/.test(value), {
-      message: "Longitude must contain only numbers, commas, or points",
-    })
-    .transform((value) => parseFloat(value))
-    .refine((val) => !isNaN(val) && val >= -180 && val <= 180, {
-      message: "Longitude must be a valid number between -180 and 180",
-    }),
+  lat: z.coerce.number().refine((val) => val >= -90 && val <= 90, {
+    message: "Latitude must be a valid number between -90 and 90",
+  }),
+  lng: z.coerce.number().refine((val) => val >= -180 && val <= 180, {
+    message: "Longitude must be a valid number between -180 and 180",
+  }),
   email: z
     .string()
     .refine(
@@ -103,8 +91,19 @@ const validationSchema = z.object({
   circular_service_types: z.array(z.string()).nonempty(),
 });
 
-export default function ContractorUploadForm() {
-  const router = useRouter();
+export default function ContractorBaseForm({
+  onCancel,
+  onDelete,
+  onSubmit,
+  defaultValues,
+  submitLabel = "Upload",
+}: {
+  onCancel?: () => void;
+  onDelete?: () => void;
+  onSubmit: (values: ContractorCreate) => Promise<void>;
+  defaultValues?: ContractorCreate;
+  submitLabel?: string;
+}) {
   const { data: filterOptions, error: filterOptionsError } = useSWR(
     "/api/contractors/filter/",
     fetchContractorFilterOptions
@@ -114,19 +113,9 @@ export default function ContractorUploadForm() {
       resolver: zodResolver(validationSchema),
       mode: "onBlur",
       reValidateMode: "onBlur",
+      defaultValues,
     });
   const { errors, isValid } = formState;
-
-  const onSubmit = async (values: ContractorCreate) => {
-    try {
-      console.log(`sent to backend: ${JSON.stringify(values)}`);
-      await createContractor({ ...values });
-      toast.success("Successfully uploaded contractor");
-      router.push("/building-elements/contractors");
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const renderInputInternal = (
     label: keyof ContractorCreate,
@@ -161,51 +150,113 @@ export default function ContractorUploadForm() {
   }
 
   return (
-    <div>
-      <h2>Upload Contractor</h2>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex w-1/2 max-w-[1080px] flex-col gap-2"
-      >
-        <div className="flex flex-col max-w-[1080px] gap-9">
-          <div className="flex flex-col gap-2">
-            {renderInputInternal("name", "Name")}
-            {renderInputInternal("address", "Address")}
-            {renderInputInternal("zip_code", "Zip Code")}
-            {renderInputInternal("city", "City")}
-            {renderInputInternal("lat", "Latitude")}
-            {renderInputInternal("lng", "Longitude")}
-            <br />
-            {renderInputInternal("email", "Email")}
-            {renderInputInternal("phone", "Phone")}
-            <br />
-            {renderSelectInternal(
-              "material_types",
-              "Select Materials...",
-              filterOptions?.material_types || []
-            )}
-            {renderSelectInternal(
-              "waste_code_types",
-              "Select Waste Codes...",
-              filterOptions?.waste_code_types || []
-            )}
-            {renderSelectInternal(
-              "circular_service_types",
-              "Select Circular Services...",
-              filterOptions?.circular_service_types || []
-            )}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Button
-              variant={isValid ? "primary" : "disabled"}
-              size="sm"
-              disabled={!isValid}
-            >
-              Upload
-            </Button>
-          </div>
+    <form className="flex flex-col gap-2">
+      <div className="flex flex-col gap-9">
+        <div className="flex flex-col gap-2">
+          {renderInputInternal("name", "Name")}
+          {renderInputInternal("address", "Address")}
+          {renderInputInternal("zip_code", "Zip Code")}
+          {renderInputInternal("city", "City")}
+          {renderInputInternal("lat", "Latitude")}
+          {renderInputInternal("lng", "Longitude")}
+          <br />
+          {renderInputInternal("email", "Email")}
+          {renderInputInternal("phone", "Phone")}
+          <br />
+          {renderSelectInternal(
+            "material_types",
+            "Select Materials...",
+            filterOptions?.material_types || []
+          )}
+          {renderSelectInternal(
+            "waste_code_types",
+            "Select Waste Codes...",
+            filterOptions?.waste_code_types || []
+          )}
+          {renderSelectInternal(
+            "circular_service_types",
+            "Select Circular Services...",
+            filterOptions?.circular_service_types || []
+          )}
         </div>
-      </form>
-    </div>
+        <div className="flex flex-col gap-2">
+          {onCancel && (
+            <Button variant="secondary" size="sm" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
+          {onDelete && (
+            <Button variant="danger" size="sm" onClick={onDelete}>
+              Delete
+            </Button>
+          )}
+          <Button
+            variant={isValid ? "primary" : "disabled"}
+            size="sm"
+            onClick={handleSubmit(onSubmit)}
+            disabled={!isValid}
+          >
+            {submitLabel}
+          </Button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export function ContractorCreateForm({
+  onSuccess,
+}: {
+  onSuccess?: () => void | Promise<void>;
+}) {
+  const onSubmit = async (values: ContractorCreate) => {
+    try {
+      console.log(`createContractor to backend: ${JSON.stringify(values)}`);
+      await createContractor(values);
+      await onSuccess?.();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return <ContractorBaseForm onSubmit={onSubmit} />;
+}
+
+export function ContractorEditForm({
+  onCancel,
+  onSuccess,
+  onDeleted,
+  defaultValues,
+  dataId,
+}: EditFormProps) {
+  const onSubmit = async (values: ContractorCreate) => {
+    try {
+      console.log(`editContractor to backend: ${JSON.stringify(values)}`);
+      await updateContractor(dataId, values);
+      await onSuccess?.();
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update contractor");
+    }
+  };
+
+  const onDelete = async () => {
+    try {
+      await deleteContractor(dataId);
+      await onDeleted?.();
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete contractor");
+    }
+  };
+
+  return (
+    <ContractorBaseForm
+      onSubmit={onSubmit}
+      onCancel={onCancel}
+      onDelete={onDelete}
+      defaultValues={defaultValues}
+      submitLabel="Update"
+    />
   );
 }

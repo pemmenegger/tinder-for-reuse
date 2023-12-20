@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { z } from "zod";
 import { FilterOption } from "../search/SearchInputContainer";
 import {
   createCollector,
+  deleteCollector,
   fetchCollectorFilterOptions,
   updateCollector,
 } from "@/lib/api/collectors";
@@ -13,6 +14,7 @@ import { CollectorCreate } from "@/types/api/collector";
 import { renderInput, renderSelect } from "./renderFields";
 import useSWR from "swr";
 import { EditFormProps } from "./forms";
+import toast from "react-hot-toast";
 
 const validationSchema = z.object({
   name: z
@@ -92,11 +94,13 @@ const validationSchema = z.object({
 
 export default function CollectorBaseForm({
   onCancel,
+  onDelete,
   onSubmit,
   defaultValues,
   submitLabel = "Upload",
 }: {
   onCancel?: () => void;
+  onDelete?: () => void;
   onSubmit: (values: CollectorCreate) => Promise<void>;
   defaultValues?: CollectorCreate;
   submitLabel?: string;
@@ -147,7 +151,7 @@ export default function CollectorBaseForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+    <form className="flex flex-col gap-2">
       <div className="flex flex-col gap-9">
         <div className="flex flex-col gap-2">
           {renderInputInternal("name", "Name")}
@@ -187,9 +191,15 @@ export default function CollectorBaseForm({
               Cancel
             </Button>
           )}
+          {onDelete && (
+            <Button variant="danger" size="sm" onClick={onDelete}>
+              Delete
+            </Button>
+          )}
           <Button
             variant={isValid ? "primary" : "disabled"}
             size="sm"
+            onClick={handleSubmit(onSubmit)}
             disabled={!isValid}
           >
             {submitLabel}
@@ -212,6 +222,7 @@ export function CollectorCreateForm({
       await onSuccess?.();
     } catch (err) {
       console.error(err);
+      toast.error("Failed to create collector");
     }
   };
 
@@ -221,6 +232,7 @@ export function CollectorCreateForm({
 export function CollectorEditForm({
   onCancel,
   onSuccess,
+  onDeleted,
   defaultValues,
   dataId,
 }: EditFormProps) {
@@ -234,10 +246,21 @@ export function CollectorEditForm({
     }
   };
 
+  const onDelete = async () => {
+    try {
+      await deleteCollector(dataId);
+      await onDeleted?.();
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete collector");
+    }
+  };
+
   return (
     <CollectorBaseForm
       onSubmit={onSubmit}
       onCancel={onCancel}
+      onDelete={onDelete}
       defaultValues={defaultValues}
       submitLabel="Update"
     />

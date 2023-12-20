@@ -112,6 +112,19 @@ def update_collector(
     return collector.dict()
 
 
+@router.delete("/{id}")
+def delete_collector(
+    id: int,
+    session: Session = Depends(get_session),
+):
+    collector = session.get(Collector, id)
+    if not collector:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Collector not found")
+    session.delete(collector)
+    session.commit()
+    return collector.dict()
+
+
 @router.get("/filter/", response_model=CollectorFilterOptions)
 def read_filter_options(session: Session = Depends(get_session)):
     material_types = read_types(session, MaterialType)

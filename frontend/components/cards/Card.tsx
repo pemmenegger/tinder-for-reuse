@@ -73,6 +73,10 @@ export function CardEditable({
       {isEditing ? (
         <EditForm
           onCancel={() => setIsEditing(false)}
+          onDeleted={() => {
+            toast.success(`${name} successfully deleted`);
+            setIsEditing(false);
+          }}
           onSuccess={() => {
             toast.success(`${name} successfully updated`);
             setIsEditing(false);

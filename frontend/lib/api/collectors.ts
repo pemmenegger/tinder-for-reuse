@@ -43,6 +43,17 @@ export const updateCollector = async (
   return data;
 };
 
+export const deleteCollector = async (
+  collectorId: number
+): Promise<CollectorRead> => {
+  const { response, data } = await fetchApi(API_ROUTE, `/${collectorId}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new ApiError("deleteCollector fehlgeschlagen", data);
+  console.log("deleteCollector Response", data);
+  return data;
+};
+
 export const fetchCollectorFilterOptions =
   async (): Promise<CollectorFilterOptions> => {
     const { response, data } = await fetchApi(API_ROUTE, `/filter/`, {

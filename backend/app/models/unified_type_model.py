@@ -13,6 +13,7 @@ from app.models.collector_model import (
 )
 from app.models.contractor_model import (
     Contractor,
+    ContractorToCircularServiceType,
     ContractorToMaterialType,
     ContractorToWasteCodeType,
 )
@@ -48,4 +49,7 @@ class UnifiedType(UnifiedTypeBase, table=True):
     )
     contractor_waste_code_types: List[Contractor] = Relationship(
         back_populates="waste_code_types", link_model=ContractorToWasteCodeType
+    )
+    contractor_circular_service_types: List[Contractor] = Relationship(
+        back_populates="circular_service_types", link_model=ContractorToCircularServiceType
     )

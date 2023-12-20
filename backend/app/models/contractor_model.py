@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, List
 
 from app.models._base_model import RondasBase
 from app.schemas.contractor_schema import ContractorBase
-from app.shared.types import MaterialType, WasteCodeType
+from app.shared.types import CircularServiceType, MaterialType, WasteCodeType
 from sqlmodel import (
     Field,
     ForeignKeyConstraint,
@@ -41,6 +41,11 @@ class ContractorToWasteCodeType(ContractorToTypeBase, table=True):
     __table_args__ = ContractorToTypeBase.get_table_args()
 
 
+class ContractorToCircularServiceType(ContractorToTypeBase, table=True):
+    __tablename__ = "contractor_to_circular_service_type"
+    __table_args__ = ContractorToTypeBase.get_table_args()
+
+
 class Contractor(ContractorBase, RondasBase, table=True):
     __tablename__ = "contractor"
 
@@ -58,4 +63,7 @@ class Contractor(ContractorBase, RondasBase, table=True):
     )
     waste_code_types: List["UnifiedType"] = _relationship_definition(
         "contractor_waste_code_types", WasteCodeType, ContractorToWasteCodeType
+    )
+    circular_service_types: List["UnifiedType"] = _relationship_definition(
+        "contractor_circular_service_types", CircularServiceType, ContractorToCircularServiceType
     )

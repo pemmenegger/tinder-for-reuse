@@ -22,6 +22,7 @@ module.exports = {
         lgray: "#C2C2C2",
         dgray: "#939393",
         red: "#FF0000",
+        "red-500": "rgb(239 68 68)",
         lbeige: "#FEFCFB",
         dbeige: "rgb(44, 35, 17)",
         black: "#2f2f2f",

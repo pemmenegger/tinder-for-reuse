@@ -2,33 +2,35 @@ import React from "react";
 import { CollectorEditForm } from "../forms/CollectorForm";
 import { ResultCardProps } from "@/types/item";
 import { CardEditable } from "./Card";
+import { CollectorCreate } from "@/types/api/collector";
 
 export function CollectorCard({
   isActive = false,
   data,
   ...props
 }: ResultCardProps) {
+  const collector = data as CollectorCreate;
   return (
     <CardEditable
       isActive={isActive}
       activeClassName="border-[#C95139]"
       attributes={[
-        { label: "Name", value: data.name },
+        { label: "Name", value: collector.name },
         {
           label: "Address",
-          value: `${data.address}, ${data.zip_code}, ${data.city}`,
+          value: `${collector.address}, ${collector.zip_code}, ${collector.city}`,
         },
-        { label: "Email", value: data.email },
-        { label: "Phone", value: data.phone },
-        { label: "Materials", value: data.material_types },
-        { label: "Waste Codes", value: data.waste_code_types },
+        { label: "Email", value: collector.email },
+        { label: "Phone", value: collector.phone },
+        { label: "Materials", value: collector.material_types },
+        { label: "Waste Codes", value: collector.waste_code_types },
         {
           label: "Authorized Vehicles",
-          value: data.authorized_vehicle_types,
+          value: collector.authorized_vehicle_types,
         },
         {
           label: "Circular Strategies",
-          value: data.circular_strategy_types,
+          value: collector.circular_strategy_types,
         },
       ]}
       name="Collector"

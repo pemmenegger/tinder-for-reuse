@@ -9,6 +9,7 @@ const buttonVariants = cva("font-body-400 shadow-md tracking-wide", {
     variant: {
       primary: "bg-black text-white hover:opacity-90",
       secondary: "bg-white text-black border border-dgray/40",
+      danger: "bg-red-500 text-white hover:opacity-90",
       disabled: "bg-black/80 text-white cursor-not-allowed",
     },
     size: {
