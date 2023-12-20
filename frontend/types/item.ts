@@ -5,8 +5,8 @@ export interface ResultCardProps extends React.ComponentProps<"div"> {
 
 export type MapMarker = {
   id: number;
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
   iconUrl: string;
   iconScaledSize: {
     width: number;

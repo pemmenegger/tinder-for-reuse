@@ -84,8 +84,8 @@ def update_contractor(
     contractor.address = payload.address
     contractor.zip_code = payload.zip_code
     contractor.city = payload.city
-    contractor.lat = payload.lat
-    contractor.lng = payload.lng
+    contractor.latitude = payload.latitude
+    contractor.longitude = payload.longitude
     contractor.email = payload.email
     contractor.phone = payload.phone
     contractor.material_types = material_types

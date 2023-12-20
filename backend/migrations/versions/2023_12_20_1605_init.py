@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 63fa98f93592
+Revision ID: 0aa1535b452d
 Revises: No down revision
-Create Date: 2023-12-20 12:32:09.779234
+Create Date: 2023-12-20 16:05:43.751433
 
 """
 import sqlalchemy as sa  # noqa: F401
@@ -11,7 +11,7 @@ from alembic import op
 from app.shared.types import get_all_unified_types
 
 # revision identifiers, used by Alembic.
-revision = "63fa98f93592"
+revision = "0aa1535b452d"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,18 +32,12 @@ def upgrade() -> None:
         sa.Column("address", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("latitude", sa.Float(), nullable=False),
         sa.Column("longitude", sa.Float(), nullable=False),
-        sa.Column("worksheet_type", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("category_type", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("reference", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.Column("category", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("reference", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("title", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("unit_type", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("total", sa.Float(), nullable=True),
-        sa.Column("total_mass_t", sa.Float(), nullable=True),
+        sa.Column("total_mass_kg", sa.Float(), nullable=True),
         sa.Column("total_volume_m3", sa.Float(), nullable=True),
-        sa.Column("health_status_types", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-        sa.Column("reuse_potential_types", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-        sa.Column("waste_code_types", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-        sa.Column("recycling_code_types", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
         sa.Column("has_energy_recovery", sa.Boolean(), nullable=True),
         sa.Column("has_elimination", sa.Boolean(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
@@ -61,8 +55,8 @@ def upgrade() -> None:
         sa.Column("address", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("zip_code", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("city", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("lat", sa.Float(), nullable=False),
-        sa.Column("lng", sa.Float(), nullable=False),
+        sa.Column("latitude", sa.Float(), nullable=False),
+        sa.Column("longitude", sa.Float(), nullable=False),
         sa.Column("email", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
         sa.Column("phone", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
@@ -80,8 +74,8 @@ def upgrade() -> None:
         sa.Column("address", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("zip_code", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("city", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("lat", sa.Float(), nullable=False),
-        sa.Column("lng", sa.Float(), nullable=False),
+        sa.Column("latitude", sa.Float(), nullable=False),
+        sa.Column("longitude", sa.Float(), nullable=False),
         sa.Column("email", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
         sa.Column("phone", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
@@ -99,7 +93,97 @@ def upgrade() -> None:
         get_all_unified_types(),
     )
     op.create_table(
+        "building_element_to_building_element_unit_type",
+        sa.Column("building_element_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_discriminator", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["building_element_id"],
+            ["building_element.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["unified_type_id", "unified_type_discriminator"],
+            ["unified_type.id", "unified_type.discriminator"],
+        ),
+        sa.PrimaryKeyConstraint("building_element_id", "unified_type_id", "unified_type_discriminator"),
+    )
+    op.create_table(
+        "building_element_to_building_element_worksheet_type",
+        sa.Column("building_element_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_discriminator", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["building_element_id"],
+            ["building_element.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["unified_type_id", "unified_type_discriminator"],
+            ["unified_type.id", "unified_type.discriminator"],
+        ),
+        sa.PrimaryKeyConstraint("building_element_id", "unified_type_id", "unified_type_discriminator"),
+    )
+    op.create_table(
+        "building_element_to_health_status_type",
+        sa.Column("building_element_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_discriminator", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["building_element_id"],
+            ["building_element.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["unified_type_id", "unified_type_discriminator"],
+            ["unified_type.id", "unified_type.discriminator"],
+        ),
+        sa.PrimaryKeyConstraint("building_element_id", "unified_type_id", "unified_type_discriminator"),
+    )
+    op.create_table(
         "building_element_to_material_type",
+        sa.Column("building_element_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_discriminator", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["building_element_id"],
+            ["building_element.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["unified_type_id", "unified_type_discriminator"],
+            ["unified_type.id", "unified_type.discriminator"],
+        ),
+        sa.PrimaryKeyConstraint("building_element_id", "unified_type_id", "unified_type_discriminator"),
+    )
+    op.create_table(
+        "building_element_to_recycling_potential_type",
+        sa.Column("building_element_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_discriminator", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["building_element_id"],
+            ["building_element.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["unified_type_id", "unified_type_discriminator"],
+            ["unified_type.id", "unified_type.discriminator"],
+        ),
+        sa.PrimaryKeyConstraint("building_element_id", "unified_type_id", "unified_type_discriminator"),
+    )
+    op.create_table(
+        "building_element_to_reuse_potential_type",
+        sa.Column("building_element_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_id", sa.Integer(), nullable=True),
+        sa.Column("unified_type_discriminator", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.ForeignKeyConstraint(
+            ["building_element_id"],
+            ["building_element.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["unified_type_id", "unified_type_discriminator"],
+            ["unified_type.id", "unified_type.discriminator"],
+        ),
+        sa.PrimaryKeyConstraint("building_element_id", "unified_type_id", "unified_type_discriminator"),
+    )
+    op.create_table(
+        "building_element_to_waste_code_type",
         sa.Column("building_element_id", sa.Integer(), nullable=True),
         sa.Column("unified_type_id", sa.Integer(), nullable=True),
         sa.Column("unified_type_discriminator", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
@@ -230,7 +314,13 @@ def downgrade() -> None:
     op.drop_table("collector_to_material_type")
     op.drop_table("collector_to_circular_strategy_type")
     op.drop_table("collector_to_authorized_vehicle_type")
+    op.drop_table("building_element_to_waste_code_type")
+    op.drop_table("building_element_to_reuse_potential_type")
+    op.drop_table("building_element_to_recycling_potential_type")
     op.drop_table("building_element_to_material_type")
+    op.drop_table("building_element_to_health_status_type")
+    op.drop_table("building_element_to_building_element_worksheet_type")
+    op.drop_table("building_element_to_building_element_unit_type")
     op.drop_index(op.f("ix_unified_type_value"), table_name="unified_type")
     op.drop_table("unified_type")
     op.drop_table("contractor")

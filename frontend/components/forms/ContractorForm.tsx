@@ -47,10 +47,10 @@ const validationSchema = z.object({
     .refine((value) => value.length <= 60 && value.length >= 2, {
       message: "Invalid city",
     }),
-  lat: z.coerce.number().refine((val) => val >= -90 && val <= 90, {
+  latitude: z.coerce.number().refine((val) => val >= -90 && val <= 90, {
     message: "Latitude must be a valid number between -90 and 90",
   }),
-  lng: z.coerce.number().refine((val) => val >= -180 && val <= 180, {
+  longitude: z.coerce.number().refine((val) => val >= -180 && val <= 180, {
     message: "Longitude must be a valid number between -180 and 180",
   }),
   email: z
@@ -157,8 +157,8 @@ export default function ContractorBaseForm({
           {renderInputInternal("address", "Address")}
           {renderInputInternal("zip_code", "Zip Code")}
           {renderInputInternal("city", "City")}
-          {renderInputInternal("lat", "Latitude")}
-          {renderInputInternal("lng", "Longitude")}
+          {renderInputInternal("latitude", "Latitude")}
+          {renderInputInternal("longitude", "Longitude")}
           <br />
           {renderInputInternal("email", "Email")}
           {renderInputInternal("phone", "Phone")}

@@ -97,8 +97,8 @@ def update_collector(
     collector.address = payload.address
     collector.zip_code = payload.zip_code
     collector.city = payload.city
-    collector.lat = payload.lat
-    collector.lng = payload.lng
+    collector.latitude = payload.latitude
+    collector.longitude = payload.longitude
     collector.email = payload.email
     collector.phone = payload.phone
     collector.material_types = material_types

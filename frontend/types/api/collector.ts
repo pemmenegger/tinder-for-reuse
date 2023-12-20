@@ -10,8 +10,8 @@ type CollectorBase = {
   address: string;
   zip_code: string;
   city: string;
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
   email?: string;
   phone?: string;
 

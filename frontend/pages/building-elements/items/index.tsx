@@ -13,10 +13,13 @@ import { MapMarker } from "@/types/item";
 export default function BuildingElementItemsPage() {
   const [filterProperties, setFilterProperties] =
     useState<BuildingElementFilterOptions>({
+      worksheet_types: [],
       unit_types: [],
-      category_types: [],
-      constitution_types: [],
       material_types: [],
+      health_status_types: [],
+      reuse_potential_types: [],
+      waste_code_types: [],
+      recycling_potential_types: [],
     });
 
   useEffect(() => {
@@ -43,13 +46,22 @@ export default function BuildingElementItemsPage() {
           text: "",
         },
         filter: {
+          worksheet_type_ids: [],
           unit_type_ids: [],
-          category_type_ids: [],
-          constitution_type_ids: [],
           material_type_ids: [],
+          health_status_type_ids: [],
+          reuse_potential_type_ids: [],
+          waste_code_type_ids: [],
+          recycling_potential_type_ids: [],
         },
       }}
       filterConfigs={[
+        {
+          type: "multi",
+          label: "Worksheets",
+          path: ["filter", "worksheet_type_ids"],
+          options: filterProperties.worksheet_types,
+        },
         {
           type: "multi",
           label: "Units",
@@ -58,21 +70,33 @@ export default function BuildingElementItemsPage() {
         },
         {
           type: "multi",
-          label: "Categories",
-          path: ["filter", "category_type_ids"],
-          options: filterProperties.category_types,
-        },
-        {
-          type: "multi",
-          label: "Constitutions",
-          path: ["filter", "constitution_type_ids"],
-          options: filterProperties.constitution_types,
-        },
-        {
-          type: "multi",
           label: "Materials",
           path: ["filter", "material_type_ids"],
           options: filterProperties.material_types,
+        },
+        {
+          type: "multi",
+          label: "Health Status",
+          path: ["filter", "health_status_type_ids"],
+          options: filterProperties.health_status_types,
+        },
+        {
+          type: "multi",
+          label: "Reuse Potential",
+          path: ["filter", "reuse_potential_type_ids"],
+          options: filterProperties.reuse_potential_types,
+        },
+        {
+          type: "multi",
+          label: "Waste Codes",
+          path: ["filter", "waste_code_type_ids"],
+          options: filterProperties.waste_code_types,
+        },
+        {
+          type: "multi",
+          label: "Recycling Potential",
+          path: ["filter", "recycling_potential_type_ids"],
+          options: filterProperties.recycling_potential_types,
         },
       ]}
       ResultsWrapper={BuildingElementResultsWrapper}

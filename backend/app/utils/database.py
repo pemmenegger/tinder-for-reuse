@@ -44,22 +44,24 @@ def read_types(session, type_class):
     return types
 
 
-def read_type_by_value(session, type_class, value):
-    result = session.execute(
+def read_type_by_value_or_throw(session, type_class, value):
+    instance = session.execute(
         select(UnifiedType)
         .where(UnifiedType.discriminator == type_class.DISCRIMINATOR)
         .where(UnifiedType.value == value)
     )
-    return result.scalars().first()
+    instance = instance.scalars().first()
+    if not instance:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"type discriminator <{type_class.DISCRIMINATOR}> with value <{value}> not found",
+        )
+    return instance
 
 
 def read_types_by_values_or_throw(session, type_class, values):
     instances = []
     for value in values:
-        instance = read_type_by_value(session, type_class, value)
-        if not instance:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail=f"{type_class} with value {value} not found"
-            )
+        instance = read_type_by_value_or_throw(session, type_class, value)
         instances.append(instance)
     return instances

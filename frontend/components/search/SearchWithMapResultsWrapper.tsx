@@ -31,8 +31,8 @@ const addMarkers = ({
   return mapMarkers.map((mapMarker) => {
     const marker = new google.maps.Marker({
       position: {
-        lat: mapMarker.lat,
-        lng: mapMarker.lng,
+        lat: mapMarker.latitude,
+        lng: mapMarker.longitude,
       },
       map,
       icon: {
@@ -136,7 +136,7 @@ const GoogleMaps = ({
     const visibleMapMarkerIds = mapMarkers
       .filter((mapMarker) =>
         bounds?.contains(
-          new window.google.maps.LatLng(mapMarker.lat, mapMarker.lng)
+          new window.google.maps.LatLng(mapMarker.latitude, mapMarker.longitude)
         )
       )
       .map((mapMarker) => mapMarker.id);

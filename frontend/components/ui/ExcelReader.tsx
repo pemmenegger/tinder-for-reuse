@@ -52,8 +52,8 @@ const ExcelReader: React.FC<Props> = ({
         );
         const address: string = jsonSynthese[0][1];
         const location: string = jsonSynthese[1][1];
-        const location_lat: number = parseFloat(location.split(";")[0]);
-        const location_long: number = parseFloat(location.split(";")[1]);
+        const location_latitude: number = parseFloat(location.split(",")[0]);
+        const location_longitude: number = parseFloat(location.split(",")[1]);
         workbook.SheetNames.forEach((sheetName) => {
           console.log("Handling sheet:", sheetName);
           if (
@@ -69,8 +69,8 @@ const ExcelReader: React.FC<Props> = ({
             header: 1,
           });
           onFileUploaded(jsonData, sheetName, address, [
-            location_lat,
-            location_long,
+            location_latitude,
+            location_longitude,
           ]);
         });
       } catch (error) {

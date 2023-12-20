@@ -2,11 +2,11 @@ import { BuildingElementCard } from "@/components/cards/BuildingElementCard";
 import ExcelReader from "@/components/ui/ExcelReader";
 import { Button } from "@/components/ui/button";
 import { uploadBuildingElements } from "@/lib/api/building-elements";
+import { roundNumber } from "@/lib/utils";
 import { BuildingElementCreate } from "@/types/api/items/building-element";
 
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { v4 as uuidv4 } from "uuid";
 
 export default function BuildingElementUploadPage() {
   const [buildingElementsToUpload, setBuildingElementsToUpload] = useState<
@@ -19,55 +19,85 @@ export default function BuildingElementUploadPage() {
     address: string,
     location: [number, number]
   ) => {
-    const upload_uuid = uuidv4();
-
-    const headers = data[1];
+    const first_row = data[0];
+    const second_row = data[1];
     const columnIndices = {
-      total_mass: headers.indexOf("Masse totale estimée in kg"),
-      total_volume: headers.indexOf("volume total en m3"),
-      material: headers.indexOf("matériaux"),
-      condition_sanitary: headers.indexOf("état sanitaire des matériaux"),
-      reuse_potential: headers.indexOf("potentiel de réemploi/ réutilisation"),
-      waste_code: headers.indexOf("code déchet"),
-      recycling_potential: headers.indexOf("potentiel de recyclage"),
-      energy_recovery: headers.indexOf("valorisation énergie"),
-      disposal: headers.indexOf("élimination"),
+      reference: first_row.indexOf("Référence"),
+      title: first_row.indexOf("DESIGNATION"),
+      unit: first_row.indexOf("Unité"),
+
+      total: second_row.indexOf("total"),
+      total_mass_kg: second_row.indexOf("Masse totale estimée in kg"),
+      total_volume_m3: second_row.indexOf("volume total en m3"),
+      material: second_row.indexOf("matériaux"),
+      health_status: second_row.indexOf("état sanitaire des matériaux"),
+      reuse_potential: second_row.indexOf(
+        "potentiel de réemploi/ réutilisation"
+      ),
+      waste_code: second_row.indexOf("code déchet"),
+      recycling_potential: second_row.indexOf("potentiel de recyclage"),
+      has_energy_recovery: second_row.indexOf("valorisation énergie"),
+      has_elimination: second_row.indexOf("élimination"),
     };
 
-    let currCategory;
+    let currCategoryName;
     for (let i = 2; i < data.length; i++) {
       const row = data[i];
       if (row.length < 2) continue;
       if (row.length == 2) {
-        currCategory = row[1];
+        currCategoryName = row[1];
         continue;
       }
-      if (!currCategory) continue;
+      if (!currCategoryName) continue;
 
-      // const newElement: BuildingElementCreate = {
-      //   total_mass: row[columnIndices.total_mass],
-      //   total_volume: row[columnIndices.total_volume],
-      //   material: row[columnIndices.material],
-      //   condition_sanitary: row[columnIndices.condition_sanitary],
-      //   reuse_potential: row[columnIndices.reuse_potential],
-      //   waste_code: row[columnIndices.waste_code],
-      //   recycling_potential: row[columnIndices.recycling_potential],
-      //   energy_recovery: row[columnIndices.energy_recovery],
-      //   disposal: row[columnIndices.disposal],
-      //   category_type: currCategory,
-      //   worksheet: sheetName,
-      //   item: {
-      //     title: row[1],
-      //     category_type_id: 1, // This might need to be dynamically determined
-      //   },
-      //   address: address,
-      //   lat: location[0],
-      //   lng: location[1],
-      //   upload_uuid: upload_uuid,
-      // };
+      const buildingElement: BuildingElementCreate = {
+        upload_uuid: "test",
+        address: address,
+        latitude: location[0],
+        longitude: location[1],
 
-      // setBuildingElementsToUpload((prev) => [...prev, newElement]);
+        worksheet_type: sheetName,
+        category: currCategoryName,
+
+        reference: row[columnIndices.reference],
+        title: row[columnIndices.title],
+        unit_type: row[columnIndices.unit],
+
+        total: roundNumber(row[columnIndices.total], 10000),
+        total_mass_kg: roundNumber(row[columnIndices.total_mass_kg], 100),
+        total_volume_m3: roundNumber(row[columnIndices.total_volume_m3], 100),
+        material_type: row[columnIndices.material],
+        health_status_type: row[columnIndices.health_status],
+        reuse_potential_type: row[columnIndices.reuse_potential],
+        waste_code_type: row[columnIndices.waste_code],
+        recycling_potential_type: row[columnIndices.recycling_potential],
+        has_energy_recovery: row[columnIndices.has_energy_recovery],
+        has_elimination: row[columnIndices.has_elimination],
+      };
+
+      postprocess(buildingElement);
+
+      if (!buildingElement.unit_type) {
+        console.log("no unit type");
+        console.log(buildingElement);
+        continue;
+      }
+
+      setBuildingElementsToUpload((prev) => [...prev, buildingElement]);
     }
+  };
+
+  const postprocess = (buildingElement: BuildingElementCreate) => {
+    Object.keys(buildingElement).forEach((key) => {
+      let value = buildingElement[key as keyof BuildingElementCreate];
+      if (typeof value === "string") {
+        value = value.replace(/\u00A0/g, " ");
+        value = value.replace("m2", "m²");
+        value = value.replace("m3", "m³");
+        value = value.trim();
+        (buildingElement as any)[key] = value;
+      }
+    });
   };
 
   const upload = async () => {

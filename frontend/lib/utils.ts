@@ -12,13 +12,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const roundNumber = (value: string, precision: number) => {
+  const number = Number(value);
+  return Math.round(number * precision) / precision;
+};
+
 export const fromCollectorsToCollectorMapMarkers = (
   collectors: CollectorRead[]
 ): MapMarker[] => {
   return collectors.map((collector) => ({
     id: collector.id,
-    lat: collector.lat,
-    lng: collector.lng,
+    latitude: collector.latitude,
+    longitude: collector.longitude,
     iconUrl: "/icons/collectors/marker.svg",
     iconScaledSize: {
       width: 22,
@@ -34,8 +39,8 @@ export const fromContractorsToContractorMapMarkers = (
 ): MapMarker[] => {
   return contractors.map((contractor) => ({
     id: contractor.id,
-    lat: contractor.lat,
-    lng: contractor.lng,
+    latitude: contractor.latitude,
+    longitude: contractor.longitude,
     iconUrl: "/icons/contractors/marker.svg",
     iconScaledSize: {
       width: 22,
@@ -65,8 +70,8 @@ export const fromBuildingElementsToBuildingElementsMapMarkers = (
   return Object.values(buildingElementsByUploadUuid).map(
     (buildingElements) => ({
       id: buildingElements[0].id,
-      lat: buildingElements[0].lat,
-      lng: buildingElements[0].lng,
+      latitude: buildingElements[0].latitude,
+      longitude: buildingElements[0].longitude,
       iconUrl: "/icons/building-elements/marker.svg",
       iconScaledSize: {
         width: 22,

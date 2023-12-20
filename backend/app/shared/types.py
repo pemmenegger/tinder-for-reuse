@@ -47,6 +47,7 @@ class BuildingElementUnitType:
     M3 = UnifiedType(id=3, discriminator=DISCRIMINATOR, value="m³")
     U = UnifiedType(id=4, discriminator=DISCRIMINATOR, value="U")
     ENS = UnifiedType(id=5, discriminator=DISCRIMINATOR, value="ens")
+    KG = UnifiedType(id=6, discriminator=DISCRIMINATOR, value="kg")
 
 
 class BuildingElementWorksheetType:
@@ -115,7 +116,7 @@ class WasteCodeType:
     _170101 = UnifiedType(id=3, discriminator=DISCRIMINATOR, value="17 01 01")
     _170102 = UnifiedType(id=4, discriminator=DISCRIMINATOR, value="17 01 02")
     _170103 = UnifiedType(id=5, discriminator=DISCRIMINATOR, value="17 01 03")
-    _170106 = UnifiedType(id=6, discriminator=DISCRIMINATOR, value="17 01 06")
+    _170106 = UnifiedType(id=6, discriminator=DISCRIMINATOR, value="17 01 06*")
     _170107 = UnifiedType(id=7, discriminator=DISCRIMINATOR, value="17 01 07")
     _170201 = UnifiedType(id=8, discriminator=DISCRIMINATOR, value="17 02 01")
     _170202 = UnifiedType(id=9, discriminator=DISCRIMINATOR, value="17 02 02")
@@ -170,9 +171,9 @@ class HealthStatusType:
     LEAD = UnifiedType(id=2, discriminator=DISCRIMINATOR, value="Lead")
     TERMITES = UnifiedType(id=3, discriminator=DISCRIMINATOR, value="Termites")
     DAMAGED = UnifiedType(id=4, discriminator=DISCRIMINATOR, value="Damaged")
-    NOT_DAMAGED = UnifiedType(id=5, discriminator=DISCRIMINATOR, value="Not damaged")
+    NOT_DAMAGED = UnifiedType(id=5, discriminator=DISCRIMINATOR, value="Not Damaged")
     HETEROGENEOUS = UnifiedType(id=6, discriminator=DISCRIMINATOR, value="Heterogeneous")
-    NOT_VERIFIED_YET = UnifiedType(id=7, discriminator=DISCRIMINATOR, value="Not verified yet")
+    UNCLEAR = UnifiedType(id=7, discriminator=DISCRIMINATOR, value="Unclear")
 
 
 class ReusePotentialType:

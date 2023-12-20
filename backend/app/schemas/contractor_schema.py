@@ -14,8 +14,8 @@ class ContractorBase(SQLModel):
     address: str
     zip_code: str
     city: str
-    lat: float
-    lng: float
+    latitude: float
+    longitude: float
     email: Optional[str]
     phone: Optional[str]
 
