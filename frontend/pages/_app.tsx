@@ -1,6 +1,5 @@
 import "@/styles/globals.css";
 import Layout from "../components/Layout";
-import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 
@@ -11,11 +10,12 @@ export default function App({
   return (
     <Layout>
       <Head>
-        <title>Rondas — Discover The Future of Secondhand</title>
+        <title>
+          Tinder For Reuse — Discover The Future of Matchmaking in the
+          Construction Industry
+        </title>
       </Head>
-      <SessionProvider session={session}>
-        <Component {...pageProps} />
-      </SessionProvider>
+      <Component {...pageProps} />
     </Layout>
   );
 }

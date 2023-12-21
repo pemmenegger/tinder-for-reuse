@@ -1,8 +1,18 @@
 import React, { useCallback, useRef, useState } from "react";
 import * as XLSX from "xlsx";
 
+export type FileData = {
+  address: string;
+  latitude: number;
+  longitude: number;
+  content: {
+    sheetName: string;
+    data: any[][];
+  }[];
+};
+
 type Props = {
-  onFileUploaded: (data: any[][]) => void;
+  onFileUploaded: (fileData: FileData) => void;
   supportedWorksheetNames?: string[];
 };
 
@@ -39,6 +49,24 @@ const ExcelReader: React.FC<Props> = ({
         const data = await file.arrayBuffer();
         const workbook = XLSX.read(data, { type: "array" });
 
+        const jsonSynthese: any[][] = XLSX.utils.sheet_to_json(
+          workbook.Sheets["synthese"],
+          {
+            header: 1,
+          }
+        );
+        const address: string = jsonSynthese[0][1];
+        const location: string = jsonSynthese[1][1];
+        const location_latitude: number = parseFloat(location.split(",")[0]);
+        const location_longitude: number = parseFloat(location.split(",")[1]);
+
+        const fileData: FileData = {
+          address: address,
+          latitude: location_latitude,
+          longitude: location_longitude,
+          content: [],
+        };
+
         workbook.SheetNames.forEach((sheetName) => {
           if (
             supportedWorksheetNames &&
@@ -50,8 +78,14 @@ const ExcelReader: React.FC<Props> = ({
           const jsonData: any[][] = XLSX.utils.sheet_to_json(worksheet, {
             header: 1,
           });
-          onFileUploaded(jsonData);
+
+          fileData.content.push({
+            sheetName: sheetName,
+            data: jsonData,
+          });
         });
+
+        onFileUploaded(fileData);
       } catch (error) {
         console.error("Error reading file:", error);
         // Handle the error according to your needs

@@ -7,8 +7,10 @@ import { cn } from "@/lib/utils";
 const buttonVariants = cva("font-body-400 shadow-md tracking-wide", {
   variants: {
     variant: {
-      primary: "bg-rondas-black text-white hover:opacity-90",
-      disabled: "bg-rondas-black/80 text-white cursor-not-allowed",
+      primary: "bg-black text-white hover:opacity-90",
+      secondary: "bg-white text-black border border-dgray/40",
+      danger: "bg-red-500 text-white hover:opacity-90",
+      disabled: "bg-black/80 text-white cursor-not-allowed",
     },
     size: {
       sm: "rounded-lg py-3 px-4 text-sm",

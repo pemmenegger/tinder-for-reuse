@@ -26,21 +26,3 @@ class RondasBase(SQLModel):
         orm_mode = True
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
-
-
-class RondasItemBase(SQLModel):
-    id: Optional[int] = Field(default=None, primary_key=True)
-
-    class Config:
-        orm_mode = True
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-
-
-class RondasTypeBase(SQLModel):
-    id: Optional[int] = Field(default=None, primary_key=True)
-
-    class Config:
-        orm_mode = True
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True

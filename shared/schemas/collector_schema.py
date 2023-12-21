@@ -12,12 +12,15 @@ class CollectorBase(SQLModel):
     address: str
     zip_code: str
     city: str
-    lat: float
-    lng: float
+    latitude: float
+    longitude: float
     email: Optional[str]
     phone: Optional[str]
 
-    collection_types: List[str]
+    material_types: List[str]
+    waste_code_types: List[str]
+    authorized_vehicle_types: List[str]
+    circular_strategy_types: List[str]
 
 
 class CollectorCreate(CollectorBase):
@@ -30,14 +33,16 @@ class CollectorRead(CollectorBase):
     @classmethod
     def from_collector(cls, collector):
         return cls(
-            id=collector.id,
-            name=collector.name,
-            address=collector.address,
-            zip_code=collector.zip_code,
-            city=collector.city,
-            lat=collector.lat,
-            lng=collector.lng,
-            email=collector.email,
-            phone=collector.phone,
-            collection_types=[collection_type.name for collection_type in collector.collection_types],
+            **collector.dict(
+                exclude_unset=False,
+                exclude={"material_types", "waste_code_types", "authorized_vehicle_types", "circular_strategy_types"},
+            ),
+            material_types=[material_type.type_label for material_type in collector.material_types],
+            waste_code_types=[waste_code_type.type_label for waste_code_type in collector.waste_code_types],
+            authorized_vehicle_types=[
+                authorized_vehicle_type.type_label for authorized_vehicle_type in collector.authorized_vehicle_types
+            ],
+            circular_strategy_types=[
+                circular_strategy_type.type_label for circular_strategy_type in collector.circular_strategy_types
+            ],
         )

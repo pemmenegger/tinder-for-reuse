@@ -4,13 +4,15 @@
 
 from typing import List
 
-from app.shared.schemas.collector_schema import CollectorRead
-from app.shared.schemas.type_schema import TypeRead
+from app.shared.schemas.type_schema import UnifiedTypeRead
 from pydantic import BaseModel
 
 
 class CollectorFilterOptions(BaseModel):
-    collection_types: List[TypeRead]
+    material_types: List[UnifiedTypeRead]
+    waste_code_types: List[UnifiedTypeRead]
+    authorized_vehicle_types: List[UnifiedTypeRead]
+    circular_strategy_types: List[UnifiedTypeRead]
 
 
 class CollectorSearchRequest(BaseModel):
@@ -18,12 +20,10 @@ class CollectorSearchRequest(BaseModel):
         text: str
 
     class Filter(BaseModel):
-        collection_type_ids: List[int]
+        material_type_ids: List[int]
+        waste_code_type_ids: List[int]
+        authorized_vehicle_type_ids: List[int]
+        circular_strategy_type_ids: List[int]
 
     query: Query
     filter: Filter
-
-
-class CollectorSearchResponse(BaseModel):
-    results: List[CollectorRead]
-    hasMore: bool

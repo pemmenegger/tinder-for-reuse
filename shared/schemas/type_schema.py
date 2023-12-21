@@ -7,18 +7,15 @@
 from sqlmodel import Field, SQLModel
 
 
-class TypeBase(SQLModel):
-    name: str = Field(unique=True, index=True)
+class UnifiedTypeBase(SQLModel):
+    discriminator: str = Field(index=True)
+    type_id: int
+    type_label: str = Field(index=True)
 
 
-class TypeCreate(TypeBase):
+class UnifiedTypeCreate(UnifiedTypeBase):
     pass
 
 
-class TypeRead(TypeBase):
-    # change also in frontend/types/api/type.ts
+class UnifiedTypeRead(UnifiedTypeBase):
     id: int
-
-    @classmethod
-    def from_enum(cls, type_enum):
-        return cls(id=type_enum.id, name=type_enum.label)

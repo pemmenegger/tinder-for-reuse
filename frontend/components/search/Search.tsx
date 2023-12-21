@@ -1,26 +1,28 @@
 import SearchInputContainer, {
   FilterConfig,
 } from "@/components/search/SearchInputContainer";
-import SearchResults, {
-  SearchRequest,
-  SearchResponse,
-} from "@/components/search/SearchResults";
+import { SearchRequest, SearchResponse } from "@/types/api/search";
 import { useState } from "react";
-import { ResultsWrapperType } from "./resultsWrappers";
+import SearchResults from "./SearchResults";
+
+export type SearchResultsWrapperType = {
+  results: any[];
+  isLoading: boolean;
+};
 
 export default function Search<
   ReqT extends SearchRequest,
-  ResT extends SearchResponse
+  ResT extends SearchResponse<any>
 >({
   fetcher,
   initialSearchRequest,
   filterConfigs,
   ResultsWrapper,
 }: {
-  fetcher: (pageIndex: number, searchRequest: ReqT) => Promise<ResT>;
+  fetcher: (searchRequest: ReqT) => Promise<ResT>;
   initialSearchRequest: ReqT;
-  filterConfigs: FilterConfig[];
-  ResultsWrapper: React.ComponentType<ResultsWrapperType>;
+  filterConfigs: Record<string, FilterConfig[]>;
+  ResultsWrapper: React.ComponentType<SearchResultsWrapperType>;
 }) {
   const [searchRequest, setSearchRequest] =
     useState<ReqT>(initialSearchRequest);
@@ -41,13 +43,6 @@ export default function Search<
           setTotalResults={setTotalResults}
           ResultsWrapper={ResultsWrapper}
         />
-        <button
-          onClick={() => {
-            console.log(searchRequest);
-          }}
-        >
-          Log search request
-        </button>
       </div>
     </div>
   );

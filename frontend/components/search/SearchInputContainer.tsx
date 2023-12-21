@@ -1,18 +1,15 @@
-import {
-  ArrowUturnDownIcon,
-  ChevronDownIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useState, KeyboardEvent } from "react";
-import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 import SearchInputText from "./SearchInputText";
-import SearchInputImage from "./SearchInputImage";
-import { SearchRequest } from "./SearchResults";
-import { SearchInputSelect } from "./SearchInputSelect";
+import { SearchRequest } from "@/types/api/search";
+import { Select } from "../ui/select";
 
 export type FilterOption = {
-  name: string;
   id: number | string;
+  discriminator: string;
+  type_id: number | string;
+  type_label: string;
 };
 
 export type FilterConfig = {
@@ -31,13 +28,12 @@ export default function SearchContainer<ReqT extends SearchRequest>({
   searchRequest: ReqT;
   setSearchRequest: (searchProps: ReqT) => void;
   totalResults: number;
-  filterConfigs: FilterConfig[];
+  filterConfigs: Record<string, FilterConfig[]>;
 }) {
   const [newSearchRequest, setNewSearchRequest] = useState<ReqT>(searchRequest);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
 
-  const { image: queryImage, text: queryText } = newSearchRequest.query;
-  const isImageAllowed = queryImage !== undefined;
+  const { text: queryText } = newSearchRequest.query;
 
   const handleKeyDown = (e: KeyboardEvent<HTMLImageElement>) => {
     if (e.key === "Enter") {
@@ -46,10 +42,6 @@ export default function SearchContainer<ReqT extends SearchRequest>({
   };
 
   const handleSearchButton = async () => {
-    // if (!queryImage && !queryText) {
-    //   toast.error("Please provide either an image or a text for the search");
-    //   return;
-    // }
     setSearchRequest(newSearchRequest);
   };
 
@@ -73,38 +65,53 @@ export default function SearchContainer<ReqT extends SearchRequest>({
     handleInputChange(["query", "text"], text !== "" ? text : undefined);
   };
 
-  const onImageChange = (image: string) => {
-    handleInputChange(["query", "image"], image);
-    handleInputChange(["filter", "embedding_type"], "IMAGE_ONLY");
-  };
-
-  const onImageRemove = () => {
-    handleInputChange(["query", "image"], undefined);
-  };
+  function getValueAtPath<ReqT extends SearchRequest>(
+    searchRequest: ReqT,
+    path: string[]
+  ): any {
+    // Navigate through the searchRequest using the path
+    return path.reduce((obj, key) => {
+      // Type assertion to tell TypeScript that obj can be indexed with a string key
+      return (obj as any)[key];
+    }, searchRequest as any);
+  }
 
   const renderFilterUI = (config: FilterConfig) => {
+    if (!config.options) {
+      return null;
+    }
     switch (config.type) {
       case "single":
         return (
-          <SearchInputSelect
-            options={config.options || []}
+          <Select
+            options={config.options}
+            selectedOptions={config.options.filter((option) =>
+              getValueAtPath<ReqT>(searchRequest, config.path).includes(
+                option.id
+              )
+            )}
             onChange={(selectedOptions) => {
-              const value =
-                selectedOptions.length > 0 ? selectedOptions[0].id : null;
-              handleInputChange(config.path, value);
+              const id = selectedOptions.map((option) => option.id);
+              handleInputChange(config.path, id);
             }}
-            multiSelect={false}
+            isMultiSelect={false}
           />
         );
       case "multi":
         return (
-          <SearchInputSelect
-            options={config.options || []}
+          <Select
+            options={config.options}
+            selectedOptions={config.options.filter((option) =>
+              getValueAtPath<ReqT>(searchRequest, config.path).includes(
+                option.id
+              )
+            )}
+            // selectedOptions={config.options}
             onChange={(selectedOptions) => {
-              const value = selectedOptions.map((option) => option.id);
-              handleInputChange(config.path, value);
+              const ids = selectedOptions.map((option) => option.id);
+              handleInputChange(config.path, ids);
             }}
-            multiSelect={true}
+            isMultiSelect={true}
           />
         );
       default:
@@ -112,25 +119,37 @@ export default function SearchContainer<ReqT extends SearchRequest>({
     }
   };
 
+  const renderConfigItem = (config: FilterConfig, configKey: string) => (
+    <div key={configKey} className="mb-4">
+      <p className="text-sm font-body-400 mb-2">{config.label}</p>
+      {renderFilterUI(config)}
+    </div>
+  );
+
+  const renderFilterConfigs = () => {
+    return (
+      <div className="flex flex-col gap-4">
+        {Object.entries(filterConfigs).map(([key, configs], index) => (
+          <div key={key} className="mb-4">
+            {Object.keys(filterConfigs).length > 1 && (
+              <p className="text-md font-body-500 mb-3">{key}</p>
+            )}
+
+            {configs.map((config, configIndex) =>
+              renderConfigItem(config, `${key}-${configIndex}`)
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="w-full mb-6 md:mb-6">
       <div className="flex pb-10">
         <div className="relative w-full lg:mt-[42px]" onKeyDown={handleKeyDown}>
-          {isImageAllowed && (
-            <p className="hidden lg:block absolute right-[135px] top-[-42px] font-head-400 tracking-wide text-base text-dgray/80">
-              <span>Tip: Search by Using a Photo!</span>
-              <ArrowUturnDownIcon className="w-6 ml-2 inline" />
-            </p>
-          )}
           <SearchInputText queryText={queryText} onTextChange={onTextChange} />
           <div className="flex absolute right-2 top-2 justify-right">
-            {isImageAllowed && (
-              <SearchInputImage
-                queryImage={queryImage}
-                onImageChange={onImageChange}
-                onImageRemove={onImageRemove}
-              />
-            )}
             <Button
               variant="primary"
               size="lg"
@@ -158,14 +177,7 @@ export default function SearchContainer<ReqT extends SearchRequest>({
             <ChevronDownIcon className="w-6" />
           </div>
           <div className={`${isFilterVisible ? "block" : "hidden"}`}>
-            {filterConfigs.map((config, index) => {
-              return (
-                <div key={index} className="mb-4">
-                  <p className="text-sm font-body-400 mb-2">{config.label}</p>
-                  {renderFilterUI(config)}
-                </div>
-              );
-            })}
+            {renderFilterConfigs()}
           </div>
         </div>
       </div>

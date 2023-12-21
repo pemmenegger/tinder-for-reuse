@@ -1,32 +1,51 @@
-from typing import List
+from typing import TYPE_CHECKING, List
 
-from app.models._base_model import RondasBase, RondasTypeBase
+from app.models._base_model import RondasBase
 from app.shared.schemas.collector_schema import CollectorBase
-from app.shared.schemas.type_schema import TypeBase
 from sqlmodel import Field, Relationship, SQLModel
 
+# avoid circular imports
+if TYPE_CHECKING:
+    from app.models.unified_type_model import UnifiedType
 
-class CollectorToCollectorCollectionType(SQLModel, table=True):
-    __tablename__ = "collector_to_collector_collection_type"
 
+class CollectorToTypeBase(SQLModel):
     collector_id: int = Field(default=None, foreign_key="collector.id", primary_key=True)
-    collector_collection_type_id: int = Field(
-        default=None, foreign_key="collector_collection_type.id", primary_key=True
-    )
+    unified_type_id: int = Field(default=None, foreign_key="unified_type.id", primary_key=True)
 
 
-class CollectorCollectionType(TypeBase, RondasTypeBase, table=True):
-    __tablename__ = "collector_collection_type"
+class CollectorToMaterialType(CollectorToTypeBase, table=True):
+    __tablename__ = "collector_to_material_type"
 
-    collectors: List["Collector"] = Relationship(
-        back_populates="collection_types", link_model=CollectorToCollectorCollectionType
-    )
+
+class CollectorToWasteCodeType(CollectorToTypeBase, table=True):
+    __tablename__ = "collector_to_waste_code_type"
+
+
+class CollectorToAuthorizedVehicleType(CollectorToTypeBase, table=True):
+    __tablename__ = "collector_to_authorized_vehicle_type"
+
+
+class CollectorToCircularStrategyType(CollectorToTypeBase, table=True):
+    __tablename__ = "collector_to_circular_strategy_type"
 
 
 class Collector(CollectorBase, RondasBase, table=True):
     __tablename__ = "collector"
 
-    collection_types: List[CollectorCollectionType] = Relationship(
-        back_populates="collectors",
-        link_model=CollectorToCollectorCollectionType,
+    material_types: List["UnifiedType"] = Relationship(
+        back_populates="collector_material_types",
+        link_model=CollectorToMaterialType,
+    )
+    waste_code_types: List["UnifiedType"] = Relationship(
+        back_populates="collector_waste_code_types",
+        link_model=CollectorToWasteCodeType,
+    )
+    authorized_vehicle_types: List["UnifiedType"] = Relationship(
+        back_populates="collector_authorized_vehicle_types",
+        link_model=CollectorToAuthorizedVehicleType,
+    )
+    circular_strategy_types: List["UnifiedType"] = Relationship(
+        back_populates="collector_circular_strategy_types",
+        link_model=CollectorToCircularStrategyType,
     )

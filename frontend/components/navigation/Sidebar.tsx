@@ -1,19 +1,17 @@
 import Link from "next/link";
 import {
-  HomeIcon as HomeIconOutline,
-  CubeIcon as CubeIconOutline,
-  ShoppingBagIcon as ShoppingBagIconOutline,
-  UserCircleIcon as UserCircleIconOutline,
   ArrowUpTrayIcon as ArrowUpTrayIconOutline,
+  CircleStackIcon as CircleStackIconOutline,
   MagnifyingGlassIcon as MagnifyingGlassIconOutline,
+  BriefcaseIcon as BriefcaseIconOutline,
+  ArrowPathRoundedSquareIcon as ArrowPathRoundedSquareIconOutline,
 } from "@heroicons/react/24/outline";
 import {
-  HomeIcon as HomeIconSolid,
-  CubeIcon as CubeIconSolid,
-  ShoppingBagIcon as ShoppingBagIconSolid,
-  UserCircleIcon as UserCircleIconSolid,
   ArrowUpTrayIcon as ArrowUpTrayIconSolid,
+  CircleStackIcon as CircleStackIconSolid,
   MagnifyingGlassIcon as MagnifyingGlassIconSolid,
+  BriefcaseIcon as BriefcaseIconSolid,
+  ArrowPathRoundedSquareIcon as ArrowPathRoundedSquareIconSolid,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
 const tfrLogo = require("../../public/tfr-logo.svg") as string;
@@ -34,9 +32,9 @@ function NavItem({
   active: boolean;
 }) {
   let itemStyle =
-    "flex text-lg my-2 md:my-3 items-center rounded-lg py-2 md:py-4 md:pb-3 px-4 hover:bg-rondas-beige-dark/10";
+    "flex text-lg my-2 md:my-3 items-center rounded-lg py-2 md:py-4 md:pb-3 px-4 hover:bg-dbeige/10";
   if (active) {
-    itemStyle += " bg-rondas-beige-dark/5 text-black font-body-500";
+    itemStyle += " bg-dbeige/5 text-black font-body-500";
   }
 
   let iconStyle = "h-6 w-6 mb-0.5 lg:mr-4";
@@ -88,41 +86,59 @@ export default function Sidebar() {
       </Link>
       <ul className="flex justify-between px-4 md:px-0 md:block">
         <NavItem
-          OutlineIcon={MagnifyingGlassIconOutline}
-          SolidIcon={MagnifyingGlassIconSolid}
-          text="Search"
-          link="/building-elements/search"
-          active={router.asPath === "/building-elements/search"}
+          OutlineIcon={CircleStackIconOutline}
+          SolidIcon={CircleStackIconSolid}
+          text="Items"
+          link="/building-elements/items"
+          active={
+            router.asPath === "/building-elements/items" ||
+            router.asPath === "/"
+          }
         />
         <NavItem
           OutlineIcon={ArrowUpTrayIconOutline}
           SolidIcon={ArrowUpTrayIconSolid}
           text="Upload"
-          link="/building-elements/upload"
-          active={router.asPath === "/building-elements/upload"}
+          link="/building-elements/items/upload"
+          active={router.asPath === "/building-elements/items/upload"}
         />
-        <div className="border-b "></div>
+        <div className="border-b"></div>
         <NavItem
-          OutlineIcon={UserCircleIconOutline}
-          SolidIcon={UserCircleIconSolid}
-          text="My Account"
-          link="/account"
-          active={router.asPath === "/account"}
-        />
-        <NavItem
-          OutlineIcon={UserCircleIconOutline}
-          SolidIcon={UserCircleIconSolid}
-          text="My Uploads"
-          link="/my-uploads"
-          active={router.asPath === "/my-uploads"}
-        />
-        <div className="border-b "></div>
-        <NavItem
-          OutlineIcon={CubeIconOutline}
-          SolidIcon={CubeIconSolid}
+          OutlineIcon={ArrowPathRoundedSquareIconOutline}
+          SolidIcon={ArrowPathRoundedSquareIconSolid}
           text="Collectors"
           link="/building-elements/collectors"
           active={router.asPath === "/building-elements/collectors"}
+        />
+        <NavItem
+          OutlineIcon={ArrowUpTrayIconOutline}
+          SolidIcon={ArrowUpTrayIconSolid}
+          text="Upload"
+          link="/building-elements/collectors/upload"
+          active={router.asPath === "/building-elements/collectors/upload"}
+        />
+        <div className="border-b"></div>
+        <NavItem
+          OutlineIcon={BriefcaseIconOutline}
+          SolidIcon={BriefcaseIconSolid}
+          text="Contractors"
+          link="/building-elements/contractors"
+          active={router.asPath === "/building-elements/contractors"}
+        />
+        <NavItem
+          OutlineIcon={ArrowUpTrayIconOutline}
+          SolidIcon={ArrowUpTrayIconSolid}
+          text="Upload"
+          link="/building-elements/contractors/upload"
+          active={router.asPath === "/building-elements/contractors/upload"}
+        />
+        <div className="border-b "></div>
+        <NavItem
+          OutlineIcon={MagnifyingGlassIconOutline}
+          SolidIcon={MagnifyingGlassIconSolid}
+          text="Matches"
+          link="/building-elements/matches"
+          active={router.asPath === "/building-elements/matches"}
         />
       </ul>
     </nav>
