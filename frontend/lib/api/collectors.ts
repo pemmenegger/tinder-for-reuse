@@ -3,20 +3,11 @@ import {
   CollectorFilterOptions,
   CollectorRead,
   CollectorSearchRequest,
-  CollectorSearchResponse,
 } from "@/types/api/collector";
 import { ApiError, fetchApi } from "../utils";
+import { SearchResponse } from "@/types/api/search";
 
 const API_ROUTE = "/api/collectors";
-
-export const fetchCollectors = async (): Promise<CollectorRead[]> => {
-  const { response, data } = await fetchApi(API_ROUTE, `/`, {
-    method: "GET",
-  });
-  if (!response.ok) throw new ApiError("fetchCollectors fehlgeschlagen", data);
-  // console.log("fetchCollectors Response", data);
-  return data;
-};
 
 export const createCollector = async (
   collector: CollectorCreate
@@ -25,7 +16,7 @@ export const createCollector = async (
     method: "POST",
     body: [collector],
   });
-  if (!response.ok) throw new ApiError("createCollector fehlgeschlagen", data);
+  if (!response.ok) throw new ApiError("createCollector failed", data);
   console.log("createCollector Response", data);
   return data;
 };
@@ -38,7 +29,7 @@ export const updateCollector = async (
     method: "PUT",
     body: collector,
   });
-  if (!response.ok) throw new ApiError("updateCollector fehlgeschlagen", data);
+  if (!response.ok) throw new ApiError("updateCollector failed", data);
   console.log("updateCollector Response", data);
   return data;
 };
@@ -49,7 +40,7 @@ export const deleteCollector = async (
   const { response, data } = await fetchApi(API_ROUTE, `/${collectorId}`, {
     method: "DELETE",
   });
-  if (!response.ok) throw new ApiError("deleteCollector fehlgeschlagen", data);
+  if (!response.ok) throw new ApiError("deleteCollector failed", data);
   console.log("deleteCollector Response", data);
   return data;
 };
@@ -60,19 +51,19 @@ export const fetchCollectorFilterOptions =
       method: "GET",
     });
     if (!response.ok)
-      throw new ApiError("fetchCollectorFilterOptions fehlgeschlagen", data);
+      throw new ApiError("fetchCollectorFilterOptions failed", data);
     console.log("fetchCollectorFilterOptions Response", data);
     return data;
   };
 
 export const collectorsFetcher = async (
   searchRequest: CollectorSearchRequest
-): Promise<CollectorSearchResponse> => {
+): Promise<SearchResponse<CollectorRead>> => {
   const { response, data } = await fetchApi(API_ROUTE, `/search`, {
     method: "POST",
     body: searchRequest,
   });
-  if (!response.ok) throw new ApiError("Fetching collectors failed", data);
-  console.log("CollectorsFetcher Response", data);
+  if (!response.ok) throw new ApiError("collectorsFetcher failed", data);
+  console.log("collectorsFetcher Response", data);
   return data;
 };

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Search, { SearchResultsWrapperType } from "@/components/search/Search";
 import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";
 import { MapMarker } from "@/types/item";
-import { fromContractorsToContractorMapMarkers } from "@/lib/utils";
+import { generateContractorMapMarkers } from "@/lib/utils";
 import useSWR from "swr";
 
 export default function ContractorsPage() {
@@ -33,26 +33,28 @@ export default function ContractorsPage() {
           circular_service_type_ids: [],
         },
       }}
-      filterConfigs={[
-        {
-          type: "multi",
-          label: "Materials",
-          path: ["filter", "material_type_ids"],
-          options: filterOptions?.material_types,
-        },
-        {
-          type: "multi",
-          label: "Waste Codes",
-          path: ["filter", "waste_code_type_ids"],
-          options: filterOptions?.waste_code_types,
-        },
-        {
-          type: "multi",
-          label: "Circular Services",
-          path: ["filter", "circular_service_type_ids"],
-          options: filterOptions?.circular_service_types,
-        },
-      ]}
+      filterConfigs={{
+        Contractor: [
+          {
+            type: "multi",
+            label: "Materials",
+            path: ["filter", "material_type_ids"],
+            options: filterOptions?.material_types,
+          },
+          {
+            type: "multi",
+            label: "Waste Codes",
+            path: ["filter", "waste_code_type_ids"],
+            options: filterOptions?.waste_code_types,
+          },
+          {
+            type: "multi",
+            label: "Circular Services",
+            path: ["filter", "circular_service_type_ids"],
+            options: filterOptions?.circular_service_types,
+          },
+        ],
+      }}
       ResultsWrapper={ContractorResultsWrapper}
     />
   );
@@ -71,8 +73,7 @@ function ContractorResultsWrapper({
       return;
     }
 
-    const contractorsMapMarkers =
-      fromContractorsToContractorMapMarkers(contractors);
+    const contractorsMapMarkers = generateContractorMapMarkers(contractors);
 
     setMapMarkers(contractorsMapMarkers);
   }, [results]);

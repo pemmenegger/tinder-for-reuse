@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Search, { SearchResultsWrapperType } from "@/components/search/Search";
 import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";
 import { MapMarker } from "@/types/item";
-import { fromCollectorsToCollectorMapMarkers } from "@/lib/utils";
+import { generateCollectorMapMarkers } from "@/lib/utils";
 import useSWR from "swr";
 
 export default function CollectorsPage() {
@@ -34,32 +34,34 @@ export default function CollectorsPage() {
           circular_strategy_type_ids: [],
         },
       }}
-      filterConfigs={[
-        {
-          type: "multi",
-          label: "Materials",
-          path: ["filter", "material_type_ids"],
-          options: filterOptions?.material_types,
-        },
-        {
-          type: "multi",
-          label: "Waste Codes",
-          path: ["filter", "waste_code_type_ids"],
-          options: filterOptions?.waste_code_types,
-        },
-        {
-          type: "multi",
-          label: "Authorized Vehicles",
-          path: ["filter", "authorized_vehicle_type_ids"],
-          options: filterOptions?.authorized_vehicle_types,
-        },
-        {
-          type: "multi",
-          label: "Circular Strategies",
-          path: ["filter", "circular_strategy_type_ids"],
-          options: filterOptions?.circular_strategy_types,
-        },
-      ]}
+      filterConfigs={{
+        Collector: [
+          {
+            type: "multi",
+            label: "Materials",
+            path: ["filter", "material_type_ids"],
+            options: filterOptions?.material_types,
+          },
+          {
+            type: "multi",
+            label: "Waste Codes",
+            path: ["filter", "waste_code_type_ids"],
+            options: filterOptions?.waste_code_types,
+          },
+          {
+            type: "multi",
+            label: "Authorized Vehicles",
+            path: ["filter", "authorized_vehicle_type_ids"],
+            options: filterOptions?.authorized_vehicle_types,
+          },
+          {
+            type: "multi",
+            label: "Circular Strategies",
+            path: ["filter", "circular_strategy_type_ids"],
+            options: filterOptions?.circular_strategy_types,
+          },
+        ],
+      }}
       ResultsWrapper={CollectorResultsWrapper}
     />
   );
@@ -72,14 +74,20 @@ function CollectorResultsWrapper({
   const [mapMarkers, setMapMarkers] = useState<MapMarker[]>([]);
 
   useEffect(() => {
-    const collectors = results as CollectorRead[];
+    const collectors = results;
 
+    // if empty object
+    if (!collectors) {
+      console.log("no collectors");
+      return;
+    }
     if (!collectors || collectors.length === 0) {
       return;
     }
 
-    const collectorsMapMarkers =
-      fromCollectorsToCollectorMapMarkers(collectors);
+    console.log("collectors", collectors);
+
+    const collectorsMapMarkers = generateCollectorMapMarkers(collectors);
 
     setMapMarkers(collectorsMapMarkers);
   }, [results]);

@@ -1,11 +1,9 @@
 import SearchInputContainer, {
   FilterConfig,
 } from "@/components/search/SearchInputContainer";
-import SearchResults, {
-  SearchRequest,
-  SearchResponse,
-} from "@/components/search/SearchResults";
+import { SearchRequest, SearchResponse } from "@/types/api/search";
 import { useState } from "react";
+import SearchResults from "./SearchResults";
 
 export type SearchResultsWrapperType = {
   results: any[];
@@ -14,7 +12,7 @@ export type SearchResultsWrapperType = {
 
 export default function Search<
   ReqT extends SearchRequest,
-  ResT extends SearchResponse
+  ResT extends SearchResponse<any>
 >({
   fetcher,
   initialSearchRequest,
@@ -23,7 +21,7 @@ export default function Search<
 }: {
   fetcher: (searchRequest: ReqT) => Promise<ResT>;
   initialSearchRequest: ReqT;
-  filterConfigs: FilterConfig[];
+  filterConfigs: Record<string, FilterConfig[]>;
   ResultsWrapper: React.ComponentType<SearchResultsWrapperType>;
 }) {
   const [searchRequest, setSearchRequest] =

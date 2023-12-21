@@ -6,19 +6,11 @@ import React, {
   useMemo,
   useState,
 } from "react";
-
-export type SearchRequest = {
-  query: any;
-  filter: any;
-};
-
-export type SearchResponse = {
-  results: any[];
-};
+import { SearchRequest, SearchResponse } from "@/types/api/search";
 
 function useSearchResults<
   ReqT extends SearchRequest,
-  ResT extends SearchResponse
+  ResT extends SearchResponse<any>
 >(searchRequest: ReqT, fetcher: (searchRequest: ReqT) => Promise<ResT>) {
   const swrKey = useMemo(
     () => [JSON.stringify(searchRequest), fetcher],
@@ -38,7 +30,7 @@ function useSearchResults<
 
 export default function SearchResults<
   ReqT extends SearchRequest,
-  ResT extends SearchResponse
+  ResT extends SearchResponse<any>
 >({
   fetcher,
   searchRequest,
@@ -50,7 +42,7 @@ export default function SearchResults<
   setTotalResults: Dispatch<SetStateAction<number>>;
   ResultsWrapper: React.ComponentType<any>;
 }) {
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<ResT[]>([]);
   const { data, error, isLoading } = useSearchResults(searchRequest, fetcher);
 
   useEffect(() => {
@@ -59,7 +51,7 @@ export default function SearchResults<
 
   useEffect(() => {
     if (data?.results) {
-      setResults((prevItems) => [...prevItems, ...data.results]);
+      setResults(data.results);
     }
   }, [data]);
 

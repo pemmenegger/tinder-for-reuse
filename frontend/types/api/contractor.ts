@@ -32,18 +32,15 @@ export type ContractorFilterOptions = {
   circular_service_types: UnifiedTypeRead[];
 };
 
+export type ContractorFilter = {
+  material_type_ids: number[];
+  waste_code_type_ids: number[];
+  circular_service_type_ids: number[];
+};
+
 export type ContractorSearchRequest = {
   query: {
     text: string;
   };
-  filter: {
-    material_type_ids: number[];
-    waste_code_type_ids: number[];
-    circular_service_type_ids: number[];
-  };
-};
-
-export type ContractorSearchResponse = {
-  results: ContractorRead[];
-  hasMore: boolean;
+  filter: ContractorFilter;
 };

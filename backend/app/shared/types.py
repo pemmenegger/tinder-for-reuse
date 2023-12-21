@@ -87,6 +87,7 @@ class MaterialType:
     )
     FURNITURE_COMPONENTS = UnifiedType(discriminator=DISCRIMINATOR, type_id=20, type_label="Furniture Components")
     UNSORTED = UnifiedType(discriminator=DISCRIMINATOR, type_id=21, type_label="Unsorted")
+    TEXTILE = UnifiedType(discriminator=DISCRIMINATOR, type_id=22, type_label="Textile")
 
 
 class AuthorizedVehicleType:
@@ -140,7 +141,7 @@ class WasteCodeType:
     _170506 = UnifiedType(discriminator=DISCRIMINATOR, type_id=28, type_label="17 05 06")
     _170507 = UnifiedType(discriminator=DISCRIMINATOR, type_id=29, type_label="17 05 07")
     _170508 = UnifiedType(discriminator=DISCRIMINATOR, type_id=30, type_label="17 05 08")
-    _170601 = UnifiedType(discriminator=DISCRIMINATOR, type_id=31, type_label="17 06 01")
+    _170601 = UnifiedType(discriminator=DISCRIMINATOR, type_id=31, type_label="17 06 01*")
     _170603 = UnifiedType(discriminator=DISCRIMINATOR, type_id=32, type_label="17 06 03")
     _170604 = UnifiedType(discriminator=DISCRIMINATOR, type_id=33, type_label="17 06 04")
     _170605 = UnifiedType(discriminator=DISCRIMINATOR, type_id=34, type_label="17 06 05")
@@ -173,6 +174,7 @@ class HealthStatusType:
     NOT_DAMAGED = UnifiedType(discriminator=DISCRIMINATOR, type_id=5, type_label="Not Damaged")
     HETEROGENEOUS = UnifiedType(discriminator=DISCRIMINATOR, type_id=6, type_label="Heterogeneous")
     UNCLEAR = UnifiedType(discriminator=DISCRIMINATOR, type_id=7, type_label="Unclear")
+    NOT_VERIFIED_YET = UnifiedType(discriminator=DISCRIMINATOR, type_id=8, type_label="Not Verified Yet")
 
 
 class ReusePotentialType:

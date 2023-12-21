@@ -3,15 +3,25 @@
 // See: ./backend/app/schemas/items/building_element_schema.py             //
 /////////////////////////////////////////////////////////////////////////////
 
-import { CollectorRead } from "../collector";
+import { CollectorFilter, CollectorRead } from "../collector";
+import { ContractorFilter } from "../contractor";
 import { UnifiedTypeRead } from "../type";
 
-type BuildingElementBase = {
-  upload_uuid: string;
+type BuildingElementUpload = {
   address: string;
   latitude: number;
   longitude: number;
+};
 
+export type BuildingElementUploadCreate = BuildingElementUpload & {
+  building_elements: BuildingElementCreate[];
+};
+
+export type BuildingElementUploadRead = BuildingElementUploadCreate & {
+  id: number;
+};
+
+type BuildingElementBase = {
   worksheet_type: string;
   category: string;
 
@@ -51,19 +61,28 @@ export type BuildingElementSearchRequest = {
   query: {
     text: string;
   };
-  filter: {
-    worksheet_type_ids: number[];
-    unit_type_ids: number[];
-    material_type_ids: number[];
-    health_status_type_ids: number[];
-    reuse_potential_type_ids: number[];
-    waste_code_type_ids: number[];
-    recycling_potential_type_ids: number[];
-  };
+  filter: BuildingElementFilter;
 };
 
-export type BuildingElementSearchResponse = {
-  results: BuildingElementRead[];
+export type BuildingElementFilter = {
+  worksheet_type_ids: number[];
+  unit_type_ids: number[];
+  material_type_ids: number[];
+  health_status_type_ids: number[];
+  reuse_potential_type_ids: number[];
+  waste_code_type_ids: number[];
+  recycling_potential_type_ids: number[];
+};
+
+export type MatchesSearchRequest = {
+  query: {
+    text: string;
+  };
+  filter: {
+    building_element: BuildingElementFilter;
+    collector: CollectorFilter;
+    contractor: ContractorFilter;
+  };
 };
 
 export type BuildingElementMatchesResponse = {

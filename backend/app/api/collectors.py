@@ -2,11 +2,8 @@ from typing import List
 
 from app.models import Collector
 from app.models.unified_type_model import UnifiedType
-from app.schemas.collector_schema import (
-    CollectorFilterOptions,
-    CollectorSearchRequest,
-    CollectorSearchResponse,
-)
+from app.schemas.collector_schema import CollectorFilterOptions, CollectorSearchRequest
+from app.schemas.search_schema import SearchResponse
 from app.shared.schemas.collector_schema import CollectorCreate, CollectorRead
 from app.shared.types import (
     AuthorizedVehicleType,
@@ -16,26 +13,9 @@ from app.shared.types import (
 )
 from app.utils.database import get_session, read_types, read_types_by_values_or_throw
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session, joinedload
-from sqlmodel import select
+from sqlalchemy.orm import Session
 
 router = APIRouter()
-
-
-@router.get("/")
-def fetch_collectors(
-    session: Session = Depends(get_session),
-):
-    query = (
-        select(Collector)
-        .options(joinedload(Collector.material_types))
-        .options(joinedload(Collector.waste_code_types))
-        .options(joinedload(Collector.authorized_vehicle_types))
-        .options(joinedload(Collector.circular_strategy_types))
-    )
-    results = session.execute(query)
-    collectors_read = [CollectorRead.from_collector(collector) for collector in results.scalars().unique()]
-    return collectors_read
 
 
 @router.post("/")
@@ -139,7 +119,7 @@ def read_filter_options(session: Session = Depends(get_session)):
     )
 
 
-@router.post("/search", response_model=CollectorSearchResponse)
+@router.post("/search", response_model=SearchResponse)
 def search(payload: CollectorSearchRequest, session: Session = Depends(get_session)):
     text = payload.query.text if payload.query.text else None
     material_type_ids = payload.filter.material_type_ids
@@ -164,8 +144,5 @@ def search(payload: CollectorSearchRequest, session: Session = Depends(get_sessi
     query = query.order_by(Collector.name.asc())
     results = session.execute(query)
 
-    collectors_read = [CollectorRead.from_collector(collector) for collector in results.scalars().unique()]
-    return CollectorSearchResponse(
-        results=collectors_read,
-        hasMore=False,
-    )
+    collectors_results = [CollectorRead.from_collector(collector) for collector in results.scalars().unique()]
+    return SearchResponse[CollectorRead](results=collectors_results)

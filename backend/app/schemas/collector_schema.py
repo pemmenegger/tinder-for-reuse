@@ -4,7 +4,6 @@
 
 from typing import List
 
-from app.shared.schemas.collector_schema import CollectorRead
 from app.shared.schemas.type_schema import UnifiedTypeRead
 from pydantic import BaseModel
 
@@ -28,8 +27,3 @@ class CollectorSearchRequest(BaseModel):
 
     query: Query
     filter: Filter
-
-
-class CollectorSearchResponse(BaseModel):
-    results: List[CollectorRead]
-    hasMore: bool

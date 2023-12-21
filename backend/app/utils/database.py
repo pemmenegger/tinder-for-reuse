@@ -45,6 +45,8 @@ def read_types(session, type_class):
 
 
 def read_type_by_value_or_throw(session, type_class, value):
+    if not value:
+        return None
     instance = session.execute(
         select(UnifiedType)
         .where(UnifiedType.discriminator == type_class.DISCRIMINATOR)

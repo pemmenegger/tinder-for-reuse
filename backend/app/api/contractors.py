@@ -7,30 +7,14 @@ from app.schemas.contractor_schema import (
     ContractorFilterOptions,
     ContractorRead,
     ContractorSearchRequest,
-    ContractorSearchResponse,
 )
+from app.schemas.search_schema import SearchResponse
 from app.shared.types import CircularServiceType, MaterialType, WasteCodeType
 from app.utils.database import get_session, read_types, read_types_by_values_or_throw
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session, joinedload
-from sqlmodel import select
+from sqlalchemy.orm import Session
 
 router = APIRouter()
-
-
-@router.get("/")
-def fetch_contractors(
-    session: Session = Depends(get_session),
-):
-    query = (
-        select(Contractor)
-        .options(joinedload(Contractor.material_types))
-        .options(joinedload(Contractor.waste_code_types))
-        .options(joinedload(Contractor.circular_service_types))
-    )
-    results = session.execute(query)
-    contractors_read = [ContractorRead.from_contractor(contractor) for contractor in results.scalars().unique()]
-    return contractors_read
 
 
 @router.post("/")
@@ -125,7 +109,7 @@ def read_filter_options(session: Session = Depends(get_session)):
     )
 
 
-@router.post("/search", response_model=ContractorSearchResponse)
+@router.post("/search", response_model=SearchResponse)
 def search(payload: ContractorSearchRequest, session: Session = Depends(get_session)):
     text = payload.query.text if len(payload.query.text) > 0 else None
     material_type_ids = payload.filter.material_type_ids
@@ -147,8 +131,5 @@ def search(payload: ContractorSearchRequest, session: Session = Depends(get_sess
     query = query.order_by(Contractor.name.asc())
     results = session.execute(query)
 
-    contractors_read = [ContractorRead.from_contractor(contractor) for contractor in results.scalars().unique()]
-    return ContractorSearchResponse(
-        results=contractors_read,
-        hasMore=False,
-    )
+    contractors_results = [ContractorRead.from_contractor(contractor) for contractor in results.scalars().unique()]
+    return SearchResponse[ContractorRead](results=contractors_results)

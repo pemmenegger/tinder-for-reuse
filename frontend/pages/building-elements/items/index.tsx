@@ -1,46 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Search, { SearchResultsWrapperType } from "@/components/search/Search";
-import { fetchBuildingElementFilterOptions } from "@/lib/api/building-elements";
 import {
-  BuildingElementFilterOptions,
-  BuildingElementRead,
-} from "@/types/api/items/building-element";
-import { buildingElementsFetcher } from "@/lib/api/building-elements";
+  buildingElementUploadsFetcher,
+  fetchBuildingElementFilterOptions,
+} from "@/lib/api/building-elements";
+import { BuildingElementUploadRead } from "@/types/api/items/building-element";
+
 import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";
-import { fromBuildingElementsToBuildingElementsMapMarkers } from "@/lib/utils";
+import { generateBuildingElementUploadMapMarkers } from "@/lib/utils";
 import { MapMarker } from "@/types/item";
+import useSWR from "swr";
 
 export default function BuildingElementItemsPage() {
-  const [filterProperties, setFilterProperties] =
-    useState<BuildingElementFilterOptions>({
-      worksheet_types: [],
-      unit_types: [],
-      material_types: [],
-      health_status_types: [],
-      reuse_potential_types: [],
-      waste_code_types: [],
-      recycling_potential_types: [],
-    });
+  const { data: filterOptions, error } = useSWR(
+    "/api/building-elements/filter/",
+    fetchBuildingElementFilterOptions
+  );
 
-  useEffect(() => {
-    async function getFilterProperties() {
-      try {
-        const properties = await fetchBuildingElementFilterOptions();
-        setFilterProperties(properties);
-      } catch (error) {
-        console.error(
-          "Failed to fetch building element filter properties:",
-          error
-        );
-      }
-    }
-
-    getFilterProperties();
-  }, []);
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <Search
-      fetcher={buildingElementsFetcher}
+      fetcher={buildingElementUploadsFetcher}
       initialSearchRequest={{
         query: {
           text: "",
@@ -55,50 +38,52 @@ export default function BuildingElementItemsPage() {
           recycling_potential_type_ids: [],
         },
       }}
-      filterConfigs={[
-        {
-          type: "multi",
-          label: "Worksheets",
-          path: ["filter", "worksheet_type_ids"],
-          options: filterProperties.worksheet_types,
-        },
-        {
-          type: "multi",
-          label: "Units",
-          path: ["filter", "unit_type_ids"],
-          options: filterProperties.unit_types,
-        },
-        {
-          type: "multi",
-          label: "Materials",
-          path: ["filter", "material_type_ids"],
-          options: filterProperties.material_types,
-        },
-        {
-          type: "multi",
-          label: "Health Status",
-          path: ["filter", "health_status_type_ids"],
-          options: filterProperties.health_status_types,
-        },
-        {
-          type: "multi",
-          label: "Reuse Potential",
-          path: ["filter", "reuse_potential_type_ids"],
-          options: filterProperties.reuse_potential_types,
-        },
-        {
-          type: "multi",
-          label: "Waste Codes",
-          path: ["filter", "waste_code_type_ids"],
-          options: filterProperties.waste_code_types,
-        },
-        {
-          type: "multi",
-          label: "Recycling Potential",
-          path: ["filter", "recycling_potential_type_ids"],
-          options: filterProperties.recycling_potential_types,
-        },
-      ]}
+      filterConfigs={{
+        "Building Element": [
+          {
+            type: "multi",
+            label: "Worksheets",
+            path: ["filter", "worksheet_type_ids"],
+            options: filterOptions?.worksheet_types,
+          },
+          {
+            type: "multi",
+            label: "Units",
+            path: ["filter", "unit_type_ids"],
+            options: filterOptions?.unit_types,
+          },
+          {
+            type: "multi",
+            label: "Materials",
+            path: ["filter", "material_type_ids"],
+            options: filterOptions?.material_types,
+          },
+          {
+            type: "multi",
+            label: "Health Status",
+            path: ["filter", "health_status_type_ids"],
+            options: filterOptions?.health_status_types,
+          },
+          {
+            type: "multi",
+            label: "Reuse Potential",
+            path: ["filter", "reuse_potential_type_ids"],
+            options: filterOptions?.reuse_potential_types,
+          },
+          {
+            type: "multi",
+            label: "Waste Codes",
+            path: ["filter", "waste_code_type_ids"],
+            options: filterOptions?.waste_code_types,
+          },
+          {
+            type: "multi",
+            label: "Recycling Potential",
+            path: ["filter", "recycling_potential_type_ids"],
+            options: filterOptions?.recycling_potential_types,
+          },
+        ],
+      }}
       ResultsWrapper={BuildingElementResultsWrapper}
     />
   );
@@ -111,16 +96,16 @@ function BuildingElementResultsWrapper({
   const [mapMarkers, setMapMarkers] = useState<MapMarker[]>([]);
 
   useEffect(() => {
-    const buildingElements = results as BuildingElementRead[];
+    const buildingElementUploads = results as BuildingElementUploadRead[];
 
-    if (!buildingElements || buildingElements.length === 0) {
+    if (!buildingElementUploads || buildingElementUploads.length === 0) {
       return;
     }
 
-    const buildingElementsMapMarkers =
-      fromBuildingElementsToBuildingElementsMapMarkers(buildingElements);
+    const buildingElementUploadsMapMarkers =
+      generateBuildingElementUploadMapMarkers(buildingElementUploads);
 
-    setMapMarkers(buildingElementsMapMarkers);
+    setMapMarkers(buildingElementUploadsMapMarkers);
   }, [results]);
 
   return (

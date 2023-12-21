@@ -3,9 +3,9 @@ import {
   ContractorFilterOptions,
   ContractorRead,
   ContractorSearchRequest,
-  ContractorSearchResponse,
 } from "@/types/api/contractor";
 import { ApiError, fetchApi } from "../utils";
+import { SearchResponse } from "@/types/api/search";
 
 const API_ROUTE = "/api/contractors";
 
@@ -16,17 +16,8 @@ export const createContractor = async (
     method: "POST",
     body: [contractor],
   });
-  if (!response.ok) throw new ApiError("createContractor fehlgeschlagen", data);
+  if (!response.ok) throw new ApiError("createContractor failed", data);
   console.log("createContractor Response", data);
-  return data;
-};
-
-export const fetchContractors = async (): Promise<ContractorRead[]> => {
-  const { response, data } = await fetchApi(API_ROUTE, `/`, {
-    method: "GET",
-  });
-  if (!response.ok) throw new ApiError("fetchContractors fehlgeschlagen", data);
-  // console.log("fetchContractors Response", data);
   return data;
 };
 
@@ -38,7 +29,7 @@ export const updateContractor = async (
     method: "PUT",
     body: contractor,
   });
-  if (!response.ok) throw new ApiError("updateContractor fehlgeschlagen", data);
+  if (!response.ok) throw new ApiError("updateContractor failed", data);
   console.log("updateContractor Response", data);
   return data;
 };
@@ -49,7 +40,7 @@ export const deleteContractor = async (
   const { response, data } = await fetchApi(API_ROUTE, `/${contractorId}`, {
     method: "DELETE",
   });
-  if (!response.ok) throw new ApiError("deleteContractor fehlgeschlagen", data);
+  if (!response.ok) throw new ApiError("deleteContractor failed", data);
   console.log("deleteContractor Response", data);
   return data;
 };
@@ -60,19 +51,19 @@ export const fetchContractorFilterOptions =
       method: "GET",
     });
     if (!response.ok)
-      throw new ApiError("fetchContractorFilterOptions fehlgeschlagen", data);
+      throw new ApiError("fetchContractorFilterOptions failed", data);
     console.log("fetchContractorFilterOptions Response", data);
     return data;
   };
 
 export const contractorsFetcher = async (
   searchRequest: ContractorSearchRequest
-): Promise<ContractorSearchResponse> => {
+): Promise<SearchResponse<ContractorRead>> => {
   const { response, data } = await fetchApi(API_ROUTE, `/search`, {
     method: "POST",
     body: searchRequest,
   });
-  if (!response.ok) throw new ApiError("Fetching contractors failed", data);
-  console.log("ContractorsFetcher Response", data);
+  if (!response.ok) throw new ApiError("contractorsFetcher failed", data);
+  console.log("contractorsFetcher Response", data);
   return data;
 };

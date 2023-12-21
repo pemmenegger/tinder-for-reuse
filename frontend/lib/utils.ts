@@ -3,10 +3,10 @@ import { ContractorRead } from "@/types/api/contractor";
 import { MapMarker } from "@/types/item";
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { BuildingElementRead } from "@/types/api/items/building-element";
+import { BuildingElementUploadRead } from "@/types/api/items/building-element";
 import { CollectorCard } from "@/components/cards/CollectorCard";
 import { ContractorCard } from "@/components/cards/ContractorCard";
-import { BuildingElementCard } from "@/components/cards/BuildingElementCard";
+import { BuildingElementUploadCard } from "@/components/cards/BuildingElementUploadCard";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -17,7 +17,7 @@ export const roundNumber = (value: string, precision: number) => {
   return Math.round(number * precision) / precision;
 };
 
-export const fromCollectorsToCollectorMapMarkers = (
+export const generateCollectorMapMarkers = (
   collectors: CollectorRead[]
 ): MapMarker[] => {
   return collectors.map((collector) => ({
@@ -34,7 +34,7 @@ export const fromCollectorsToCollectorMapMarkers = (
   }));
 };
 
-export const fromContractorsToContractorMapMarkers = (
+export const generateContractorMapMarkers = (
   contractors: ContractorRead[]
 ): MapMarker[] => {
   return contractors.map((contractor) => ({
@@ -51,36 +51,21 @@ export const fromContractorsToContractorMapMarkers = (
   }));
 };
 
-export const fromBuildingElementsToBuildingElementsMapMarkers = (
-  buildingElements: BuildingElementRead[]
+export const generateBuildingElementUploadMapMarkers = (
+  buildingElementUploads: BuildingElementUploadRead[]
 ): MapMarker[] => {
-  const buildingElementsByUploadUuid = buildingElements.reduce(
-    (accumulator, currentValue) => {
-      if (!accumulator[currentValue.upload_uuid]) {
-        accumulator[currentValue.upload_uuid] = [];
-      }
-
-      accumulator[currentValue.upload_uuid].push(currentValue);
-
-      return accumulator;
+  return buildingElementUploads.map((buildingElementUpload) => ({
+    id: buildingElementUpload.id,
+    latitude: buildingElementUpload.latitude,
+    longitude: buildingElementUpload.longitude,
+    iconUrl: "/icons/building-elements/marker.svg",
+    iconScaledSize: {
+      width: 22,
+      height: 31,
     },
-    {} as Record<string, BuildingElementRead[]>
-  );
-
-  return Object.values(buildingElementsByUploadUuid).map(
-    (buildingElements) => ({
-      id: buildingElements[0].id,
-      latitude: buildingElements[0].latitude,
-      longitude: buildingElements[0].longitude,
-      iconUrl: "/icons/building-elements/marker.svg",
-      iconScaledSize: {
-        width: 22,
-        height: 31,
-      },
-      results: buildingElements,
-      ResultCard: BuildingElementCard,
-    })
-  );
+    results: [buildingElementUpload],
+    ResultCard: BuildingElementUploadCard,
+  }));
 };
 
 export const fetchApi = async (

@@ -4,18 +4,12 @@
 
 from typing import List, Optional
 
-from app.shared.schemas.collector_schema import CollectorRead
 from app.shared.schemas.type_schema import UnifiedTypeRead
 from pydantic import BaseModel
 from sqlmodel import SQLModel
 
 
 class BuildingElementBase(SQLModel):
-    upload_uuid: str
-    address: str
-    latitude: float
-    longitude: float
-
     worksheet_type: str
     category: str
 
@@ -57,21 +51,44 @@ class BuildingElementRead(BuildingElementBase):
                     "recycling_potential_type",
                 },
             ),
-            worksheet_type=building_element.worksheet_type[0].type_label if building_element.worksheet_type else None,
-            unit_type=building_element.unit_type[0].type_label if building_element.unit_type else None,
-            material_type=building_element.material_type[0].type_label if building_element.material_type else None,
-            health_status_type=building_element.health_status_type[0].type_label
+            worksheet_type=building_element.worksheet_type.type_label,
+            unit_type=building_element.unit_type.type_label,
+            material_type=building_element.material_type.type_label if building_element.material_type else None,
+            health_status_type=building_element.health_status_type.type_label
             if building_element.health_status_type
             else None,
-            reuse_potential_type=building_element.reuse_potential_type[0].type_label
+            reuse_potential_type=building_element.reuse_potential_type.type_label
             if building_element.reuse_potential_type
             else None,
-            waste_code_type=building_element.waste_code_type[0].type_label
-            if building_element.waste_code_type
-            else None,
-            recycling_potential_type=building_element.recycling_potential_type[0].type_label
+            waste_code_type=building_element.waste_code_type.type_label if building_element.waste_code_type else None,
+            recycling_potential_type=building_element.recycling_potential_type.type_label
             if building_element.recycling_potential_type
             else None,
+        )
+
+
+class BuildingElementUploadBase(SQLModel):
+    address: str
+    latitude: float
+    longitude: float
+
+
+class BuildingElementUploadCreate(BuildingElementUploadBase):
+    building_elements: List[BuildingElementCreate]
+
+
+class BuildingElementUploadRead(BuildingElementUploadBase):
+    id: int
+    building_elements: List[BuildingElementCreate]
+
+    @classmethod
+    def from_building_element_upload(cls, building_element_upload):
+        return BuildingElementUploadRead(
+            **building_element_upload.dict(exclude_unset=False, exclude={"building_elements"}),
+            building_elements=[
+                BuildingElementRead.from_building_element(building_element)
+                for building_element in building_element_upload.building_elements
+            ],
         )
 
 
@@ -100,15 +117,3 @@ class BuildingElementSearchRequest(BaseModel):
 
     query: Query
     filter: Filter
-
-
-class BuildingElementSearchResponse(BaseModel):
-    results: List[BuildingElementRead]
-
-
-class BuildingElementMatchesResponse(BaseModel):
-    class BuildingElementMatchesRead(BaseModel):
-        building_elements_read: List[BuildingElementRead]
-        collectors_read: List[CollectorRead]
-
-    results: List[BuildingElementMatchesRead]

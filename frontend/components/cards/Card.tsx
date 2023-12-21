@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { PencilIcon as PencilIconOutline } from "@heroicons/react/24/outline";
+import { ChevronDownIcon as ChevronDownIconOutline } from "@heroicons/react/24/outline";
+import { ChevronUpIcon as ChevronUpIconOutline } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import { EditFormProps } from "../forms/forms";
 import { IGNORE_CARD_DEACTIVATION_CLASS } from "../search/SearchWithMapResultsWrapper";
+import { children } from "cheerio/lib/api/traversing";
 
 interface CardProps extends React.ComponentProps<"div"> {
   isActive?: boolean;
@@ -33,20 +36,25 @@ interface CardGridProps extends React.ComponentProps<"div"> {
 }
 
 export default function CardGrid({ attributes, ...props }: CardGridProps) {
+  const renderAttributeValue = (value: any) => {
+    if (typeof value === "boolean") {
+      return value ? "Yes" : "No";
+    }
+    if (Array.isArray(value)) {
+      return value.join(", ");
+    }
+    return value;
+  };
+
   return (
     <div {...props} className="grid grid-cols-2">
-      {attributes.map((attribute) => {
-        if (!attribute.value) {
-          return null;
-        }
+      {attributes.map(({ label, value }) => {
+        if (!value && typeof value !== "boolean") return null;
+
         return (
-          <React.Fragment key={attribute.label}>
-            <p>{attribute.label}</p>
-            <p>
-              {Array.isArray(attribute.value)
-                ? attribute.value.join(", ")
-                : attribute.value}
-            </p>
+          <React.Fragment key={label}>
+            <p>{label}</p>
+            <p>{renderAttributeValue(value)}</p>
           </React.Fragment>
         );
       })}
@@ -104,6 +112,36 @@ export function CardReadable({ ...props }: CardProps) {
   return (
     <Card {...props}>
       <CardGrid attributes={props.attributes} />
+    </Card>
+  );
+}
+
+export function CardReadableCollapsible({ ...props }: CardProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  return (
+    <Card {...props}>
+      <CardGrid attributes={props.attributes} />
+      {isCollapsed && (
+        <>
+          <div className="mt-8"></div>
+          {props.children}
+        </>
+      )}
+      <div
+        className={`absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 ${IGNORE_CARD_DEACTIVATION_CLASS}`}
+      >
+        <Button
+          variant="secondary"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          {isCollapsed ? (
+            <ChevronUpIconOutline className="h-4 w-4" />
+          ) : (
+            <ChevronDownIconOutline className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
     </Card>
   );
 }

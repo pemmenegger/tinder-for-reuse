@@ -1,21 +1,14 @@
 import Link from "next/link";
 import {
-  UserCircleIcon as UserCircleIconOutline,
   ArrowUpTrayIcon as ArrowUpTrayIconOutline,
-  BuildingStorefrontIcon as BuildingStorefrontIconOutline,
   CircleStackIcon as CircleStackIconOutline,
-  ArrowsPointingInIcon as ArrowsPointingInIconOutline,
   MagnifyingGlassIcon as MagnifyingGlassIconOutline,
   BriefcaseIcon as BriefcaseIconOutline,
   ArrowPathRoundedSquareIcon as ArrowPathRoundedSquareIconOutline,
 } from "@heroicons/react/24/outline";
 import {
-  UserCircleIcon as UserCircleIconSolid,
   ArrowUpTrayIcon as ArrowUpTrayIconSolid,
-  BuildingStorefrontIcon as BuildingStorefrontIconSolid,
   CircleStackIcon as CircleStackIconSolid,
-  ArrowsPointingInIcon as ArrowsPointingInIconSolid,
-  LinkIcon as LinkIconSolid,
   MagnifyingGlassIcon as MagnifyingGlassIconSolid,
   BriefcaseIcon as BriefcaseIconSolid,
   ArrowPathRoundedSquareIcon as ArrowPathRoundedSquareIconSolid,
@@ -136,15 +129,14 @@ export default function Sidebar() {
           link="/building-elements/contractors/upload"
           active={router.asPath === "/building-elements/contractors/upload"}
         />
-
-        {/* <div className="border-b "></div>
+        <div className="border-b "></div>
         <NavItem
           OutlineIcon={MagnifyingGlassIconOutline}
           SolidIcon={MagnifyingGlassIconSolid}
           text="Matches"
           link="/building-elements/matches"
           active={router.asPath === "/building-elements/matches"}
-        /> */}
+        />
       </ul>
     </nav>
   );

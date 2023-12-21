@@ -34,19 +34,16 @@ export type CollectorFilterOptions = {
   circular_strategy_types: UnifiedTypeRead[];
 };
 
+export type CollectorFilter = {
+  material_type_ids: number[];
+  waste_code_type_ids: number[];
+  authorized_vehicle_type_ids: number[];
+  circular_strategy_type_ids: number[];
+};
+
 export type CollectorSearchRequest = {
   query: {
     text: string;
   };
-  filter: {
-    material_type_ids: number[];
-    waste_code_type_ids: number[];
-    authorized_vehicle_type_ids: number[];
-    circular_strategy_type_ids: number[];
-  };
-};
-
-export type CollectorSearchResponse = {
-  results: CollectorRead[];
-  hasMore: boolean;
+  filter: CollectorFilter;
 };

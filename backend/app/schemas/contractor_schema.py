@@ -63,8 +63,3 @@ class ContractorSearchRequest(BaseModel):
 
     query: Query
     filter: Filter
-
-
-class ContractorSearchResponse(BaseModel):
-    results: List[ContractorRead]
-    hasMore: bool

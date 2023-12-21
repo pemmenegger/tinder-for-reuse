@@ -9,10 +9,9 @@ export function BuildingElementCard({
   ...props
 }: ResultCardProps) {
   const buildingElement = data as BuildingElementCreate;
+
   return (
     <CardReadable
-      isActive={isActive}
-      activeClassName="border-[#5442f5]"
       attributes={[
         { label: "Worksheet", value: buildingElement.worksheet_type },
         { label: "Category", value: buildingElement.category },
@@ -43,11 +42,11 @@ export function BuildingElementCard({
           value: buildingElement.recycling_potential_type,
         },
         {
-          label: "Has Energy Recovery",
+          label: "Energy Recovery",
           value: buildingElement.has_energy_recovery,
         },
         {
-          label: "Has Elimination",
+          label: "Elimination",
           value: buildingElement.has_elimination,
         },
       ]}

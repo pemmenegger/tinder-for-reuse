@@ -1,24 +1,24 @@
 import {
-  BuildingElementCreate,
   BuildingElementFilterOptions,
-  BuildingElementMatchesResponse,
   BuildingElementSearchRequest,
-  BuildingElementSearchResponse,
+  BuildingElementUploadCreate,
+  BuildingElementUploadRead,
 } from "@/types/api/items/building-element";
 import { ApiError, fetchApi } from "../utils";
+import { SearchResponse } from "@/types/api/search";
 
 const API_ROUTE = "/api/building-elements";
 
-export const uploadBuildingElements = async (
-  buildingElements: BuildingElementCreate[]
+export const createBuildingElementUpload = async (
+  buildingElementUpload: BuildingElementUploadCreate
 ) => {
   const { response, data } = await fetchApi(API_ROUTE, `/`, {
     method: "POST",
-    body: buildingElements,
+    body: buildingElementUpload,
   });
   if (!response.ok)
-    throw new ApiError("createBuildingElements fehlgeschlagen", data);
-  console.log("createBuildingElements Response", data);
+    throw new ApiError("createBuildingElementUpload failed", data);
+  console.log("createBuildingElementUpload response", data);
   return data;
 };
 
@@ -28,24 +28,14 @@ export const fetchBuildingElementFilterOptions =
       method: "GET",
     });
     if (!response.ok)
-      throw new ApiError("readBuildingElementFilterTypes fehlgeschlagen", data);
+      throw new ApiError("readBuildingElementFilterTypes failed", data);
     // console.log("readBuildingElementFilterTypes Response", data);
     return data;
   };
 
-export const fetchMyBuildingElements = async () => {
-  const { response, data } = await fetchApi(API_ROUTE, `/my`, {
-    method: "GET",
-  });
-  if (!response.ok)
-    throw new ApiError("getMyBuildingElements fehlgeschlagen", data);
-  console.log("getMyBuildingElements Response", data);
-  return data;
-};
-
-export const buildingElementsFetcher = async (
+export const buildingElementUploadsFetcher = async (
   searchRequest: BuildingElementSearchRequest
-): Promise<BuildingElementSearchResponse> => {
+): Promise<SearchResponse<BuildingElementUploadRead>> => {
   const { response, data } = await fetchApi(API_ROUTE, `/search/`, {
     method: "POST",
     body: searchRequest,
@@ -54,19 +44,5 @@ export const buildingElementsFetcher = async (
     throw new ApiError("Fetching building elements failed", data);
 
   console.log("buildingElementsFetcher Response", data);
-  return data;
-};
-
-export const buildingElementMatchesFetcher = async (
-  searchRequest: BuildingElementSearchRequest
-): Promise<BuildingElementMatchesResponse> => {
-  const { response, data } = await fetchApi(API_ROUTE, `/matches/`, {
-    method: "POST",
-    body: searchRequest,
-  });
-  if (!response.ok)
-    throw new ApiError("Fetching building element matches failed", data);
-
-  console.log("buildingElementMatchesFetcher Response", data);
   return data;
 };
