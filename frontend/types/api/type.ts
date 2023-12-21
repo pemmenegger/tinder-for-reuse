@@ -4,7 +4,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 export type UnifiedTypeRead = {
-  discriminator: string;
   id: number;
-  value: string;
+  discriminator: string;
+  type_id: number;
+  type_label: string;
 };

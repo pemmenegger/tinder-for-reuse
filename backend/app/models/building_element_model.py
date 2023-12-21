@@ -11,99 +11,50 @@ from app.shared.types import (
     ReusePotentialType,
     WasteCodeType,
 )
-from sqlmodel import (
-    Field,
-    ForeignKeyConstraint,
-    PrimaryKeyConstraint,
-    Relationship,
-    SQLModel,
-)
+from sqlmodel import Field, Relationship
 
 # avoid circular imports
 if TYPE_CHECKING:
     from app.models.unified_type_model import UnifiedType
 
 
-class BuildingElementToTypeBase(SQLModel):
-    building_element_id: int = Field(default=None, foreign_key="building_element.id")
-    unified_type_id: int = Field(default=None)
-    unified_type_discriminator: str = Field(default=None)
-
-    @classmethod
-    def get_table_args(self):
-        return (
-            ForeignKeyConstraint(
-                ["unified_type_id", "unified_type_discriminator"], ["unified_type.id", "unified_type.discriminator"]
-            ),
-            PrimaryKeyConstraint("building_element_id", "unified_type_id", "unified_type_discriminator"),
-        )
-
-
-class BuildingElementToMaterialType(BuildingElementToTypeBase, table=True):
-    __tablename__ = "building_element_to_material_type"
-    __table_args__ = BuildingElementToTypeBase.get_table_args()
-
-
-class BuildingElementToBuildingElementWorksheetType(BuildingElementToTypeBase, table=True):
-    __tablename__ = "building_element_to_building_element_worksheet_type"
-    __table_args__ = BuildingElementToTypeBase.get_table_args()
-
-
-class BuildingElementToBuildingElementUnitType(BuildingElementToTypeBase, table=True):
-    __tablename__ = "building_element_to_building_element_unit_type"
-    __table_args__ = BuildingElementToTypeBase.get_table_args()
-
-
-class BuildingElementToHealthStatusType(BuildingElementToTypeBase, table=True):
-    __tablename__ = "building_element_to_health_status_type"
-    __table_args__ = BuildingElementToTypeBase.get_table_args()
-
-
-class BuildingElementToReusePotentialType(BuildingElementToTypeBase, table=True):
-    __tablename__ = "building_element_to_reuse_potential_type"
-    __table_args__ = BuildingElementToTypeBase.get_table_args()
-
-
-class BuildingElementToWasteCodeType(BuildingElementToTypeBase, table=True):
-    __tablename__ = "building_element_to_waste_code_type"
-    __table_args__ = BuildingElementToTypeBase.get_table_args()
-
-
-class BuildingElementToRecyclingPotentialType(BuildingElementToTypeBase, table=True):
-    __tablename__ = "building_element_to_recycling_potential_type"
-    __table_args__ = BuildingElementToTypeBase.get_table_args()
-
-
 class BuildingElement(BuildingElementBase, RondasBase, table=True):
     __tablename__ = "building_element"
 
-    def _relationship_definition(back_populates, type_class, link_model):
+    worksheet_type_id: int = Field(foreign_key="unified_type.id")
+    unit_type_id: int = Field(foreign_key="unified_type.id")
+    material_type_id: int = Field(foreign_key="unified_type.id")
+    health_status_type_id: int = Field(foreign_key="unified_type.id")
+    reuse_potential_type_id: int = Field(foreign_key="unified_type.id")
+    waste_code_type_id: int = Field(foreign_key="unified_type.id")
+    recycling_potential_type_id: int = Field(foreign_key="unified_type.id")
+
+    def _relationship_definition(back_populates, column_name, type_class):
         return Relationship(
             back_populates=back_populates,
-            link_model=link_model,
             sa_relationship_kwargs={
-                "primaryjoin": f"and_(BuildingElement.id == {link_model.__name__}.building_element_id, {link_model.__name__}.unified_type_discriminator == '{type_class.DISCRIMINATOR}')"  # noqa: E501
+                "primaryjoin": f"and_(BuildingElement.{column_name} == UnifiedType.id, UnifiedType.discriminator == '{type_class.DISCRIMINATOR}')",  # noqa: E501
             },
         )
 
     worksheet_type: "UnifiedType" = _relationship_definition(
-        "building_element_worksheet_type", BuildingElementWorksheetType, BuildingElementToBuildingElementWorksheetType
+        "building_element_worksheet_type", "worksheet_type_id", BuildingElementWorksheetType
     )
     unit_type: "UnifiedType" = _relationship_definition(
-        "building_element_unit_type", BuildingElementUnitType, BuildingElementToBuildingElementUnitType
+        "building_element_unit_type", "unit_type_id", BuildingElementUnitType
     )
     material_type: "UnifiedType" = _relationship_definition(
-        "building_element_material_type", MaterialType, BuildingElementToMaterialType
+        "building_element_material_type", "material_type_id", MaterialType
     )
     health_status_type: "UnifiedType" = _relationship_definition(
-        "building_element_health_status_type", HealthStatusType, BuildingElementToHealthStatusType
+        "building_element_health_status_type", "health_status_type_id", HealthStatusType
     )
     reuse_potential_type: "UnifiedType" = _relationship_definition(
-        "building_element_reuse_potential_type", ReusePotentialType, BuildingElementToReusePotentialType
+        "building_element_reuse_potential_type", "reuse_potential_type_id", ReusePotentialType
     )
     waste_code_type: "UnifiedType" = _relationship_definition(
-        "building_element_waste_code_type", WasteCodeType, BuildingElementToWasteCodeType
+        "building_element_waste_code_type", "waste_code_type_id", WasteCodeType
     )
     recycling_potential_type: "UnifiedType" = _relationship_definition(
-        "building_element_recycling_potential_type", RecyclingPotentialType, BuildingElementToRecyclingPotentialType
+        "building_element_recycling_potential_type", "recycling_potential_type_id", RecyclingPotentialType
     )

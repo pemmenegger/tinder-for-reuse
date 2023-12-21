@@ -1,15 +1,6 @@
 from typing import List, Optional
 
-from app.models.building_element_model import (
-    BuildingElement,
-    BuildingElementToBuildingElementUnitType,
-    BuildingElementToBuildingElementWorksheetType,
-    BuildingElementToHealthStatusType,
-    BuildingElementToMaterialType,
-    BuildingElementToRecyclingPotentialType,
-    BuildingElementToReusePotentialType,
-    BuildingElementToWasteCodeType,
-)
+from app.models.building_element_model import BuildingElement
 from app.models.collector_model import (
     Collector,
     CollectorToAuthorizedVehicleType,
@@ -34,25 +25,32 @@ class UnifiedType(UnifiedTypeBase, table=True):
 
     # BuildingElement
     building_element_worksheet_type: List[BuildingElement] = Relationship(
-        back_populates="worksheet_type", link_model=BuildingElementToBuildingElementWorksheetType
+        back_populates="worksheet_type",
+        sa_relationship_kwargs={"foreign_keys": "[BuildingElement.worksheet_type_id]"},
     )
     building_element_unit_type: List[BuildingElement] = Relationship(
-        back_populates="unit_type", link_model=BuildingElementToBuildingElementUnitType
+        back_populates="unit_type",
+        sa_relationship_kwargs={"foreign_keys": "[BuildingElement.unit_type_id]"},
     )
     building_element_material_type: List[BuildingElement] = Relationship(
-        back_populates="material_type", link_model=BuildingElementToMaterialType
+        back_populates="material_type",
+        sa_relationship_kwargs={"foreign_keys": "[BuildingElement.material_type_id]"},
     )
     building_element_health_status_type: List[BuildingElement] = Relationship(
-        back_populates="health_status_type", link_model=BuildingElementToHealthStatusType
+        back_populates="health_status_type",
+        sa_relationship_kwargs={"foreign_keys": "[BuildingElement.health_status_type_id]"},
     )
     building_element_reuse_potential_type: List[BuildingElement] = Relationship(
-        back_populates="reuse_potential_type", link_model=BuildingElementToReusePotentialType
+        back_populates="reuse_potential_type",
+        sa_relationship_kwargs={"foreign_keys": "[BuildingElement.reuse_potential_type_id]"},
     )
     building_element_waste_code_type: List[BuildingElement] = Relationship(
-        back_populates="waste_code_type", link_model=BuildingElementToWasteCodeType
+        back_populates="waste_code_type",
+        sa_relationship_kwargs={"foreign_keys": "[BuildingElement.waste_code_type_id]"},
     )
     building_element_recycling_potential_type: List[BuildingElement] = Relationship(
-        back_populates="recycling_potential_type", link_model=BuildingElementToRecyclingPotentialType
+        back_populates="recycling_potential_type",
+        sa_relationship_kwargs={"foreign_keys": "[BuildingElement.recycling_potential_type_id]"},
     )
     # Collector
     collector_material_types: List[Collector] = Relationship(

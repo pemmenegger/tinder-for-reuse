@@ -83,7 +83,7 @@ export const Select: React.FC<SelectProps> = ({
     if (isMultiSelect) {
       if (isSelected(option)) {
         newSelectedOptions = selectedOptions.filter(
-          (selectedOption) => selectedOption.id !== option.id
+          (selectedOption) => selectedOption.type_id !== option.type_id
         );
       } else {
         newSelectedOptions = [...selectedOptions, option];
@@ -96,7 +96,7 @@ export const Select: React.FC<SelectProps> = ({
 
   const isSelected = (option: FilterOption) => {
     return selectedOptions.some(
-      (selectedOption) => selectedOption.id === option.id
+      (selectedOption) => selectedOption.type_id === option.type_id
     );
   };
 
@@ -111,7 +111,7 @@ export const Select: React.FC<SelectProps> = ({
       >
         {isEmpty
           ? placeholder
-          : selectedOptions.map((option) => option.value).join(", ")}
+          : selectedOptions.map((option) => option.type_label).join(", ")}
       </button>
 
       {isOpen && (
@@ -122,7 +122,7 @@ export const Select: React.FC<SelectProps> = ({
               onClick={() => toggleOption(option)}
               className={cn(optionVariants({ isSelected: isSelected(option) }))}
             >
-              <span className={`block truncate`}>{option.value}</span>
+              <span className={`block truncate`}>{option.type_label}</span>
               {isSelected(option) && (
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600">
                   <svg

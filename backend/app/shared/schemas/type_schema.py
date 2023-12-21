@@ -8,8 +8,9 @@ from sqlmodel import Field, SQLModel
 
 
 class UnifiedTypeBase(SQLModel):
-    discriminator: str = Field(primary_key=True)
-    value: str = Field(index=True)
+    discriminator: str = Field(index=True)
+    type_id: int
+    type_label: str = Field(index=True)
 
 
 class UnifiedTypeCreate(UnifiedTypeBase):
@@ -17,9 +18,4 @@ class UnifiedTypeCreate(UnifiedTypeBase):
 
 
 class UnifiedTypeRead(UnifiedTypeBase):
-    # change also in frontend/types/api/type.ts
     id: int
-
-    @classmethod
-    def from_enum(cls, type_enum):
-        return cls(id=type_enum.id, name=type_enum.label)

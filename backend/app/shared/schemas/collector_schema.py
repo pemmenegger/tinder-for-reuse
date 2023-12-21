@@ -37,12 +37,12 @@ class CollectorRead(CollectorBase):
                 exclude_unset=False,
                 exclude={"material_types", "waste_code_types", "authorized_vehicle_types", "circular_strategy_types"},
             ),
-            material_types=[material_type.value for material_type in collector.material_types],
-            waste_code_types=[waste_code_type.value for waste_code_type in collector.waste_code_types],
+            material_types=[material_type.type_label for material_type in collector.material_types],
+            waste_code_types=[waste_code_type.type_label for waste_code_type in collector.waste_code_types],
             authorized_vehicle_types=[
-                authorized_vehicle_type.value for authorized_vehicle_type in collector.authorized_vehicle_types
+                authorized_vehicle_type.type_label for authorized_vehicle_type in collector.authorized_vehicle_types
             ],
             circular_strategy_types=[
-                circular_strategy_type.value for circular_strategy_type in collector.circular_strategy_types
+                circular_strategy_type.type_label for circular_strategy_type in collector.circular_strategy_types
             ],
         )

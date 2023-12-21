@@ -206,7 +206,7 @@ def search(payload: BuildingElementSearchRequest, session: Session = Depends(get
 
 #     # Flatten the list of collectors and remove duplicates
 #     unique_collectors = {
-#         collector.id: collector for collectors in nearest_collectors_read.values() for collector in collectors
+#         collector.id: collector for collectors in nearest_collectors_read.type_labels() for collector in collectors
 #     }
 #     collectors_read = list(unique_collectors.values())
 

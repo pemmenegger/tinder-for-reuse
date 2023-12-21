@@ -48,7 +48,7 @@ def read_type_by_value_or_throw(session, type_class, value):
     instance = session.execute(
         select(UnifiedType)
         .where(UnifiedType.discriminator == type_class.DISCRIMINATOR)
-        .where(UnifiedType.value == value)
+        .where(UnifiedType.type_label == value)
     )
     instance = instance.scalars().first()
     if not instance:

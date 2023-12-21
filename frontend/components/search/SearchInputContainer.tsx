@@ -11,9 +11,10 @@ import { SearchRequest } from "./SearchResults";
 import { SearchInputSelect } from "./SearchInputSelect";
 
 export type FilterOption = {
-  discriminator: string;
-  value: string;
   id: number | string;
+  discriminator: string;
+  type_id: number | string;
+  type_label: string;
 };
 
 export type FilterConfig = {
@@ -91,7 +92,7 @@ export default function SearchContainer<ReqT extends SearchRequest>({
             options={config.options || []}
             onChange={(selectedOptions) => {
               const value =
-                selectedOptions.length > 0 ? selectedOptions[0].id : null;
+                selectedOptions.length > 0 ? selectedOptions[0].type_id : null;
               handleInputChange(config.path, value);
             }}
             multiSelect={false}
@@ -102,7 +103,7 @@ export default function SearchContainer<ReqT extends SearchRequest>({
           <SearchInputSelect
             options={config.options || []}
             onChange={(selectedOptions) => {
-              const value = selectedOptions.map((option) => option.id);
+              const value = selectedOptions.map((option) => option.type_id);
               handleInputChange(config.path, value);
             }}
             multiSelect={true}

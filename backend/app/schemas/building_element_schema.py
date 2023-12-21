@@ -57,17 +57,19 @@ class BuildingElementRead(BuildingElementBase):
                     "recycling_potential_type",
                 },
             ),
-            worksheet_type=building_element.worksheet_type[0].value if building_element.worksheet_type else None,
-            unit_type=building_element.unit_type[0].value if building_element.unit_type else None,
-            material_type=building_element.material_type[0].value if building_element.material_type else None,
-            health_status_type=building_element.health_status_type[0].value
+            worksheet_type=building_element.worksheet_type[0].type_label if building_element.worksheet_type else None,
+            unit_type=building_element.unit_type[0].type_label if building_element.unit_type else None,
+            material_type=building_element.material_type[0].type_label if building_element.material_type else None,
+            health_status_type=building_element.health_status_type[0].type_label
             if building_element.health_status_type
             else None,
-            reuse_potential_type=building_element.reuse_potential_type[0].value
+            reuse_potential_type=building_element.reuse_potential_type[0].type_label
             if building_element.reuse_potential_type
             else None,
-            waste_code_type=building_element.waste_code_type[0].value if building_element.waste_code_type else None,
-            recycling_potential_type=building_element.recycling_potential_type[0].value
+            waste_code_type=building_element.waste_code_type[0].type_label
+            if building_element.waste_code_type
+            else None,
+            recycling_potential_type=building_element.recycling_potential_type[0].type_label
             if building_element.recycling_potential_type
             else None,
         )
