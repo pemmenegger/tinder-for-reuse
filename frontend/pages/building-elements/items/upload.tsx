@@ -249,7 +249,7 @@ export default function BuildingElementUploadPage() {
           "DEA",
         ]}
       />
-      {/* {buildingElementUploadToUpload?.map(
+      {buildingElementUploadToUpload?.building_elements?.map(
         (buildingElementUploadToUpload, index) => (
           <BuildingElementCard
             data={buildingElementUploadToUpload}
@@ -257,21 +257,22 @@ export default function BuildingElementUploadPage() {
             className="mt-8"
           />
         )
-      )} */}
+      )}
       <Button
         className="mt-8"
-        // variant={
-        //   buildingElementUploadToUpload.length === 0 ? "disabled" : "primary"
-        // }
+        variant={
+          buildingElementUploadToUpload?.building_elements?.length === 0
+            ? "disabled"
+            : "primary"
+        }
         size="sm"
-        // disabled={buildingElementUploadToUpload.length === 0}
+        disabled={
+          buildingElementUploadToUpload?.building_elements?.length === 0
+        }
         onClick={async () => await upload()}
       >
-        Upload
+        Upload {buildingElementUploadToUpload?.building_elements?.length} Items
       </Button>
-      <p onClick={() => console.log(buildingElementUploadToUpload)}>
-        print elements
-      </p>
     </>
   );
 }

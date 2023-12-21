@@ -59,6 +59,7 @@ export const fetchCollectorFilterOptions =
 export const collectorsFetcher = async (
   searchRequest: CollectorSearchRequest
 ): Promise<SearchResponse<CollectorRead>> => {
+  if (!searchRequest.query.text) searchRequest.query.text = "";
   const { response, data } = await fetchApi(API_ROUTE, `/search`, {
     method: "POST",
     body: searchRequest,

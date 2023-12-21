@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Search, { SearchResultsWrapperType } from "@/components/search/Search";
 import {
   buildingElementUploadsFetcher,
+  deleteAllBuildingElements,
   fetchBuildingElementFilterOptions,
 } from "@/lib/api/building-elements";
 import { BuildingElementUploadRead } from "@/types/api/items/building-element";
@@ -10,6 +11,8 @@ import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResult
 import { generateBuildingElementUploadMapMarkers } from "@/lib/utils";
 import { MapMarker } from "@/types/item";
 import useSWR from "swr";
+import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 export default function BuildingElementItemsPage() {
   const { data: filterOptions, error } = useSWR(
@@ -109,10 +112,29 @@ function BuildingElementResultsWrapper({
   }, [results]);
 
   return (
-    <SearchWithMapResultsWrapper
-      isLoading={isLoading}
-      mapMarkers={mapMarkers}
-      clusterIconUrl="/icons/building-elements/cluster.svg"
-    />
+    <>
+      <SearchWithMapResultsWrapper
+        isLoading={isLoading}
+        mapMarkers={mapMarkers}
+        clusterIconUrl="/icons/building-elements/cluster.svg"
+      />
+      <Button
+        variant="danger"
+        size="sm"
+        className="mt-8"
+        onClick={async () => {
+          try {
+            await deleteAllBuildingElements();
+            toast.success("Successfully deleted all building elements");
+            window.location.reload();
+          } catch (error) {
+            console.error(error);
+            toast.error("Failed to delete all building elements");
+          }
+        }}
+      >
+        Delete All Building Elements
+      </Button>
+    </>
   );
 }

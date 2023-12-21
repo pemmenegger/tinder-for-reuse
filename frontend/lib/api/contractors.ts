@@ -59,6 +59,7 @@ export const fetchContractorFilterOptions =
 export const contractorsFetcher = async (
   searchRequest: ContractorSearchRequest
 ): Promise<SearchResponse<ContractorRead>> => {
+  if (!searchRequest.query.text) searchRequest.query.text = "";
   const { response, data } = await fetchApi(API_ROUTE, `/search`, {
     method: "POST",
     body: searchRequest,

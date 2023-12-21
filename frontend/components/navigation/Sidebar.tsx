@@ -90,7 +90,10 @@ export default function Sidebar() {
           SolidIcon={CircleStackIconSolid}
           text="Items"
           link="/building-elements/items"
-          active={router.asPath === "/building-elements/items"}
+          active={
+            router.asPath === "/building-elements/items" ||
+            router.asPath === "/"
+          }
         />
         <NavItem
           OutlineIcon={ArrowUpTrayIconOutline}

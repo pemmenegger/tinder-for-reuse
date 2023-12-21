@@ -22,6 +22,16 @@ export const createBuildingElementUpload = async (
   return data;
 };
 
+export const deleteAllBuildingElements = async () => {
+  const { response, data } = await fetchApi(API_ROUTE, `/`, {
+    method: "DELETE",
+  });
+  if (!response.ok)
+    throw new ApiError("deleteAllBuildingElements failed", data);
+  console.log("deleteAllBuildingElements response", data);
+  return data;
+};
+
 export const fetchBuildingElementFilterOptions =
   async (): Promise<BuildingElementFilterOptions> => {
     const { response, data } = await fetchApi(API_ROUTE, `/filter/`, {
@@ -36,6 +46,7 @@ export const fetchBuildingElementFilterOptions =
 export const buildingElementUploadsFetcher = async (
   searchRequest: BuildingElementSearchRequest
 ): Promise<SearchResponse<BuildingElementUploadRead>> => {
+  if (!searchRequest.query.text) searchRequest.query.text = "";
   const { response, data } = await fetchApi(API_ROUTE, `/search/`, {
     method: "POST",
     body: searchRequest,
