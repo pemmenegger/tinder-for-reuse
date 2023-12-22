@@ -12,11 +12,11 @@ The application primarily revolves around three entities: reclaimed building ele
 
 ### Reclaimed Building Elements (Items)
 
-**Search and Filter:** Users can explore items using criteria like worksheets, units, material type, health status, reuse potential, waste codes, and recycling potential.
+**Search and Filter:** Users can explore items using criteria like worksheets, units, material type, health status, reuse potential, waste codes, and recycling potential. Those filter criteria are based on the French diagnostic method for building deconstruction.
 
 ![items search](./screenshots/items-search.png)
 
-**Upload:** Uploading items is straightforward through an Excel file format.
+**Upload:** Uploading items is straightforward through an Excel file format according to a predefined template. This template is based on the French diagnostic method for building deconstruction. The application parses the file and creates items based on the data.
 
 ![items upload](./screenshots/items-upload-2.png)
 
@@ -33,9 +33,11 @@ The application primarily revolves around three entities: reclaimed building ele
 ### Contractors
 
 **Search and Filter:** Find contractors by their specialization in materials, waste codes, and circular services.
+
 ![contractors search](./screenshots/contractors-search.png)
 
 **Upload:** Contractors can easily join the platform through an upload form.
+
 ![contractors upload](./screenshots/contractors-upload.png)
 
 ### Matches
@@ -43,6 +45,8 @@ The application primarily revolves around three entities: reclaimed building ele
 **Interactive Mapping:** The match feature allows users to find synergies between items, collectors, and contractors. The map visually represents all entities, refining to show only matched entities based on filter criteria. Users can click on map markers for detailed information.
 
 ![matches search](./screenshots/matches-search.png)
+
+All supported filter criteria are defined in the [types.py file](./backend/app/types.py).
 
 ## Run It Locally
 
