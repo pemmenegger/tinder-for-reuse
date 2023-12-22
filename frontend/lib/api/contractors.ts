@@ -61,7 +61,7 @@ export const fetchContractorFilterOptions =
     });
     if (!response.ok)
       throw new ApiError("fetchContractorFilterOptions failed", data);
-    console.log("fetchContractorFilterOptions Response", data);
+    // console.log("fetchContractorFilterOptions Response", data);
     return data;
   };
 

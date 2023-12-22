@@ -39,6 +39,7 @@ export default function BuildingElementItemsPage() {
           reuse_potential_type_ids: [],
           waste_code_type_ids: [],
           recycling_potential_type_ids: [],
+          circular_service_needed_type_ids: [],
         },
       }}
       filterConfigs={{
@@ -84,6 +85,12 @@ export default function BuildingElementItemsPage() {
             label: "Recycling Potential",
             path: ["filter", "recycling_potential_type_ids"],
             options: filterOptions?.recycling_potential_types,
+          },
+          {
+            type: "multi",
+            label: "Circular Services Needed",
+            path: ["filter", "circular_service_needed_type_ids"],
+            options: filterOptions?.circular_service_needed_types,
           },
         ],
       }}

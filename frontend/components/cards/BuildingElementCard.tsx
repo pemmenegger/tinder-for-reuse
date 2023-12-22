@@ -49,6 +49,10 @@ export function BuildingElementCard({
           label: "Elimination",
           value: buildingElement.has_elimination,
         },
+        {
+          label: "Circular Service Needed",
+          value: buildingElement.circular_service_needed,
+        },
       ]}
       {...props}
     />

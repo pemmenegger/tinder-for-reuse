@@ -217,7 +217,6 @@ export function CollectorCreateForm({
 }) {
   const onSubmit = async (values: CollectorCreate) => {
     try {
-      console.log(`createCollector to backend: ${JSON.stringify(values)}`);
       await createCollector(values);
       await onSuccess?.();
     } catch (err) {
@@ -238,7 +237,6 @@ export function CollectorEditForm({
 }: EditFormProps) {
   const onSubmit = async (values: CollectorCreate) => {
     try {
-      console.log(`editCollector to backend: ${JSON.stringify(values)}`);
       await updateCollector(dataId, values);
       await onSuccess?.();
     } catch (err) {

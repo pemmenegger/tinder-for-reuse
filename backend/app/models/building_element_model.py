@@ -8,6 +8,7 @@ from app.schemas.building_element_schema import (
 from app.types import (
     BuildingElementUnitType,
     BuildingElementWorksheetType,
+    CircularServiceType,
     HealthStatusType,
     MaterialType,
     RecyclingPotentialType,
@@ -40,6 +41,7 @@ class BuildingElement(BuildingElementBase, RondasBase, table=True):
     reuse_potential_type_id: Optional[int] = Field(foreign_key="unified_type.id")
     waste_code_type_id: Optional[int] = Field(foreign_key="unified_type.id")
     recycling_potential_type_id: Optional[int] = Field(foreign_key="unified_type.id")
+    circular_service_needed_id: Optional[int] = Field(foreign_key="unified_type.id")
 
     def _relationship_definition(back_populates, column_name, type_class):
         return Relationship(
@@ -69,4 +71,7 @@ class BuildingElement(BuildingElementBase, RondasBase, table=True):
     )
     recycling_potential_type: Optional["UnifiedType"] = _relationship_definition(
         "building_element_recycling_potential_type", "recycling_potential_type_id", RecyclingPotentialType
+    )
+    circular_service_needed: Optional["UnifiedType"] = _relationship_definition(
+        "building_element_circular_service_needed", "circular_service_needed_id", CircularServiceType
     )

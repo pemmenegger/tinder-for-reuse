@@ -10,6 +10,7 @@ from app.schemas.search_schema import SearchResponse
 from app.types import (
     BuildingElementUnitType,
     BuildingElementWorksheetType,
+    CircularServiceType,
     HealthStatusType,
     MaterialType,
     RecyclingPotentialType,
@@ -53,6 +54,7 @@ def create_building_element_upload(
                     "reuse_potential_type",
                     "waste_code_type",
                     "recycling_potential_type",
+                    "circular_service_needed",
                 },
             ),
             building_element_upload_id=building_element_upload.id,
@@ -72,6 +74,9 @@ def create_building_element_upload(
             ),
             recycling_potential_type=read_type_by_value_or_throw(
                 session, RecyclingPotentialType, building_element_create.recycling_potential_type
+            ),
+            circular_service_needed_type=read_type_by_value_or_throw(
+                session, CircularServiceType, building_element_create.circular_service_needed
             ),
         )
         for building_element_create in payload.building_elements
@@ -97,6 +102,7 @@ def read_filter_options(session: Session = Depends(get_session)):
     reuse_potential_types = read_types(session, ReusePotentialType)
     waste_code_types = read_types(session, WasteCodeType)
     recycling_potential_types = read_types(session, RecyclingPotentialType)
+    circular_service_needed_types = read_types(session, CircularServiceType)
 
     return BuildingElementFilterOptions(
         worksheet_types=worksheet_types,
@@ -106,6 +112,7 @@ def read_filter_options(session: Session = Depends(get_session)):
         reuse_potential_types=reuse_potential_types,
         waste_code_types=waste_code_types,
         recycling_potential_types=recycling_potential_types,
+        circular_service_needed_types=circular_service_needed_types,
     )
 
 
@@ -121,6 +128,7 @@ def search_building_elements(request: BuildingElementSearchRequest, session: Ses
         "reuse_potential_type_id": request.filter.reuse_potential_type_ids,
         "waste_code_type_id": request.filter.waste_code_type_ids,
         "recycling_potential_type_id": request.filter.recycling_potential_type_ids,
+        "circular_service_needed_id": request.filter.circular_service_needed_type_ids,
     }
 
     query = select(BuildingElement)

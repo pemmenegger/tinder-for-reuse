@@ -54,6 +54,7 @@ export default function BuildingElementItemsPage() {
             reuse_potential_type_ids: [],
             waste_code_type_ids: [],
             recycling_potential_type_ids: [],
+            circular_service_needed_type_ids: [],
           },
           collector: {
             material_type_ids: [],
@@ -115,6 +116,17 @@ export default function BuildingElementItemsPage() {
               "recycling_potential_type_ids",
             ],
             options: filterOptions?.building_element?.recycling_potential_types,
+          },
+          {
+            type: "multi",
+            label: "Circular Services Needed",
+            path: [
+              "filter",
+              "building_element",
+              "circular_service_needed_type_ids",
+            ],
+            options:
+              filterOptions?.building_element?.circular_service_needed_types,
           },
         ],
         Collector: [
@@ -212,7 +224,7 @@ function BuildingElementResultsWrapper({
     <SearchWithMapResultsWrapper
       isLoading={isLoading}
       mapMarkers={mapMarkers}
-      clusterIconUrl="/icons/building-elements/cluster.svg"
+      clusterIconUrl="/icons/matches/cluster.svg"
     />
   );
 }

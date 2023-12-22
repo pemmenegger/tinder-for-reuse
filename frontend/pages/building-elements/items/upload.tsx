@@ -88,6 +88,11 @@ export default function BuildingElementUploadPage() {
           "valorisation énergie"
         ),
         has_elimination: findColumnIndex(sheetName, second_row, "élimination"),
+        circular_service_needed: findColumnIndex(
+          sheetName,
+          second_row,
+          "service nécessaire"
+        ),
       };
 
       let currCategoryName;
@@ -118,6 +123,7 @@ export default function BuildingElementUploadPage() {
           recycling_potential_type: row[columnIndices.recycling_potential],
           has_energy_recovery: row[columnIndices.has_energy_recovery],
           has_elimination: row[columnIndices.has_elimination],
+          circular_service_needed: row[columnIndices.circular_service_needed],
         };
 
         postprocess(buildingElement);
@@ -173,6 +179,12 @@ export default function BuildingElementUploadPage() {
             types: filterOptions!.recycling_potential_types,
             value: buildingElement.recycling_potential_type,
             columnName: "Recycling Potential",
+            title: buildingElement.title,
+          },
+          {
+            types: filterOptions!.circular_service_needed_types,
+            value: buildingElement.circular_service_needed,
+            columnName: "Circular Service Needed",
             title: buildingElement.title,
           },
         ];

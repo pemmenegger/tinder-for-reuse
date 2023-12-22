@@ -1,8 +1,8 @@
 """init
 
-Revision ID: e71d4385f2d1
+Revision ID: 3cfa163547fa
 Revises: No down revision
-Create Date: 2023-12-21 16:33:12.174652
+Create Date: 2023-12-22 15:18:28.844932
 
 """
 import sqlalchemy as sa  # noqa: F401
@@ -11,7 +11,7 @@ from alembic import op
 from app.types import get_unified_types
 
 # revision identifiers, used by Alembic.
-revision = "e71d4385f2d1"
+revision = "3cfa163547fa"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -110,9 +110,14 @@ def upgrade() -> None:
         sa.Column("reuse_potential_type_id", sa.Integer(), nullable=True),
         sa.Column("waste_code_type_id", sa.Integer(), nullable=True),
         sa.Column("recycling_potential_type_id", sa.Integer(), nullable=True),
+        sa.Column("circular_service_needed_id", sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(
             ["building_element_upload_id"],
             ["building_element_upload.id"],
+        ),
+        sa.ForeignKeyConstraint(
+            ["circular_service_needed_id"],
+            ["unified_type.id"],
         ),
         sa.ForeignKeyConstraint(
             ["health_status_type_id"],

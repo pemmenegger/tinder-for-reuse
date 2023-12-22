@@ -61,7 +61,7 @@ export const fetchCollectorFilterOptions =
     });
     if (!response.ok)
       throw new ApiError("fetchCollectorFilterOptions failed", data);
-    console.log("fetchCollectorFilterOptions Response", data);
+    // console.log("fetchCollectorFilterOptions Response", data);
     return data;
   };
 

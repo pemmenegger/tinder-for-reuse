@@ -52,6 +52,10 @@ class UnifiedType(UnifiedTypeBase, table=True):
         back_populates="recycling_potential_type",
         sa_relationship_kwargs={"foreign_keys": "[BuildingElement.recycling_potential_type_id]"},
     )
+    building_element_circular_service_needed: List[BuildingElement] = Relationship(
+        back_populates="circular_service_needed",
+        sa_relationship_kwargs={"foreign_keys": "[BuildingElement.circular_service_needed_id]"},
+    )
     # Collector
     collector_material_types: List[Collector] = Relationship(
         back_populates="material_types", link_model=CollectorToMaterialType

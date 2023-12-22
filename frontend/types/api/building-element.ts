@@ -39,6 +39,7 @@ type BuildingElementBase = {
   recycling_potential_type?: string;
   has_energy_recovery?: boolean;
   has_elimination?: boolean;
+  circular_service_needed?: string;
 };
 
 export type BuildingElementCreate = BuildingElementBase;
@@ -55,6 +56,7 @@ export type BuildingElementFilterOptions = {
   reuse_potential_types: UnifiedTypeRead[];
   waste_code_types: UnifiedTypeRead[];
   recycling_potential_types: UnifiedTypeRead[];
+  circular_service_needed_types: UnifiedTypeRead[];
 };
 
 export type BuildingElementSearchRequest = {
@@ -72,6 +74,7 @@ export type BuildingElementFilter = {
   reuse_potential_type_ids: number[];
   waste_code_type_ids: number[];
   recycling_potential_type_ids: number[];
+  circular_service_needed_type_ids: number[];
 };
 
 export type MatchesSearchRequest = {

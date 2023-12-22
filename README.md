@@ -101,6 +101,15 @@ Ensure Docker is running. Run the following command in the project's root direct
 sh run_local_db.sh
 ```
 
+If your database is not already up to date, you will need to run the migration upgrade script. To do this, open a new terminal and execute the following command in the project's root directory:
+
+```bash
+cd ./backend
+sh run_local_migration_upgrade.sh
+```
+
+You can close the terminal once the migration is complete but keep the database running.
+
 **Step 2: Launch the Backend**
 
 In a new terminal, run the following command in the project's root directory:

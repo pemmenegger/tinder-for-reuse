@@ -27,6 +27,7 @@ class BuildingElementBase(SQLModel):
     recycling_potential_type: Optional[str]
     has_energy_recovery: Optional[bool]
     has_elimination: Optional[bool]
+    circular_service_needed: Optional[str]
 
 
 class BuildingElementCreate(BuildingElementBase):
@@ -49,6 +50,7 @@ class BuildingElementRead(BuildingElementBase):
                     "reuse_potential_type",
                     "waste_code_type",
                     "recycling_potential_type",
+                    "circular_service_needed",
                 },
             ),
             worksheet_type=building_element.worksheet_type.type_label,
@@ -63,6 +65,9 @@ class BuildingElementRead(BuildingElementBase):
             waste_code_type=building_element.waste_code_type.type_label if building_element.waste_code_type else None,
             recycling_potential_type=building_element.recycling_potential_type.type_label
             if building_element.recycling_potential_type
+            else None,
+            circular_service_needed=building_element.circular_service_needed.type_label
+            if building_element.circular_service_needed
             else None,
         )
 
@@ -100,6 +105,7 @@ class BuildingElementFilterOptions(BaseModel):
     reuse_potential_types: List[UnifiedTypeRead]
     waste_code_types: List[UnifiedTypeRead]
     recycling_potential_types: List[UnifiedTypeRead]
+    circular_service_needed_types: List[UnifiedTypeRead]
 
 
 class BuildingElementSearchRequest(BaseModel):
@@ -114,6 +120,7 @@ class BuildingElementSearchRequest(BaseModel):
         reuse_potential_type_ids: List[int]
         waste_code_type_ids: List[int]
         recycling_potential_type_ids: List[int]
+        circular_service_needed_type_ids: List[int]
 
     query: Query
     filter: Filter

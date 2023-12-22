@@ -211,7 +211,6 @@ export function ContractorCreateForm({
 }) {
   const onSubmit = async (values: ContractorCreate) => {
     try {
-      console.log(`createContractor to backend: ${JSON.stringify(values)}`);
       await createContractor(values);
       await onSuccess?.();
     } catch (err) {
@@ -231,7 +230,6 @@ export function ContractorEditForm({
 }: EditFormProps) {
   const onSubmit = async (values: ContractorCreate) => {
     try {
-      console.log(`editContractor to backend: ${JSON.stringify(values)}`);
       await updateContractor(dataId, values);
       await onSuccess?.();
     } catch (err) {

@@ -266,7 +266,6 @@ export default function SearchWithMapResultsWrapper({
                     IGNORE_CARD_DEACTIVATION_CLASS
                   )
                 ) {
-                  console.log("clicked");
                   setActiveMapMarkerId(mapMarker.id);
                 }
               }}
