@@ -1,0 +1,304 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "store_id": "994",
+        "name": "POINT.P HESINGUE",
+        "contact": { "phone": null },
+        "address": {
+          "lines": ["Z.I. - 10, rue de Nancy"],
+          "country_code": null,
+          "city": "HESINGUE",
+          "zipcode": "68220"
+        },
+        "user_properties": {
+          "acces": "de_3_5",
+          "siret": "75680032200718",
+          "valobat": null,
+          "reemploi": "Non",
+          "date_contrat": "4/4/2023",
+          "public_accueil": "pros_particuliers",
+          "statut_activite": "actif",
+          "precision_reemploi": null
+        },
+        "tags": [
+          "flux_inertes",
+          "flux_beton",
+          "flux_bois",
+          "flux_metaux",
+          "flux_platre",
+          "flux_plastiques",
+          "flux_revetements_de_sols_en_pvc"
+        ],
+        "types": ["Distributeur", "actif"],
+        "last_updated": "2023-11-29T12:18:28.601122+00:00"
+      },
+      "geometry": { "type": "Point", "coordinates": [7.51572653321848, 47.58287993033977] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "store_id": "995",
+        "name": "POINT.P LE RUSSEY",
+        "contact": { "phone": null },
+        "address": {
+          "lines": ["Rte de Grand Combe des Bois"],
+          "country_code": null,
+          "city": "LE RUSSEY",
+          "zipcode": "25210"
+        },
+        "user_properties": {
+          "acces": "de_3_5",
+          "siret": "75680032200312",
+          "valobat": null,
+          "reemploi": "Non",
+          "date_contrat": "4/4/2023",
+          "public_accueil": "pros_particuliers",
+          "statut_activite": "actif dans plus d'un mois",
+          "precision_reemploi": null
+        },
+        "tags": [
+          "flux_inertes",
+          "flux_beton",
+          "flux_bois",
+          "flux_metaux",
+          "flux_platre",
+          "flux_plastiques",
+          "flux_menuiseries_vitrees",
+          "flux_laine_de_verre",
+          "flux_laine_de_roche",
+          "flux_membranes_bitumeuses",
+          "flux_revetements_de_sols_hors_pvc",
+          "flux_revetements_de_sols_en_pvc",
+          "flux_pse",
+          "flux_poly",
+          "flux_biosources"
+        ],
+        "types": ["Distributeur", "actif_plus_30_jours"],
+        "last_updated": "2023-11-29T12:18:28.601224+00:00"
+      },
+      "geometry": { "type": "Point", "coordinates": [6.735187428798454, 47.15770083051195] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "store_id": "996",
+        "name": "POINT.P LONS LE SAUNIER",
+        "contact": { "phone": null },
+        "address": {
+          "lines": ["Z.I. - Rue Blaise Pascal"],
+          "country_code": null,
+          "city": "LONS LE SAUNIER",
+          "zipcode": "39000"
+        },
+        "user_properties": {
+          "acces": "sup_12",
+          "siret": "75680032200239",
+          "valobat": null,
+          "reemploi": "Non",
+          "date_contrat": "4/4/2023",
+          "public_accueil": "pros_particuliers",
+          "statut_activite": "actif",
+          "precision_reemploi": null
+        },
+        "tags": [
+          "flux_inertes",
+          "flux_beton",
+          "flux_bois",
+          "flux_metaux",
+          "flux_platre",
+          "flux_plastiques",
+          "flux_menuiseries_vitrees",
+          "flux_revetements_de_sols_en_pvc"
+        ],
+        "types": ["Distributeur", "actif"],
+        "last_updated": "2023-11-29T12:18:28.601331+00:00",
+        "open": {
+          "open_now": true,
+          "open_hours": [
+            { "end": "11:30", "start": "08:30" },
+            { "end": "16:30", "start": "14:00" }
+          ],
+          "week_day": 4,
+          "current_slice": { "end": "16:30", "start": "14:00" }
+        },
+        "weekly_opening": {
+          "timezone": "Europe/Paris",
+          "1": {
+            "hours": [
+              { "end": "11:30", "start": "08:30" },
+              { "end": "16:30", "start": "14:00" }
+            ],
+            "isSpecial": false
+          },
+          "2": {
+            "hours": [
+              { "end": "11:30", "start": "08:30" },
+              { "end": "16:30", "start": "14:00" }
+            ],
+            "isSpecial": false
+          },
+          "3": {
+            "hours": [
+              { "end": "11:30", "start": "08:30" },
+              { "end": "16:30", "start": "14:00" }
+            ],
+            "isSpecial": false
+          },
+          "4": {
+            "hours": [
+              { "end": "11:30", "start": "08:30" },
+              { "end": "16:30", "start": "14:00" }
+            ],
+            "isSpecial": false
+          },
+          "5": {
+            "hours": [
+              { "end": "11:30", "start": "08:30" },
+              { "end": "16:30", "start": "14:00" }
+            ],
+            "isSpecial": false
+          },
+          "6": { "hours": [], "isSpecial": false },
+          "7": { "hours": [], "isSpecial": false }
+        },
+        "opening_hours": {
+          "usual": {
+            "1": [
+              { "end": "11:30", "start": "08:30" },
+              { "end": "16:30", "start": "14:00" }
+            ],
+            "2": [
+              { "end": "11:30", "start": "08:30" },
+              { "end": "16:30", "start": "14:00" }
+            ],
+            "3": [
+              { "end": "11:30", "start": "08:30" },
+              { "end": "16:30", "start": "14:00" }
+            ],
+            "4": [
+              { "end": "11:30", "start": "08:30" },
+              { "end": "16:30", "start": "14:00" }
+            ],
+            "5": [
+              { "end": "11:30", "start": "08:30" },
+              { "end": "16:30", "start": "14:00" }
+            ]
+          },
+          "timezone": "Europe/Paris"
+        }
+      },
+      "geometry": { "type": "Point", "coordinates": [5.575730526045627, 46.68173258175612] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "store_id": "997",
+        "name": "POINT.P LUDRES",
+        "contact": { "phone": null },
+        "address": { "lines": ["ZI 22 RUE DENIS PAPIN"], "country_code": null, "city": "LUDRES", "zipcode": "54710" },
+        "user_properties": {
+          "acces": "de_3_5",
+          "siret": "75680032200437",
+          "valobat": null,
+          "reemploi": "Non",
+          "date_contrat": "4/4/2023",
+          "public_accueil": "pros_particuliers",
+          "statut_activite": "actif dans moins d'un mois",
+          "precision_reemploi": null
+        },
+        "tags": [
+          "flux_inertes",
+          "flux_beton",
+          "flux_bois",
+          "flux_metaux",
+          "flux_platre",
+          "flux_plastiques",
+          "flux_menuiseries_vitrees",
+          "flux_revetements_de_sols_en_pvc"
+        ],
+        "types": ["Distributeur", "actif_moins_30_jours"],
+        "last_updated": "2023-11-29T12:18:28.601430+00:00"
+      },
+      "geometry": { "type": "Point", "coordinates": [6.180658719948411, 48.615557979835685] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "store_id": "998",
+        "name": "POINT.P NANCY ",
+        "contact": { "phone": null },
+        "address": { "lines": ["113, bld d'Austrasie"], "country_code": null, "city": "NANCY PP", "zipcode": "54000" },
+        "user_properties": {
+          "acces": "de_3_5",
+          "siret": "75680032200429",
+          "valobat": null,
+          "reemploi": "Non",
+          "date_contrat": "4/4/2023",
+          "public_accueil": "pros_particuliers",
+          "statut_activite": "actif dans moins d'un mois",
+          "precision_reemploi": null
+        },
+        "tags": [
+          "flux_inertes",
+          "flux_beton",
+          "flux_bois",
+          "flux_metaux",
+          "flux_platre",
+          "flux_plastiques",
+          "flux_revetements_de_sols_en_pvc"
+        ],
+        "types": ["Distributeur", "actif_moins_30_jours"],
+        "last_updated": "2023-11-29T12:18:28.601526+00:00"
+      },
+      "geometry": { "type": "Point", "coordinates": [6.204848659362211, 48.688973438271766] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "store_id": "999",
+        "name": "POINT.P NEUFCHATEAU",
+        "contact": { "phone": null },
+        "address": {
+          "lines": ["Z.I. Les Torri\u00e8res"],
+          "country_code": null,
+          "city": "NEUFCHATEAU",
+          "zipcode": "88300"
+        },
+        "user_properties": {
+          "acces": "de_3_5",
+          "siret": "75680032200122",
+          "valobat": null,
+          "reemploi": "Non",
+          "date_contrat": "4/4/2023",
+          "public_accueil": "pros_particuliers",
+          "statut_activite": "actif dans plus d'un mois",
+          "precision_reemploi": null
+        },
+        "tags": [
+          "flux_inertes",
+          "flux_beton",
+          "flux_bois",
+          "flux_metaux",
+          "flux_platre",
+          "flux_plastiques",
+          "flux_menuiseries_vitrees",
+          "flux_laine_de_verre",
+          "flux_laine_de_roche",
+          "flux_membranes_bitumeuses",
+          "flux_revetements_de_sols_hors_pvc",
+          "flux_revetements_de_sols_en_pvc",
+          "flux_pse",
+          "flux_poly",
+          "flux_biosources"
+        ],
+        "types": ["Distributeur", "actif_plus_30_jours"],
+        "last_updated": "2023-11-29T12:18:28.601631+00:00"
+      },
+      "geometry": { "type": "Point", "coordinates": [5.678739657684192, 48.361127648916536] }
+    }
+  ],
+  "pagination": { "page": 14, "pageCount": 14 }
+}

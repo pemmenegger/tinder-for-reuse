@@ -5,7 +5,7 @@ from app.schemas.building_element_schema import (
     BuildingElementBase,
     BuildingElementUploadBase,
 )
-from app.shared.types import (
+from app.types import (
     BuildingElementUnitType,
     BuildingElementWorksheetType,
     HealthStatusType,

@@ -1,10 +1,10 @@
-import React, { ReactHTMLElement, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import {
   MarkerClusterer,
   SuperClusterAlgorithm,
 } from "@googlemaps/markerclusterer";
-import { MapMarker } from "@/types/item";
+import { MapMarker } from "@/types/map";
 import { CardSkeleton } from "../cards/Card";
 
 export const IGNORE_CARD_DEACTIVATION_CLASS = "ignore-deactivation";

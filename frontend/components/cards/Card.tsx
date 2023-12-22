@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { PencilIcon as PencilIconOutline } from "@heroicons/react/24/outline";
 import { ChevronDownIcon as ChevronDownIconOutline } from "@heroicons/react/24/outline";
@@ -6,7 +6,6 @@ import { ChevronUpIcon as ChevronUpIconOutline } from "@heroicons/react/24/outli
 import toast from "react-hot-toast";
 import { EditFormProps } from "../forms/forms";
 import { IGNORE_CARD_DEACTIVATION_CLASS } from "../search/SearchWithMapResultsWrapper";
-import { children } from "cheerio/lib/api/traversing";
 
 interface CardProps extends React.ComponentProps<"div"> {
   isActive?: boolean;

@@ -25,5 +25,3 @@ backend/.venv
 backend/log
 backend/.env
 
-crawler
-

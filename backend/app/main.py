@@ -2,12 +2,9 @@ from app.api.building_elements import router as building_elements_router
 from app.api.collectors import router as collectors_router
 from app.api.contractors import router as contractors_router
 from app.config import settings
-
-# from app.shared.helpers import init_logging
 from fastapi import FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 
-# init_logging("backend.log")
 app = FastAPI()
 
 origins = [

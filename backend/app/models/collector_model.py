@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, List
 
 from app.models._base_model import RondasBase
-from app.shared.schemas.collector_schema import CollectorBase
+from app.schemas.collector_schema import CollectorBase
 from sqlmodel import Field, Relationship, SQLModel
 
 # avoid circular imports

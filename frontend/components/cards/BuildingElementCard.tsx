@@ -1,7 +1,7 @@
-import { ResultCardProps } from "@/types/item";
+import { ResultCardProps } from "@/types/map";
 import React from "react";
 import { CardReadable } from "./Card";
-import { BuildingElementCreate } from "@/types/api/items/building-element";
+import { BuildingElementCreate } from "@/types/api/building-element";
 
 export function BuildingElementCard({
   isActive = false,

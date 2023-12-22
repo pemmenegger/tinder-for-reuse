@@ -12,12 +12,6 @@ source .venv/bin/activate
 
 cp ../.env .env
 
-if [ -d "./app/shared" ]
-then
-    rm -rf ./app/shared
-fi
-cp -r ../shared ./app/
-
 source .env
 
 # disable python bytecode generation

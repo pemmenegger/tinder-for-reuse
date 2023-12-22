@@ -1,4 +1,4 @@
-import { ResultCardProps } from "@/types/item";
+import { ResultCardProps } from "@/types/map";
 import React from "react";
 import { CardEditable } from "./Card";
 import { ContractorEditForm } from "../forms/ContractorForm";

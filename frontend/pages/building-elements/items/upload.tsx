@@ -9,7 +9,7 @@ import { roundNumber } from "@/lib/utils";
 import {
   BuildingElementCreate,
   BuildingElementUploadCreate,
-} from "@/types/api/items/building-element";
+} from "@/types/api/building-element";
 import { UnifiedTypeRead } from "@/types/api/type";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -138,7 +138,6 @@ export default function BuildingElementUploadPage() {
           return isValid;
         };
 
-        // Simplify the validation checks
         const columnsToValidate = [
           {
             types: filterOptions!.unit_types,
@@ -236,7 +235,7 @@ export default function BuildingElementUploadPage() {
 
   return (
     <>
-      <h2>Upload your deconstructed Materials</h2>
+      <h2>Upload Building Elements</h2>
       <ExcelReader
         onFileUploaded={handleFileUpload}
         supportedWorksheetNames={[

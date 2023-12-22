@@ -88,7 +88,6 @@ const ExcelReader: React.FC<Props> = ({
         onFileUploaded(fileData);
       } catch (error) {
         console.error("Error reading file:", error);
-        // Handle the error according to your needs
       } finally {
         setIsProcessing(false);
       }

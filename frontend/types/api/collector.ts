@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Do not modify this file directly. It is created from the API definition //
-// See: ./shared/schemas/collector_schema.py                               //
+// See: ./backend/app/schemas/collector_schema.py                          //
 /////////////////////////////////////////////////////////////////////////////
 
 import { UnifiedTypeRead } from "./type";

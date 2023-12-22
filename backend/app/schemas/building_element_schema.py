@@ -1,10 +1,10 @@
-###################################################################
-# IMPORTANT: Keep in sync with frontend/types/building-element.ts #
-###################################################################
+#######################################################################
+# IMPORTANT: Keep in sync with frontend/types/api/building-element.ts #
+#######################################################################
 
 from typing import List, Optional
 
-from app.shared.schemas.type_schema import UnifiedTypeRead
+from app.schemas.type_schema import UnifiedTypeRead
 from pydantic import BaseModel
 from sqlmodel import SQLModel
 

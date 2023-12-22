@@ -1,11 +1,21 @@
 from typing import List
 
-from app.models import Collector
+from app.models.collector_model import (
+    Collector,
+    CollectorToAuthorizedVehicleType,
+    CollectorToCircularStrategyType,
+    CollectorToMaterialType,
+    CollectorToWasteCodeType,
+)
 from app.models.unified_type_model import UnifiedType
-from app.schemas.collector_schema import CollectorFilterOptions, CollectorSearchRequest
+from app.schemas.collector_schema import (
+    CollectorCreate,
+    CollectorFilterOptions,
+    CollectorRead,
+    CollectorSearchRequest,
+)
 from app.schemas.search_schema import SearchResponse
-from app.shared.schemas.collector_schema import CollectorCreate, CollectorRead
-from app.shared.types import (
+from app.types import (
     AuthorizedVehicleType,
     CircularStrategyType,
     MaterialType,
@@ -103,6 +113,19 @@ def delete_collector(
     session.delete(collector)
     session.commit()
     return collector.dict()
+
+
+@router.delete("/")
+def delete_all_collectors(
+    session: Session = Depends(get_session),
+):
+    session.query(CollectorToMaterialType).delete()
+    session.query(CollectorToWasteCodeType).delete()
+    session.query(CollectorToAuthorizedVehicleType).delete()
+    session.query(CollectorToCircularStrategyType).delete()
+    session.query(Collector).delete()
+    session.commit()
+    return {"message": "All collectors deleted"}
 
 
 @router.get("/filter/", response_model=CollectorFilterOptions)

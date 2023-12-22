@@ -14,7 +14,7 @@ from app.models.contractor_model import (
     ContractorToMaterialType,
     ContractorToWasteCodeType,
 )
-from app.shared.schemas.type_schema import UnifiedTypeBase
+from app.schemas.type_schema import UnifiedTypeBase
 from sqlmodel import Field, Relationship
 
 

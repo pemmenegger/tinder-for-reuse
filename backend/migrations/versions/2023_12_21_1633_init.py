@@ -8,7 +8,7 @@ Create Date: 2023-12-21 16:33:12.174652
 import sqlalchemy as sa  # noqa: F401
 import sqlmodel  # noqa: F401
 from alembic import op
-from app.shared.types import get_all_unified_types
+from app.types import get_unified_types
 
 # revision identifiers, used by Alembic.
 revision = "e71d4385f2d1"
@@ -83,7 +83,7 @@ def upgrade() -> None:
     op.create_index(op.f("ix_unified_type_type_label"), "unified_type", ["type_label"], unique=False)
     op.bulk_insert(
         unified_type_table,
-        get_all_unified_types(),
+        get_unified_types(),
     )
     op.create_table(
         "building_element",

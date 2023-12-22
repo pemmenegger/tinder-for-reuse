@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Do not modify this file directly. It is created from the API definition //
-// See: ./backend/app/schemas/items/building_element_schema.py             //
+// See: ./backend/app/schemas/building_element_schema.py                   //
 /////////////////////////////////////////////////////////////////////////////
 
-import { CollectorFilter, CollectorRead } from "../collector";
-import { ContractorFilter } from "../contractor";
-import { UnifiedTypeRead } from "../type";
+import { CollectorFilter, CollectorRead } from "./collector";
+import { ContractorFilter } from "./contractor";
+import { UnifiedTypeRead } from "./type";
 
 type BuildingElementUpload = {
   address: string;

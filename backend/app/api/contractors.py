@@ -1,6 +1,11 @@
 from typing import List
 
-from app.models.contractor_model import Contractor
+from app.models.contractor_model import (
+    Contractor,
+    ContractorToCircularServiceType,
+    ContractorToMaterialType,
+    ContractorToWasteCodeType,
+)
 from app.models.unified_type_model import UnifiedType
 from app.schemas.contractor_schema import (
     ContractorCreate,
@@ -9,7 +14,7 @@ from app.schemas.contractor_schema import (
     ContractorSearchRequest,
 )
 from app.schemas.search_schema import SearchResponse
-from app.shared.types import CircularServiceType, MaterialType, WasteCodeType
+from app.types import CircularServiceType, MaterialType, WasteCodeType
 from app.utils.database import get_session, read_types, read_types_by_values_or_throw
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -95,6 +100,19 @@ def delete_contractor(
     session.commit()
 
     return contractor.dict()
+
+
+@router.delete("/")
+def delete_all_contractors(
+    session: Session = Depends(get_session),
+):
+    session.query(ContractorToMaterialType).delete()
+    session.query(ContractorToWasteCodeType).delete()
+    session.query(ContractorToCircularServiceType).delete()
+    session.query(Contractor).delete()
+    session.commit()
+
+    return {"message": "All contractors deleted"}
 
 
 @router.get("/filter/", response_model=ContractorFilterOptions)

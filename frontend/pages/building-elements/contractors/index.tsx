@@ -1,14 +1,17 @@
 import {
   contractorsFetcher,
+  deleteAllContractors,
   fetchContractorFilterOptions,
 } from "@/lib/api/contractors";
 import { ContractorRead } from "@/types/api/contractor";
 import { useEffect, useState } from "react";
 import Search, { SearchResultsWrapperType } from "@/components/search/Search";
 import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";
-import { MapMarker } from "@/types/item";
+import { MapMarker } from "@/types/map";
 import { generateContractorMapMarkers } from "@/lib/utils";
 import useSWR from "swr";
+import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 export default function ContractorsPage() {
   const { data: filterOptions, error } = useSWR(
@@ -79,10 +82,31 @@ function ContractorResultsWrapper({
   }, [results]);
 
   return (
-    <SearchWithMapResultsWrapper
-      isLoading={isLoading}
-      mapMarkers={mapMarkers}
-      clusterIconUrl="/icons/contractors/cluster.svg"
-    />
+    <>
+      <SearchWithMapResultsWrapper
+        isLoading={isLoading}
+        mapMarkers={mapMarkers}
+        clusterIconUrl="/icons/contractors/cluster.svg"
+      />
+      {mapMarkers.length > 0 && (
+        <Button
+          variant="danger"
+          size="sm"
+          className="mt-8"
+          onClick={async () => {
+            try {
+              await deleteAllContractors();
+              toast.success("Successfully deleted all contractors");
+              window.location.reload();
+            } catch (error) {
+              console.error(error);
+              toast.error("Failed to delete all contractors");
+            }
+          }}
+        >
+          Delete All Contractors
+        </Button>
+      )}
+    </>
   );
 }

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Do not modify this file directly. It is created from the API definition //
-// See: ./shared/schemas/type_schema.ts                                    //
+// See: ./backend/app/schemas/type_schema.py                               //
 /////////////////////////////////////////////////////////////////////////////
 
 export type UnifiedTypeRead = {

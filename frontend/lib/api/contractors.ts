@@ -17,7 +17,7 @@ export const createContractor = async (
     body: [contractor],
   });
   if (!response.ok) throw new ApiError("createContractor failed", data);
-  console.log("createContractor Response", data);
+  // console.log("createContractor Response", data);
   return data;
 };
 
@@ -30,7 +30,7 @@ export const updateContractor = async (
     body: contractor,
   });
   if (!response.ok) throw new ApiError("updateContractor failed", data);
-  console.log("updateContractor Response", data);
+  // console.log("updateContractor Response", data);
   return data;
 };
 
@@ -41,7 +41,16 @@ export const deleteContractor = async (
     method: "DELETE",
   });
   if (!response.ok) throw new ApiError("deleteContractor failed", data);
-  console.log("deleteContractor Response", data);
+  // console.log("deleteContractor Response", data);
+  return data;
+};
+
+export const deleteAllContractors = async (): Promise<ContractorRead> => {
+  const { response, data } = await fetchApi(API_ROUTE, `/`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new ApiError("deleteAllContractors failed", data);
+  // console.log("deleteAllContractors Response", data);
   return data;
 };
 
@@ -65,6 +74,6 @@ export const contractorsFetcher = async (
     body: searchRequest,
   });
   if (!response.ok) throw new ApiError("contractorsFetcher failed", data);
-  console.log("contractorsFetcher Response", data);
+  // console.log("contractorsFetcher Response", data);
   return data;
 };

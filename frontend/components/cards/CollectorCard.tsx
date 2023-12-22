@@ -1,6 +1,6 @@
 import React from "react";
 import { CollectorEditForm } from "../forms/CollectorForm";
-import { ResultCardProps } from "@/types/item";
+import { ResultCardProps } from "@/types/map";
 import { CardEditable } from "./Card";
 import { CollectorCreate } from "@/types/api/collector";
 

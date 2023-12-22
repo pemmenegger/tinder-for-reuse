@@ -17,7 +17,7 @@ export const createCollector = async (
     body: [collector],
   });
   if (!response.ok) throw new ApiError("createCollector failed", data);
-  console.log("createCollector Response", data);
+  // console.log("createCollector Response", data);
   return data;
 };
 
@@ -30,7 +30,7 @@ export const updateCollector = async (
     body: collector,
   });
   if (!response.ok) throw new ApiError("updateCollector failed", data);
-  console.log("updateCollector Response", data);
+  // console.log("updateCollector Response", data);
   return data;
 };
 
@@ -41,7 +41,16 @@ export const deleteCollector = async (
     method: "DELETE",
   });
   if (!response.ok) throw new ApiError("deleteCollector failed", data);
-  console.log("deleteCollector Response", data);
+  // console.log("deleteCollector Response", data);
+  return data;
+};
+
+export const deleteAllCollectors = async (): Promise<CollectorRead> => {
+  const { response, data } = await fetchApi(API_ROUTE, `/`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new ApiError("deleteAllCollectors failed", data);
+  // console.log("deleteAllCollectors Response", data);
   return data;
 };
 
@@ -65,6 +74,6 @@ export const collectorsFetcher = async (
     body: searchRequest,
   });
   if (!response.ok) throw new ApiError("collectorsFetcher failed", data);
-  console.log("collectorsFetcher Response", data);
+  // console.log("collectorsFetcher Response", data);
   return data;
 };

@@ -3,7 +3,7 @@ import {
   BuildingElementSearchRequest,
   BuildingElementUploadCreate,
   BuildingElementUploadRead,
-} from "@/types/api/items/building-element";
+} from "@/types/api/building-element";
 import { ApiError, fetchApi } from "../utils";
 import { SearchResponse } from "@/types/api/search";
 
@@ -18,7 +18,7 @@ export const createBuildingElementUpload = async (
   });
   if (!response.ok)
     throw new ApiError("createBuildingElementUpload failed", data);
-  console.log("createBuildingElementUpload response", data);
+  // console.log("createBuildingElementUpload response", data);
   return data;
 };
 
@@ -28,7 +28,7 @@ export const deleteAllBuildingElements = async () => {
   });
   if (!response.ok)
     throw new ApiError("deleteAllBuildingElements failed", data);
-  console.log("deleteAllBuildingElements response", data);
+  // console.log("deleteAllBuildingElements response", data);
   return data;
 };
 
@@ -53,7 +53,6 @@ export const buildingElementUploadsFetcher = async (
   });
   if (!response.ok)
     throw new ApiError("Fetching building elements failed", data);
-
-  console.log("buildingElementsFetcher Response", data);
+  // console.log("buildingElementsFetcher Response", data);
   return data;
 };

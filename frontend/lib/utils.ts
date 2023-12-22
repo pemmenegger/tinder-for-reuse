@@ -1,9 +1,9 @@
 import { CollectorRead } from "@/types/api/collector";
 import { ContractorRead } from "@/types/api/contractor";
-import { MapMarker } from "@/types/item";
+import { MapMarker } from "@/types/map";
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { BuildingElementUploadRead } from "@/types/api/items/building-element";
+import { BuildingElementUploadRead } from "@/types/api/building-element";
 import { CollectorCard } from "@/components/cards/CollectorCard";
 import { ContractorCard } from "@/components/cards/ContractorCard";
 import { BuildingElementUploadCard } from "@/components/cards/BuildingElementUploadCard";

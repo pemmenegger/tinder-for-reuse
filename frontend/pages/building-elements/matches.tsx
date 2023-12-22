@@ -8,7 +8,7 @@ import {
   generateCollectorMapMarkers,
   generateContractorMapMarkers,
 } from "@/lib/utils";
-import { MapMarker } from "@/types/item";
+import { MapMarker } from "@/types/map";
 import useSWR from "swr";
 import { fetchCollectorFilterOptions } from "@/lib/api/collectors";
 import { fetchContractorFilterOptions } from "@/lib/api/contractors";

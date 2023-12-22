@@ -7,7 +7,7 @@ from app.schemas.building_element_schema import (
     BuildingElementUploadRead,
 )
 from app.schemas.search_schema import SearchResponse
-from app.shared.types import (
+from app.types import (
     BuildingElementUnitType,
     BuildingElementWorksheetType,
     HealthStatusType,

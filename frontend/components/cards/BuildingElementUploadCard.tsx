@@ -1,7 +1,7 @@
-import { ResultCardProps } from "@/types/item";
+import { ResultCardProps } from "@/types/map";
 import React from "react";
 import { CardReadableCollapsible } from "./Card";
-import { BuildingElementUploadCreate } from "@/types/api/items/building-element";
+import { BuildingElementUploadCreate } from "@/types/api/building-element";
 import { BuildingElementCard } from "./BuildingElementCard";
 
 export function BuildingElementUploadCard({

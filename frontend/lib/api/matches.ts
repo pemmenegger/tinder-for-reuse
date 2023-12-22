@@ -7,7 +7,7 @@ import {
   BuildingElementSearchRequest,
   BuildingElementUploadRead,
   MatchesSearchRequest,
-} from "@/types/api/items/building-element";
+} from "@/types/api/building-element";
 import { SearchResponse } from "@/types/api/search";
 import { buildingElementUploadsFetcher } from "./building-elements";
 import { collectorsFetcher } from "./collectors";

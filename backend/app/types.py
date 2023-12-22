@@ -11,19 +11,20 @@ class UnifiedType:
         self.type_label = type_label
 
 
-def get_all_unified_types():
-    type_classes = [
-        BuildingElementUnitType,
-        BuildingElementWorksheetType,
-        MaterialType,
-        AuthorizedVehicleType,
-        CircularStrategyType,
-        WasteCodeType,
-        CircularServiceType,
-        HealthStatusType,
-        ReusePotentialType,
-        RecyclingPotentialType,
-    ]
+def get_unified_types(type_classes=None):
+    if not type_classes:
+        type_classes = [
+            BuildingElementUnitType,
+            BuildingElementWorksheetType,
+            MaterialType,
+            AuthorizedVehicleType,
+            CircularStrategyType,
+            WasteCodeType,
+            CircularServiceType,
+            HealthStatusType,
+            ReusePotentialType,
+            RecyclingPotentialType,
+        ]
     unified_types = []
     for type_class in type_classes:
         unified_types.extend(

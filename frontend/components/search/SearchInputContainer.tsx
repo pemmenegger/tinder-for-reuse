@@ -69,9 +69,7 @@ export default function SearchContainer<ReqT extends SearchRequest>({
     searchRequest: ReqT,
     path: string[]
   ): any {
-    // Navigate through the searchRequest using the path
     return path.reduce((obj, key) => {
-      // Type assertion to tell TypeScript that obj can be indexed with a string key
       return (obj as any)[key];
     }, searchRequest as any);
   }
@@ -106,7 +104,6 @@ export default function SearchContainer<ReqT extends SearchRequest>({
                 option.id
               )
             )}
-            // selectedOptions={config.options}
             onChange={(selectedOptions) => {
               const ids = selectedOptions.map((option) => option.id);
               handleInputChange(config.path, ids);

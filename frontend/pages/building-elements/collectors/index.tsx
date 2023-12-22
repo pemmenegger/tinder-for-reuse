@@ -1,14 +1,17 @@
 import {
   collectorsFetcher,
+  deleteAllCollectors,
   fetchCollectorFilterOptions,
 } from "@/lib/api/collectors";
-import { CollectorRead } from "@/types/api/collector";
 import { useEffect, useState } from "react";
 import Search, { SearchResultsWrapperType } from "@/components/search/Search";
 import SearchWithMapResultsWrapper from "@/components/search/SearchWithMapResultsWrapper";
-import { MapMarker } from "@/types/item";
+import { MapMarker } from "@/types/map";
 import { generateCollectorMapMarkers } from "@/lib/utils";
 import useSWR from "swr";
+import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
+import { CollectorRead } from "@/types/api/collector";
 
 export default function CollectorsPage() {
   const { data: filterOptions, error } = useSWR(
@@ -74,18 +77,11 @@ function CollectorResultsWrapper({
   const [mapMarkers, setMapMarkers] = useState<MapMarker[]>([]);
 
   useEffect(() => {
-    const collectors = results;
+    const collectors = results as CollectorRead[];
 
-    // if empty object
-    if (!collectors) {
-      console.log("no collectors");
-      return;
-    }
     if (!collectors || collectors.length === 0) {
       return;
     }
-
-    console.log("collectors", collectors);
 
     const collectorsMapMarkers = generateCollectorMapMarkers(collectors);
 
@@ -93,10 +89,31 @@ function CollectorResultsWrapper({
   }, [results]);
 
   return (
-    <SearchWithMapResultsWrapper
-      isLoading={isLoading}
-      mapMarkers={mapMarkers}
-      clusterIconUrl="/icons/collectors/cluster.svg"
-    />
+    <>
+      <SearchWithMapResultsWrapper
+        isLoading={isLoading}
+        mapMarkers={mapMarkers}
+        clusterIconUrl="/icons/collectors/cluster.svg"
+      />
+      {mapMarkers.length > 0 && (
+        <Button
+          variant="danger"
+          size="sm"
+          className="mt-8"
+          onClick={async () => {
+            try {
+              await deleteAllCollectors();
+              toast.success("Successfully deleted all collectors");
+              window.location.reload();
+            } catch (error) {
+              console.error(error);
+              toast.error("Failed to delete all collectors");
+            }
+          }}
+        >
+          Delete All Collectors
+        </Button>
+      )}
+    </>
   );
 }
