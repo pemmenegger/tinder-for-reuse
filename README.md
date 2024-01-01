@@ -1,65 +1,23 @@
-# Tinder For Reuse: A Circular Economy Application
+# Tinder For Reuse: An Application to Empower Circular Economy for Construction
 
-Tinder For Reuse is an innovative application designed to facilitate a sustainable circular economy by connecting owners of reclaimed building elements with collectors and contractors skilled in deconstruction. Our mission is to substantially reduce waste from building construction and demolition, promoting the reuse of reclaimed materials. The application streamlines this process through the following workflow:
+This `README.md` gives a short introduction and focuses on technical aspects of how to run and configure the application on your computer. For a more in-depth description of challenges and implication, decisions we made, functionalities, and future work, please consult our [Wiki](https://github.com/pemmenegger/tinder-for-reuse/wiki).
 
-1. Building owners list reclaimed elements on the app.
-2. Collectors browse these listings, engage with owners, and arrange for the purchase and collection of deconstructed materials.
-3. Owners connect with contractors through the app to deconstruct these elements efficiently and safely.
+## Introduction
 
-## Features
-
-The application primarily revolves around three entities: reclaimed building elements, collectors, and contractors. It offers functionalities for uploading, searching, and browsing these entities.
-
-### Reclaimed Building Elements (Items)
-
-**Search and Filter:** Users can explore items using criteria like worksheets, units, material type, health status, reuse potential, waste codes, and recycling potential. Those filter criteria are based on the French diagnostic method for building deconstruction.
-
-![items search](./screenshots/items-search.png)
-
-**Upload:** Uploading items is straightforward through an Excel file format according to a predefined template. This template is based on the French diagnostic method for building deconstruction. The application parses the file and creates items based on the data.
-
-![items upload](./screenshots/items-upload-2.png)
-
-### Collectors
-
-**Search and Filter:** Locate collectors by their material preferences, waste codes, authorized vehicles, and circular strategies.
-
-![collectors search](./screenshots/collectors-search.png)
-
-**Upload:** Collectors can register their details via an upload form.
-
-![collectors upload](./screenshots/collectors-upload.png)
-
-### Contractors
-
-**Search and Filter:** Find contractors by their specialization in materials, waste codes, and circular services.
-
-![contractors search](./screenshots/contractors-search.png)
-
-**Upload:** Contractors can easily join the platform through an upload form.
-
-![contractors upload](./screenshots/contractors-upload.png)
-
-### Matches
-
-**Interactive Mapping:** The match feature allows users to find synergies between items, collectors, and contractors. The map visually represents all entities, refining to show only matched entities based on filter criteria. Users can click on map markers for detailed information.
-
-![matches search](./screenshots/matches-search.png)
-
-All supported filter criteria are defined in the [types.py file](./backend/app/types.py).
+The construction sector significantly contributes to global CO2 emissions, partially because most demolished building materials are sent to landfills instead of recycled. This increases environmental damage and overlooks the potential for a circular economy. Although there are marketplaces for selling deconstructed building components, they have not yet gained widespread acceptance, leaving a gap in the market for a viable solution. Consequently, we developed Tinder For Reuse, an application that facilitates the reuse of reclaimed building elements by connecting and matching building owners, contractors specializing in deconstruction and element reclamation, and collectors dedicated to reintegrating these reclaimed elements into the construction market. Our goal with this solution is to significantly reduce construction waste, decrease carbon emissions, and promote sustainable building practices.
 
 ## Run It Locally
 
-This application is structured with [Next.js](https://nextjs.org/) for the frontend, [FastAPI](https://fastapi.tiangolo.com/) for the backend, and uses [PostgreSQL](https://www.postgresql.org/) for database management. The PostgreSQL database is containerized using [Docker](https://www.docker.com/).
+This application is using [Next.js](https://nextjs.org/) for the frontend, [FastAPI](https://fastapi.tiangolo.com/) for the backend, and uses [PostgreSQL](https://www.postgresql.org/) for database management. The PostgreSQL database is containerized using [Docker](https://www.docker.com/).
 
 ### Pre-Installation Requirements
 
-Ensure these tools are installed on your machine:
+Ensure these tools are installed on your machine before proceeding:
 
 - **[Git](https://git-scm.com/):** Required for cloning the repository.
 - **[Docker](https://www.docker.com/):** Essential for managing the containerized database.
 - **[Node.js](https://nodejs.org/en/):** Required for frontend operation.
-- **[Python](https://www.python.org/):** Needed to run the backend.
+- **[Python3](https://www.python.org/downloads/):** Needed to run the backend.
 - Obtain a Google Maps API key (if you don't have one, get it [here](https://developers.google.com/maps/documentation/javascript/get-api-key)).
 
 ### Initial Setup
@@ -95,6 +53,8 @@ POSTGRES_PORT=5432
 ENV=debug # debug or prod
 ```
 
+Replace `<YOUR_GOOGLE_MAPS_API_KEY>` with your Google Maps API key.
+
 ### Launching the Application
 
 **Step 1: Launch the Database**
@@ -105,7 +65,7 @@ Ensure Docker is running. Run the following command in the project's root direct
 sh run_local_db.sh
 ```
 
-If your database is not already up to date, you will need to run the migration upgrade script. To do this, open a new terminal and execute the following command in the project's root directory:
+If your database is not already up to date, you will need to run the migration upgrade script. You probably only need to do this once for the very first launch of the application. To do this, open a new terminal and execute the following command in the project's root directory:
 
 ```bash
 cd ./backend
@@ -132,7 +92,7 @@ cd ./frontend
 sh run_local.sh
 ```
 
-The application should now be accessible at http://localhost:3000.
+The application should now be accessible at [http://localhost:3000](http://localhost:3000).
 
 ### Optional: Import Valobat Collectors
 
