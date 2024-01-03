@@ -1,9 +1,3 @@
-######################################################################
-# THIS FILE WILL BE SHARED AND COPIED TO THE RELEVANT CONTAINERS     #
-# DO ONLY CHANGE IT IN ./shared/                                     #
-######################################################################
-
-
 class UnifiedType:
     def __init__(self, discriminator: str, type_id: int, type_label: str):
         self.discriminator = discriminator
