@@ -27,6 +27,9 @@ module.exports = {
         dbeige: "rgb(44, 35, 17)",
         black: "#2f2f2f",
         orange: "#FA5E40",
+        item: "#3A7118",
+        collector: "#C95139",
+        contractor: "#5442f5",
       },
       keyframes: {
         "fade-in-up": {

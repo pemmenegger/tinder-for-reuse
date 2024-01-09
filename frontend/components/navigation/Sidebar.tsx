@@ -24,15 +24,16 @@ function NavItem({
   text,
   link,
   active,
+  color,
 }: {
   OutlineIcon: React.ElementType;
   SolidIcon: React.ElementType;
   text: string;
   link: string;
   active: boolean;
+  color: string;
 }) {
-  let itemStyle =
-    "flex text-lg my-2 md:my-3 items-center rounded-lg py-2 md:py-4 md:pb-3 px-4 hover:bg-dbeige/10";
+  let itemStyle = `flex text-lg my-2 md:my-3 items-center rounded-lg py-2 md:py-4 md:pb-3 px-4 hover:bg-dbeige/10 ${color}`;
   if (active) {
     itemStyle += " bg-dbeige/5 text-black font-body-500";
   }
@@ -40,7 +41,7 @@ function NavItem({
   let iconStyle = "h-6 w-6 mb-0.5 lg:mr-4";
 
   return (
-    <Link href={link} className="font-body">
+    <Link href={link} className={`font-body`}>
       <li className={itemStyle}>
         {active ? (
           <SolidIcon className={iconStyle} />
@@ -94,6 +95,7 @@ export default function Sidebar() {
             router.asPath === "/building-elements/items" ||
             router.asPath === "/"
           }
+          color="text-item"
         />
         <NavItem
           OutlineIcon={ArrowUpTrayIconOutline}
@@ -101,6 +103,7 @@ export default function Sidebar() {
           text="Upload"
           link="/building-elements/items/upload"
           active={router.asPath === "/building-elements/items/upload"}
+          color="text-item"
         />
         <div className="border-b"></div>
         <NavItem
@@ -109,6 +112,7 @@ export default function Sidebar() {
           text="Collectors"
           link="/building-elements/collectors"
           active={router.asPath === "/building-elements/collectors"}
+          color="text-collector"
         />
         <NavItem
           OutlineIcon={ArrowUpTrayIconOutline}
@@ -116,6 +120,7 @@ export default function Sidebar() {
           text="Upload"
           link="/building-elements/collectors/upload"
           active={router.asPath === "/building-elements/collectors/upload"}
+          color="text-collector"
         />
         <div className="border-b"></div>
         <NavItem
@@ -124,6 +129,7 @@ export default function Sidebar() {
           text="Contractors"
           link="/building-elements/contractors"
           active={router.asPath === "/building-elements/contractors"}
+          color="text-contractor"
         />
         <NavItem
           OutlineIcon={ArrowUpTrayIconOutline}
@@ -131,6 +137,7 @@ export default function Sidebar() {
           text="Upload"
           link="/building-elements/contractors/upload"
           active={router.asPath === "/building-elements/contractors/upload"}
+          color="text-contractor"
         />
         <div className="border-b "></div>
         <NavItem
@@ -139,6 +146,7 @@ export default function Sidebar() {
           text="Matches"
           link="/building-elements/matches"
           active={router.asPath === "/building-elements/matches"}
+          color="text-black"
         />
       </ul>
     </nav>
